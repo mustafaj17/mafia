@@ -1,0 +1,14 @@
+body{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.game{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+  padding: 20px 40px;
+  border: solid silver 1px;
+}
