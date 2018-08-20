@@ -33,12 +33,20 @@ class App extends Component {
         this.collection.get().then(snapshot => {
             snapshot.forEach(doc => {
                 games.push(doc);
-                doc.onSnapshot( doc => {
-                    this.setState
-                })
+                doc.ref.onSnapshot( doc => {
+                    let newGamesState = [...this.state.games];
+                    debugger;
+                    newGamesState = newGamesState.filter( gameDoc => gameDoc.data().gameName !== doc.data().gameName);
+                    newGamesState.push(doc);
+                    this.setState({
+                        games : newGamesState
+                    });
+                });
             });
 
             this.setState({games})
+        }, err => {
+            console.log(err);
         });
 
     }
