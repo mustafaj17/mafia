@@ -29,25 +29,24 @@ class App extends Component {
 
     componentWillMount(){
 
-        let games = []
-        this.collection.get().then(snapshot => {
+        this.collection.onSnapshot(snapshot => {
+            let games = [];
             snapshot.forEach(doc => {
                 games.push(doc);
-                doc.ref.onSnapshot( doc => {
-                    let newGamesState = [...this.state.games];
-                    debugger;
-                    newGamesState = newGamesState.filter( gameDoc => gameDoc.data().gameName !== doc.data().gameName);
-                    newGamesState.push(doc);
-                    this.setState({
-                        games : newGamesState
-                    });
-                });
             });
-
             this.setState({games})
         }, err => {
             console.log(err);
         });
+
+        // doc.ref.onSnapshot( doc => {
+        //     let newGamesState = [...this.state.games];
+        //     newGamesState = newGamesState.filter( gameDoc => gameDoc.id !== doc.id);
+        //     newGamesState.push(doc);
+        //     this.setState({
+        //         games : newGamesState
+        //     });
+        // });
 
     }
 
