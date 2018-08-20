@@ -1,58 +1,121 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Platform, Image, Text, View, ScrollView } from 'react-native';
+
+import firebase from 'react-native-firebase';
 
 export default class App extends React.Component {
-
-    startGame = () => {
-        alert('starting game');
+  constructor() {
+    super();
+    if ( firebase.apps.length < 1 ) {
+      let config = {
+        apiKey: "AIzaSyAJoYge9agHxipUEtP-RFulZCUTif9Mi3o",
+        authDomain: "mafia-7c60c.firebaseapp.com",
+        databaseURL: "https://mafia-7c60c.firebaseio.com",
+        projectId: "mafia-7c60c",
+        storageBucket: "mafia-7c60c.appspot.com",
+        messagingSenderId: "328931836560"
+      };
+      firebase.initializeApp(config);
     }
 
-    joinGame = () => {
-        alert('joining game');
-    }
+    let db = firebase.firestore();
+    const collection = db.collection('mafia-games');
 
-    render() {
-        return (
-           <View style={styles.container}>
+    collection.get().then(snapshot => {
 
-               <View>
-                   <Text style={styles.title}>Mafia</Text>
-               </View>
+      snapshot.forEach(doc => {
 
-               <View>
-                   <TouchableOpacity onPress={this.startGame} style={styles.button}>
-                       <Text>Start Game</Text>
-                   </TouchableOpacity>
-               </View>
+        alert( doc.data().gameName );
+        alert( doc.data().game );
 
-               <View>
-                   <TouchableOpacity onPress={this.joinGame} style={styles.button}>
-                       <Text>Join Game</Text>
-                   </TouchableOpacity>
-               </View>
+      });
 
+    })
+  }
 
+  componentDidMount() {
+    // firebase things?
+  }
 
-           </View>
-        );
-    }
+  render() {
+    return (
+      <ScrollView>
+        <View style={styles.container}>
+          <Image source={require('./assets/RNFirebase.png')} style={[styles.logo]}/>
+          <Text style={styles.welcome}>
+            Welcome to {'\n'} React Native Firebase
+          </Text>
+          <Text style={styles.instructions}>
+            To get started, edit App.js
+          </Text>
+          {Platform.OS === 'ios' ? (
+            <Text style={styles.instructions}>
+              Press Cmd+R to reload,{'\n'}
+              Cmd+D or shake for dev menu
+            </Text>
+          ) : (
+            <Text style={styles.instructions}>
+              Double tap R on your keyboard to reload,{'\n'}
+              Cmd+M or shake for dev menu
+            </Text>
+          )}
+          <View style={styles.modules}>
+            <Text style={styles.modulesHeader}>The following Firebase modules are pre-installed:</Text>
+            {firebase.admob.nativeModuleExists && <Text style={styles.module}>admob()</Text>}
+            {firebase.analytics.nativeModuleExists && <Text style={styles.module}>analytics()</Text>}
+            {firebase.auth.nativeModuleExists && <Text style={styles.module}>auth()</Text>}
+            {firebase.config.nativeModuleExists && <Text style={styles.module}>config()</Text>}
+            {firebase.crashlytics.nativeModuleExists && <Text style={styles.module}>crashlytics()</Text>}
+            {firebase.database.nativeModuleExists && <Text style={styles.module}>database()</Text>}
+            {firebase.firestore.nativeModuleExists && <Text style={styles.module}>firestore()</Text>}
+            {firebase.functions.nativeModuleExists && <Text style={styles.module}>functions()</Text>}
+            {firebase.iid.nativeModuleExists && <Text style={styles.module}>iid()</Text>}
+            {firebase.invites.nativeModuleExists && <Text style={styles.module}>invites()</Text>}
+            {firebase.links.nativeModuleExists && <Text style={styles.module}>links()</Text>}
+            {firebase.messaging.nativeModuleExists && <Text style={styles.module}>messaging()</Text>}
+            {firebase.notifications.nativeModuleExists && <Text style={styles.module}>notifications()</Text>}
+            {firebase.perf.nativeModuleExists && <Text style={styles.module}>perf()</Text>}
+            {firebase.storage.nativeModuleExists && <Text style={styles.module}>storage()</Text>}
+          </View>
+        </View>
+      </ScrollView>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    title: {
-        marginBottom: 40,
-        fontSize: 24
-    },
-    button: {
-        margin: 20,
-        padding: 20,
-        borderWidth: 1,
-        borderColor: 'lightgrey'
-    }
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
+  logo: {
+    height: 120,
+    marginBottom: 16,
+    marginTop: 32,
+    width: 120,
+  },
+  welcome: {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 10,
+  },
+  instructions: {
+    textAlign: 'center',
+    color: '#333333',
+    marginBottom: 5,
+  },
+  modules: {
+    margin: 20,
+  },
+  modulesHeader: {
+    fontSize: 16,
+    marginBottom: 8,
+  },
+  module: {
+    fontSize: 14,
+    marginTop: 4,
+    textAlign: 'center',
+  }
 });
