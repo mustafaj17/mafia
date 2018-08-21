@@ -24,44 +24,66 @@ class App extends Component {
         this.state = { games: [] }
         this.db = firebase.firestore();
         this.db.settings(settings);
-        this.collection = this.db.collection('mafia-games');
+        this.mafiaGamesCollection = this.db.collection('mafia-games');
+        this.user = {
+            name: Math.random().toString(),
+            type: 'none',
+            inGame: true,
+            ready: false
+        }
     }
 
     componentWillMount(){
 
-        this.collection.onSnapshot(snapshot => {
+        this.disconnectFromGames = this.mafiaGamesCollection.onSnapshot(gamesSnapshot => {
             let games = [];
-            snapshot.forEach(doc => {
+            gamesSnapshot.forEach(doc => {
                 games.push(doc);
             });
-            this.setState({games})
+            this.setState({games});
         }, err => {
             console.log(err);
         });
-
-        // doc.ref.onSnapshot( doc => {
-        //     let newGamesState = [...this.state.games];
-        //     newGamesState = newGamesState.filter( gameDoc => gameDoc.id !== doc.id);
-        //     newGamesState.push(doc);
-        //     this.setState({
-        //         games : newGamesState
-        //     });
-        // });
-
     }
 
     getGames = () => {
         return this.state.games.map( gameDoc => {
-            return (<div className="game">{gameDoc.data().gameName}</div>)
+            return (<div className="game" onClick={() => this.selectGame(gameDoc)}>{gameDoc.data().gameName}</div>)
         })
     }
 
+    selectGame = gameDoc => {
+        this.disconnectFromGames();
+        this.setState({
+            game : gameDoc
+        });
+
+        this.disconnectFromGame = gameDoc.ref.onSnapshot( gameDoc => {
+            this.setState({
+                game : gameDoc
+            });
+            console.log(gameDoc.data());
+        });
+
+        this.mafiaGamesCollection.doc(gameDoc.id).set({ players : [...gameDoc.data().players, this.user]}, { merge: true })
+
+    }
+
     render() {
+
+        if(this.state.game) {
+
+            let game = this.state.game.data();
+            return (
+                <div className="App">
+                    {game.gameName}
+                    {game.players && game.players.length}
+                </div>
+            )
+        }
         return (
            <div className="App">
-
                {this.getGames()}
-
            </div>
         );
     }
