@@ -15,7 +15,7 @@ class PlayerList extends Component {
             return (
                 <div className="player">
                     <div key={player.name} className="player">{player.name}</div>
-                    {!player.inGame && <div className="player">{player.type}</div>}
+                    <div className="player">{player.inGame ? player.type : '-'}</div>
                 </div>
             )
         }))
