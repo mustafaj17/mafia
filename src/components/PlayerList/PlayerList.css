@@ -1,0 +1,17 @@
+.player{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+    padding: 20px 40px;
+    border: solid silver 1px;
+}
+
+.type {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+    padding: 20px 40px;
+    border: solid silver 1px;
+}
