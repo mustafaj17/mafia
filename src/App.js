@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import firebase from 'firebase/app';
+import Players from './components/PlayerList'
 import 'firebase/firestore';
 import './App.css';
 
@@ -77,7 +78,7 @@ class App extends Component {
             return (
                 <div className="App">
                     {game.gameName}
-                    {game.players && game.players.length}
+                    {game.players && <Players players={game.players} />}
                 </div>
             )
         }
