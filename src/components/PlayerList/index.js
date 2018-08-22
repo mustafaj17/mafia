@@ -16,7 +16,7 @@ class PlayerList extends Component {
             return (
                 <div className="container">
                     <div key={player.name} className="player">{player.name}</div>
-                    <div className="player">{player.inGame ? player.type : '-'}</div>
+                    <div className="player">{player.ready ? player.type : '-'}</div>
                 </div>
             )
         }))
