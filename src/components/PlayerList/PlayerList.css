@@ -2,8 +2,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 20px;
-    padding: 20px 40px;
+    margin: 15px;
+    padding: 5px 5px;
     border: solid silver 1px;
 }
 
@@ -12,6 +12,14 @@
     justify-content: center;
     align-items: center;
     margin: 20px;
-    padding: 20px 40px;
+    padding: 20px 20px;
+    border: solid silver 1px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 25px;
     border: solid silver 1px;
 }
