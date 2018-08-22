@@ -22,10 +22,6 @@ class App extends Component {
 
         }
         const settings = {/* your settings... */ timestampsInSnapshots: true};
-        this.state = {
-            games: [],
-            createGame: false
-        }
         this.db = firebase.firestore();
         this.db.settings(settings);
         this.mafiaGamesCollection = this.db.collection('mafia-games');
@@ -34,6 +30,12 @@ class App extends Component {
             type: 'none',
             inGame: true,
             ready: false
+        }
+
+        this.state = {
+            games: [],
+            createGame: false,
+            player: this.user
         }
     }
 
@@ -83,6 +85,30 @@ class App extends Component {
         })
     }
 
+    playerReady = () => {
+        this.user = {
+            ...this.user,
+            ready: true
+        }
+
+        let newPlayerState = this.state.game.data().players.filter(player => {
+            if(player.name === this.user.name){
+                player.ready = true
+            }
+
+            return player;
+        })
+
+        this.mafiaGamesCollection.doc(this.state.game.id).set(
+           { players : newPlayerState},
+           { merge: true }
+        )
+
+        this.setState({
+            player: this.user
+        })
+    }
+
     render() {
 
         if(this.state.createGame){
@@ -99,7 +125,9 @@ class App extends Component {
             let game = this.state.game.data();
             return (
                <div className="App">
-                   {game.gameName}
+                   <div>{game.gameName}</div>
+                   {!this.state.player.ready && <div className="btn" onClick={this.playerReady}>ready</div>}
+                   {this.state.player.ready && <div>IM READYYY</div>}
                    {game.players && <Players players={game.players} />}
                </div>
             )
