@@ -23,6 +23,7 @@ class PlayerList extends Component {
     }
 
     gameReady = ()=>{
+        debugger;
         return this.props.players.every(player =>  player.ready === true)
     };
 

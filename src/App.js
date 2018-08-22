@@ -25,17 +25,22 @@ class App extends Component {
         this.db = firebase.firestore();
         this.db.settings(settings);
         this.mafiaGamesCollection = this.db.collection('mafia-games');
-        this.user = {
-            name: `Player ${Math.random().toString()[3] }`,
-            type: 'none',
-            inGame: true,
-            ready: false
+        let userName = localStorage.getItem('mafiaUserName');
+        let hasUser = false;
+        if(userName){
+            this.user = {
+                name: userName,
+                type: 'none',
+                inGame: true,
+                ready: false
+            }
+           hasUser = true;
         }
-
         this.state = {
             games: [],
             createGame: false,
-            player: this.user
+            player: this.user,
+            hasUser
         }
     }
 
@@ -60,17 +65,59 @@ class App extends Component {
 
     selectGame = gameDoc => {
         this.disconnectFromGames();
-        this.setState({
-            game : gameDoc
-        });
 
         this.disconnectFromGame = gameDoc.ref.onSnapshot( gameDoc => {
-            this.setState({
-                game : gameDoc
-            });
-            console.log(gameDoc.data());
+
+            let players = gameDoc.ref.collection('players');
+            players.onSnapshot( playersSnapshot => {
+                let playersArray = []
+                playersSnapshot.forEach( playerDoc => {
+                    playersArray.push(playerDoc.data())
+                })
+                this.setState({
+                    players: playersArray
+                })
+            })
+            let currentPlayer;
+            players.get().then( playerDocs => {
+                let playersArray = [];
+                playerDocs.forEach( playerDoc => {
+                    if(playerDoc.data().playerName === this.user.name){
+                        currentPlayer = playerDoc;
+                        console.log('player exists');
+                    }
+
+                    playersArray.push(playerDoc.data())
+                })
+
+                if(!currentPlayer){
+                    players.add(this.user).then( player => {
+                        player.get().then( playerObj => {
+                            currentPlayer = playerObj;
+                            playersArray.push(playerObj.data())
+                            this.setState({
+                                game : gameDoc,
+                                player: currentPlayer,
+                                players: playersArray
+                            });
+                        })
+
+                    })
+
+                }else{
+                    this.setState({
+                        game : gameDoc,
+                        player: currentPlayer,
+                        players: playersArray
+                    });
+                }
+
+
+
+            })
         });
-        this.mafiaGamesCollection.doc(gameDoc.id).set({ players : [...gameDoc.data().players, this.user]}, { merge: true })
+
+        // this.mafiaGamesCollection.doc(gameDoc.id).set({ players : [...gameDoc.data().players, this.user]}, { merge: true })
 
     }
 
@@ -109,7 +156,31 @@ class App extends Component {
         })
     }
 
+    createUser = () => {
+        this.user = {
+            name: this.state.inputUserName,
+            type: 'none',
+            inGame: true,
+            ready: false
+        }
+
+        localStorage.setItem('mafiaUserName', this.state.inputUserName);
+
+        this.setState({
+            hasUser: true
+        })
+    }
+
     render() {
+
+        if(!this.state.hasUser){
+            return(
+               <div className="App">
+                   Username <input type="text" value={this.state.inputUserName} onChange={ e => { this.setState({inputUserName : e.target.value })}}/>
+                   <div className="done-btn" onClick={this.createUser}>Done</div>
+               </div>
+            )
+        }
 
         if(this.state.createGame){
             return(
@@ -123,12 +194,14 @@ class App extends Component {
         if(this.state.game) {
 
             let game = this.state.game.data();
+            let player = this.state.player && this.state.player.data();
+            console.log(this.state.players);
             return (
                <div className="App">
                    <div>{game.gameName}</div>
-                   {!this.state.player.ready && <div className="btn" onClick={this.playerReady}>ready</div>}
-                   {this.state.player.ready && <div>IM READYYY</div>}
-                   {game.players && <Players players={game.players} />}
+                   {player && !player.ready && <div className="btn" onClick={this.playerReady}>ready</div>}
+                   {player && player.ready && <div>IM READYYY</div>}
+                   {this.state.players && <Players players={this.state.players} />}
                </div>
             )
         }
