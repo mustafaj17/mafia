@@ -22,18 +22,9 @@ class PlayerList extends Component {
         }))
     }
 
-    isTrue = (status)=>{
-        return status === true
-    }
-
     gameReady = ()=>{
-        const { players } = this.props
-        let statusArray = []
-        players.map(player => {
-            return statusArray.push(player.inGame)
-        })
-        return statusArray.every(this.isTrue)
-    }
+        return this.props.players.every(player =>  player.inGame === true)
+    };
 
     render(){
         return (
