@@ -16,14 +16,14 @@ class PlayerList extends Component {
             return (
                 <div className="container">
                     <div key={player.name} className="player">{player.name}</div>
-                    <div className="player">{player.ready ? player.type : '-'}</div>
+                    <div className="player">{player.inGame ? player.type : '-'}</div>
                 </div>
             )
         }))
     }
 
     gameReady = ()=>{
-        return this.props.players.every(player =>  player.inGame === true)
+        return this.props.players.every(player =>  player.ready === true)
     };
 
     render(){
