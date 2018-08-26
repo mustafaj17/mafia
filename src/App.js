@@ -21,7 +21,7 @@ class App extends Component {
             firebase.initializeApp(config);
 
         }
-        const settings = {/* your settings... */ timestampsInSnapshots: true};
+        const settings = { timestampsInSnapshots: true };
         this.db = firebase.firestore();
         this.db.settings(settings);
         this.mafiaGamesCollectionRef = this.db.collection('mafia-games');
@@ -47,8 +47,8 @@ class App extends Component {
 
         this.disconnectFromGames = this.mafiaGamesCollectionRef.onSnapshot(gamesSnapshot => {
             let games = [];
-            gamesSnapshot.forEach(doc => {
-                games.push(doc);
+            gamesSnapshot.forEach(gameDoc => {
+                games.push(gameDoc);
             });
             this.setState({games});
         }, err => {
@@ -68,6 +68,7 @@ class App extends Component {
         this.disconnectFromGame = gameDoc.ref.onSnapshot( gameDocRef => {
 
             let playersColRef = gameDocRef.ref.collection('players');
+
             playersColRef.onSnapshot(playersSnapshot => {
                 let playersArray = []
                 playersSnapshot.forEach( playerDoc => {
@@ -77,25 +78,24 @@ class App extends Component {
                     players: playersArray
                 })
             })
+
             let currentPlayerRef;
+            let playersArray = [];
+
             playersColRef.get().then(playerDocsRefs => {
-                let playersArray = [];
-                let playersDocRefs = [];
                 playerDocsRefs.forEach(playerDocRef => {
                     if(playerDocRef.data().name === this.user.name){
                         currentPlayerRef = playerDocRef;
                         console.log('playerRef exists');
                     }
-
                     playersArray.push(playerDocRef.data())
                 })
 
                 if(!currentPlayerRef){
-                    console.log('hello world')
-                    playersColRef.add(this.user).then(player => {
-                        player.get().then( playerObj => {
-                            currentPlayerRef = playerObj;
-                            playersArray.push(playerObj.data())
+                    playersColRef.add(this.user).then(playerDocRef => {
+                        playerDocRef.get().then( playerDoc => {
+                            currentPlayerRef = playerDoc;
+                            playersArray.push(playerDoc.data())
                             this.setState({
                                 gameDocRef,
                                 playerRef: currentPlayerRef,
@@ -109,7 +109,6 @@ class App extends Component {
                     this.setState({
                         gameDocRef,
                         playerRef: currentPlayerRef,
-                        playersDocRefs,
                         players: playersArray
                     });
                 }
@@ -119,19 +118,11 @@ class App extends Component {
             })
         });
 
-        // this.mafiaGamesCollectionRef.doc(gameDoc.id).set({ players : [...gameDoc.data().players, this.user]}, { merge: true })
-
     }
 
     createGame = () => {
-        this.mafiaGamesCollectionRef.add(
-            {
-                gameName: this.state.inputGameName,
-                players: []
-            })
-        this.setState({
-            createGame: false
-        })
+        this.mafiaGamesCollectionRef.add( { gameName: this.state.inputGameName } )
+        this.setState( { createGame: false } )
     }
 
     playerReady = () => {
