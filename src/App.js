@@ -62,6 +62,18 @@ class App extends Component {
         })
     }
 
+    runGame = () => {
+
+        if(this.state.players.every( player => player.ready === true)){
+            //everyone is ready
+
+            //check if types are set
+            // this.setTypes
+
+
+        }
+    }
+
     selectGame = gameDoc => {
 
         gameDoc = gameDoc.ref || gameDoc
@@ -82,6 +94,8 @@ class App extends Component {
                 this.setState({
                     players: playersArray
                 })
+
+                this.runGame();
             })
 
             let currentPlayerRef;
@@ -198,6 +212,12 @@ class App extends Component {
             return (
                <div className="app">
                    <div className="header">{game.gameName}</div>
+                   {/*{this.gameReady() && <ReactCountdownClock seconds={60}*/}
+                                                             // color="#000"
+                                                             // alpha={0.9}
+                                                             // size={150}
+                                                             // onComplete={()=>console.log('time done')} />
+                   // }
 
                    {this.state.players && <Players players={this.state.players} />}
 

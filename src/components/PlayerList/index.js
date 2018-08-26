@@ -25,19 +25,9 @@ class PlayerList extends Component {
         }))
     }
 
-    gameReady = ()=>{
-        return this.props.players.every(player =>  player.ready === true)
-    };
-
     render(){
         return (
             <div className="players">
-                {this.gameReady() && <ReactCountdownClock seconds={60}
-                                     color="#000"
-                                     alpha={0.9}
-                                     size={150}
-                                     onComplete={()=>console.log('time done')} />
-                }
                 {this.getPlayers()}
             </div>
         )
