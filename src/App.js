@@ -70,10 +70,11 @@ class App extends Component {
             let playersColRef = gameDocRef.ref.collection('players');
 
             playersColRef.onSnapshot(playersSnapshot => {
-                let playersArray = []
+                let playersArray = [];
                 playersSnapshot.forEach( playerDoc => {
                     playersArray.push(playerDoc.data())
                 })
+
                 this.setState({
                     players: playersArray
                 })
@@ -86,6 +87,11 @@ class App extends Component {
                 playerDocsRefs.forEach(playerDocRef => {
                     if(playerDocRef.data().name === this.user.name){
                         currentPlayerRef = playerDocRef;
+                        playerDocRef.ref.onSnapshot( playerRef => {
+                            this.setState({
+                                playerRef: playerRef
+                            })
+                        })
                         console.log('playerRef exists');
                     }
                     playersArray.push(playerDocRef.data())
@@ -152,18 +158,26 @@ class App extends Component {
 
         if(!this.state.hasUser){
             return(
-                <div className="App">
+                <div className="app">
+                    <div className="header">Mafia</div>
                     Username <input type="text" value={this.state.inputUserName} onChange={ e => { this.setState({inputUserName : e.target.value })}}/>
-                    <div className="done-btn" onClick={this.createUser}>Done</div>
+                    <div className="footer-btn" onClick={this.createUser}>Done</div>
                 </div>
             )
         }
 
         if(this.state.createGame){
             return(
-                <div className="App">
-                    Game name <input type="text" value={this.state.inputGameName} onChange={ e => { this.setState({inputGameName : e.target.value })}}/>
-                    <div className="done-btn" onClick={this.createGame}>Done</div>
+                <div className="app">
+
+                    <div className="header">Mafia</div>
+                    <div className="create-game">
+
+                    <div className="input-title">Game name </div>
+                        <input className="input-text-box" type="text" value={this.state.inputGameName}
+                                     onChange={ e => { this.setState({inputGameName : e.target.value })}}/>
+                    <div className="footer-btn" onClick={this.createGame}>Done</div>
+                    </div>
                 </div>
             )
         }
@@ -172,20 +186,21 @@ class App extends Component {
 
             let game = this.state.gameDocRef.data();
             let player = this.state.playerRef && this.state.playerRef.data();
-            console.log(this.state.players);
             return (
-                <div className="App">
-                    <div>{game.gameName}</div>
-                    {player && !player.ready && <div className="btn" onClick={this.playerReady}>ready</div>}
-                    {player && player.ready && <div>IM READYYY</div>}
+                <div className="app">
+                    <div className="header">{game.gameName}</div>
+
                     {this.state.players && <Players players={this.state.players} />}
+
+                    {!player.ready && <div className="footer-btn" onClick={this.playerReady}>ready</div>}
                 </div>
             )
         }
         return (
-            <div className="App">
+            <div className="app">
+                <div className="header">Mafia</div>
                 {this.getGames()}
-                <div className="btn" onClick={ () => { this.setState({createGame: true})}}>Add</div>
+                <div className="footer-btn" onClick={ () => { this.setState({createGame: true})}}>Start New Game</div>
             </div>
         );
     }

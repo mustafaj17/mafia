@@ -11,12 +11,15 @@ class PlayerList extends Component {
     }
 
     getPlayers = () => {
-        const { players } = this.props
+        const { players } = this.props;
         return (players.map(player => {
+            console.log(player);
             return (
-                <div className="container">
-                    <div key={player.name} className="player">{player.name}</div>
-                    <div className="player">{player.inGame ? player.type : '-'}</div>
+                <div className="player">
+                    <div key={player.name} className="player-name">{player.name}</div>
+                    <div className="player-type">{player.type || '-'}</div>
+                    <div className="player-in-game">{player.inGame}</div>
+                    <div className='player-ready'>{player.ready ? 'ready' : '-'}</div>
                 </div>
             )
         }))
@@ -28,7 +31,7 @@ class PlayerList extends Component {
 
     render(){
         return (
-            <div>
+            <div className="players">
                 {this.gameReady() && <ReactCountdownClock seconds={60}
                                      color="#000"
                                      alpha={0.9}

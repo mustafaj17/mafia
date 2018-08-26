@@ -1,14 +1,67 @@
-body{
-  display: flex;
-  justify-content: center;
-  align-items: center;
+*{
+  margin:0;
+  padding: 0;
+  font-family: sans-serif;
+  box-sizing: border-box;
 }
 
-.game{
+.app{
+  border: 1px solid black;
+  display: flex;
+  max-width: 400px;
+  margin: 0 auto;
+  height: 100vh;
+  position: relative;
+  flex-direction:column;
+  padding-top: 90px;
+}
+
+.header{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #292929;
+  color: white;
+  font-size: 16px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 20px;
-  padding: 20px 40px;
-  border: solid silver 1px;
+  padding: 20px;
+;
 }
+.game{
+  display: flex;
+  font-size: 24px;
+  justify-content: left;
+  padding: 20px 10px;
+  margin: 5px;
+  height: fit-content;
+  border: solid #e4e4e4 1px;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+}
+
+.footer-btn{
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+  background-color: rgb(96, 168, 189);
+  color: white;
+  padding:15px 5px;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+}
+
+
+/*start new game*/
+/*start new game*/
+/*start new game*/
+
+.input-text-box{
+  maring:5px;
+  padding: 10px;
+}
+
+.input-title{}
