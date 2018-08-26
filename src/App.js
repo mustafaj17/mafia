@@ -24,7 +24,7 @@ class App extends Component {
         const settings = {/* your settings... */ timestampsInSnapshots: true};
         this.db = firebase.firestore();
         this.db.settings(settings);
-        this.mafiaGamesCollection = this.db.collection('mafia-games');
+        this.mafiaGamesCollectionRef = this.db.collection('mafia-games');
         let userName = localStorage.getItem('mafiaUserName');
         let hasUser = false;
         if(userName){
@@ -34,19 +34,18 @@ class App extends Component {
                 inGame: true,
                 ready: false
             }
-           hasUser = true;
+            hasUser = true;
         }
         this.state = {
             games: [],
             createGame: false,
-            player: this.user,
             hasUser
         }
     }
 
     componentWillMount(){
 
-        this.disconnectFromGames = this.mafiaGamesCollection.onSnapshot(gamesSnapshot => {
+        this.disconnectFromGames = this.mafiaGamesCollectionRef.onSnapshot(gamesSnapshot => {
             let games = [];
             gamesSnapshot.forEach(doc => {
                 games.push(doc);
@@ -66,10 +65,10 @@ class App extends Component {
     selectGame = gameDoc => {
         this.disconnectFromGames();
 
-        this.disconnectFromGame = gameDoc.ref.onSnapshot( gameDoc => {
+        this.disconnectFromGame = gameDoc.ref.onSnapshot( gameDocRef => {
 
-            let players = gameDoc.ref.collection('players');
-            players.onSnapshot( playersSnapshot => {
+            let playersColRef = gameDocRef.ref.collection('players');
+            playersColRef.onSnapshot(playersSnapshot => {
                 let playersArray = []
                 playersSnapshot.forEach( playerDoc => {
                     playersArray.push(playerDoc.data())
@@ -78,26 +77,28 @@ class App extends Component {
                     players: playersArray
                 })
             })
-            let currentPlayer;
-            players.get().then( playerDocs => {
+            let currentPlayerRef;
+            playersColRef.get().then(playerDocsRefs => {
                 let playersArray = [];
-                playerDocs.forEach( playerDoc => {
-                    if(playerDoc.data().playerName === this.user.name){
-                        currentPlayer = playerDoc;
-                        console.log('player exists');
+                let playersDocRefs = [];
+                playerDocsRefs.forEach(playerDocRef => {
+                    if(playerDocRef.data().name === this.user.name){
+                        currentPlayerRef = playerDocRef;
+                        console.log('playerRef exists');
                     }
 
-                    playersArray.push(playerDoc.data())
+                    playersArray.push(playerDocRef.data())
                 })
 
-                if(!currentPlayer){
-                    players.add(this.user).then( player => {
+                if(!currentPlayerRef){
+                    console.log('hello world')
+                    playersColRef.add(this.user).then(player => {
                         player.get().then( playerObj => {
-                            currentPlayer = playerObj;
+                            currentPlayerRef = playerObj;
                             playersArray.push(playerObj.data())
                             this.setState({
-                                game : gameDoc,
-                                player: currentPlayer,
+                                gameDocRef,
+                                playerRef: currentPlayerRef,
                                 players: playersArray
                             });
                         })
@@ -106,8 +107,9 @@ class App extends Component {
 
                 }else{
                     this.setState({
-                        game : gameDoc,
-                        player: currentPlayer,
+                        gameDocRef,
+                        playerRef: currentPlayerRef,
+                        playersDocRefs,
                         players: playersArray
                     });
                 }
@@ -117,16 +119,16 @@ class App extends Component {
             })
         });
 
-        // this.mafiaGamesCollection.doc(gameDoc.id).set({ players : [...gameDoc.data().players, this.user]}, { merge: true })
+        // this.mafiaGamesCollectionRef.doc(gameDoc.id).set({ players : [...gameDoc.data().players, this.user]}, { merge: true })
 
     }
 
     createGame = () => {
-        this.mafiaGamesCollection.add(
-           {
-               gameName: this.state.inputGameName,
-               players: []
-           })
+        this.mafiaGamesCollectionRef.add(
+            {
+                gameName: this.state.inputGameName,
+                players: []
+            })
         this.setState({
             createGame: false
         })
@@ -137,23 +139,7 @@ class App extends Component {
             ...this.user,
             ready: true
         }
-
-        let newPlayerState = this.state.game.data().players.filter(player => {
-            if(player.name === this.user.name){
-                player.ready = true
-            }
-
-            return player;
-        })
-
-        this.mafiaGamesCollection.doc(this.state.game.id).set(
-           { players : newPlayerState},
-           { merge: true }
-        )
-
-        this.setState({
-            player: this.user
-        })
+        this.state.playerRef.ref.set(this.user)
     }
 
     createUser = () => {
@@ -175,41 +161,41 @@ class App extends Component {
 
         if(!this.state.hasUser){
             return(
-               <div className="App">
-                   Username <input type="text" value={this.state.inputUserName} onChange={ e => { this.setState({inputUserName : e.target.value })}}/>
-                   <div className="done-btn" onClick={this.createUser}>Done</div>
-               </div>
+                <div className="App">
+                    Username <input type="text" value={this.state.inputUserName} onChange={ e => { this.setState({inputUserName : e.target.value })}}/>
+                    <div className="done-btn" onClick={this.createUser}>Done</div>
+                </div>
             )
         }
 
         if(this.state.createGame){
             return(
-               <div className="App">
-                   Game name <input type="text" value={this.state.inputGameName} onChange={ e => { this.setState({inputGameName : e.target.value })}}/>
-                   <div className="done-btn" onClick={this.createGame}>Done</div>
-               </div>
+                <div className="App">
+                    Game name <input type="text" value={this.state.inputGameName} onChange={ e => { this.setState({inputGameName : e.target.value })}}/>
+                    <div className="done-btn" onClick={this.createGame}>Done</div>
+                </div>
             )
         }
 
-        if(this.state.game) {
+        if(this.state.gameDocRef) {
 
-            let game = this.state.game.data();
-            let player = this.state.player && this.state.player.data();
+            let game = this.state.gameDocRef.data();
+            let player = this.state.playerRef && this.state.playerRef.data();
             console.log(this.state.players);
             return (
-               <div className="App">
-                   <div>{game.gameName}</div>
-                   {player && !player.ready && <div className="btn" onClick={this.playerReady}>ready</div>}
-                   {player && player.ready && <div>IM READYYY</div>}
-                   {this.state.players && <Players players={this.state.players} />}
-               </div>
+                <div className="App">
+                    <div>{game.gameName}</div>
+                    {player && !player.ready && <div className="btn" onClick={this.playerReady}>ready</div>}
+                    {player && player.ready && <div>IM READYYY</div>}
+                    {this.state.players && <Players players={this.state.players} />}
+                </div>
             )
         }
         return (
-           <div className="App">
-               {this.getGames()}
-               <div className="btn" onClick={ () => { this.setState({createGame: true})}}>Add</div>
-           </div>
+            <div className="App">
+                {this.getGames()}
+                <div className="btn" onClick={ () => { this.setState({createGame: true})}}>Add</div>
+            </div>
         );
     }
 }
