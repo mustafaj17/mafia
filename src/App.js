@@ -172,7 +172,7 @@ class App extends Component {
             }
 
             if(this.state.gameDocRef.data().voteMode){
-                if(this.state.players.every( player => player.votingFor)){
+                if(this.state.players.filter( player => player.inGame).every( player => player.votingFor)){
                     this.votingComplete();
                 }
             }
@@ -220,6 +220,7 @@ class App extends Component {
 
                 }
                 playerDocRef.ref.update('votingFor', null)
+                playerDocRef.ref.update('ready', false)
             })
         })
 
@@ -310,7 +311,7 @@ class App extends Component {
 
                    {game.voteMode && <div>please vote</div>}
                    {this.state.roundInProgress &&
-                   <ReactCountdownClock seconds={4}
+                   <ReactCountdownClock seconds={10}
                                         color="#000"
                                         alpha={0.9}
                                         size={150}

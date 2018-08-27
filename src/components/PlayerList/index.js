@@ -12,25 +12,30 @@ class PlayerList extends Component {
         const { players } = this.props;
         let currentPlayer = this.props.currentPlayer.data()
         return players.map(player => {
+            if(this.props.voteMode){
+                if(currentPlayer.inGame &&
+                !currentPlayer.votedFor &&
+                player.inGame &&
+                (currentPlayer.name !== player.name))
+                return(
+                    <div className="player">
+                        <div key={player.name} className="player-name">{player.name}</div>
+                        <div>
+                            <div className="cast-vote" onClick={() => this.castVote(player)}> Vote </div>
+                        </div>
+                    </div>
+                )
+            } else {
             return (
-               <div className="player">
+                <div className="player">
                    <div key={player.name} className="player-name">{player.name}</div>
-                   {!this.props.voteMode &&
                    <div>
-                       (<div className="player-type">{currentPlayer.type === 'Mafia'? player.type : '-'}</div>
+                       <div className="player-type">{currentPlayer.type === 'Mafia'? player.type : '-'}</div>
                        <div className="player-in-game">{player.inGame ? 'playing' : 'out'}</div>
                        <div className='player-ready'>{player.ready ? 'ready' : '-'}</div>
-                   </div>}
-                   {this.props.voteMode &&
-                   currentPlayer.inGame &&
-                   !currentPlayer.votedFor &&
-                   (currentPlayer.name !== player.name) &&
-                   <div>
-                       <div className="cast-vote" onClick={() => this.castVote(player)}> Vote </div>
                    </div>
-                   }
                </div>
-            )
+            )}
         })
     }
 
