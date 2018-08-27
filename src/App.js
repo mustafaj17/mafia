@@ -73,11 +73,12 @@ class App extends Component {
     }
 
     createGame = () => {
-        this.mafiaGamesCollectionRef.add( { gameName: this.state.inputGameName } ).then( gameDoc => {
+        this.mafiaGamesCollectionRef.add( { gameName: this.state.inputGameName } ).then( gameDocRef => {
             this.user.admin = true;
-            this.selectGame(gameDoc);
+            this.selectGame(gameDocRef);
             this.setState({
-                createGame: false
+                createGame: false,
+                creatingGame : true
             })
         })
     }
@@ -90,7 +91,7 @@ class App extends Component {
 
     selectGame = gameDoc => {
 
-        gameDoc = gameDoc.ref || gameDoc
+        gameDoc = gameDoc.ref || gameDoc;
         this.disconnectFromGames();
 
         this.disconnectFromGame = gameDoc.onSnapshot( gameDocRef => {
@@ -137,7 +138,8 @@ class App extends Component {
                             this.setState({
                                 gameDocRef,
                                 playerRef: currentPlayerRef,
-                                players: playersArray
+                                players: playersArray,
+                                creatingGame : false
                             });
                         })
 
@@ -147,7 +149,8 @@ class App extends Component {
                     this.setState({
                         gameDocRef,
                         playerRef: currentPlayerRef,
-                        players: playersArray
+                        players: playersArray,
+                        creatingGame : false
                     });
                 }
 
@@ -168,10 +171,14 @@ class App extends Component {
 
     runGame = () => {
 
-        if(this.state.players.every( player => player.ready === true)){
+
+        if(this.state.players.length > 0 &&
+           this.state.players.every( player => player.ready === true)){
             if(this.user.admin){
                 this.setTypes()
             }
+
+            debugger;
 
             this.setState({
                 roundInProgress : true
@@ -182,7 +189,8 @@ class App extends Component {
 
     setTypes = () => {
 
-        if(this.state.players.every( player => player.type === null)){
+        if(this.state.players.length > 1 &&
+           this.state.players.every( player => player.type === null)){
             //no types are set
             let mafiaCount = 1;
             this.state.players.forEach( player => {
@@ -194,14 +202,18 @@ class App extends Component {
                 }
             });
 
-            this.state.gameDocRef.ref.collection('players').get().then( playerDoc => {
-                let playerType = null;
-                this.state.players.forEach( player => {
-                    if(player.name === playerDoc.data().name){
-                        playerType = player.type
-                    }
+            this.state.gameDocRef.ref.collection('players').get().then( playerDocs => {
+
+                playerDocs.forEach ( playerDoc => {
+                    let playerType = null;
+                    this.state.players.forEach( player => {
+                        if(player.name === playerDoc.data().name){
+                            playerType = player.type
+                        }
+                    })
+                    playerDoc.ref.update('type', playerType);
                 })
-                playerDoc.ref.update('type', playerType);
+
                }
             )
         }
@@ -235,13 +247,19 @@ class App extends Component {
             )
         }
 
+        if(this.state.creatingGame){
+            return(
+               <div>creating/joining game</div>
+            )
+        }
+
         if(this.state.gameDocRef) {
 
-            let game = this.state.gameDocRef.data();
-            let player = this.state.playerRef && this.state.playerRef.data();
+            let game = this.state.gameDocRef.data && this.state.gameDocRef.data();
+            let player = this.state.playerRef.data();
             return (
                <div className="app">
-                   <div className="header">{game.gameName}</div>
+                   <div className="header">{game && game.gameName}</div>
 
                    {this.state.voteInProgress && <div>please vote</div>}
                    {this.state.roundInProgress &&
