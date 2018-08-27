@@ -188,12 +188,28 @@ class App extends Component {
                     let allPlayersHaveVoted = playersInTheGame.every(player => player.votingFor);
                     if (allPlayersHaveVoted) {
                         this.votingComplete();
+                        this.hasGameEnded();
                     }
                 }
             }
         }
     }
 
+    hasGameEnded = () => {
+        let playersInTheGame = this.state.players.filter( player => player.inGame)
+        let civilianCount = playersInTheGame.filter( player => player.type === 'Civilian')
+        let mafiaCount = playersInTheGame.filter( player => player.type === 'Mafia')
+
+        if(mafiaCount === 0){
+            this.state.gameDocRef.ref.update('gameComplete' , true);
+        }
+
+        if(mafiaCount >= civilianCount){
+            this.state.gameDocRef.ref.update('gameComplete' , true);
+        }
+
+
+    }
     votingComplete = () => {
         let inGamePlayers = this.state.players.filter( player => player.inGame)
         let votes = inGamePlayers.map( player => player.votingFor)
@@ -239,6 +255,7 @@ class App extends Component {
     startGameRound = () => {
         this.state.gameDocRef.ref.update('roundInProgress' , true);
     }
+
     endRound = () => {
         this.state.gameDocRef.ref.collection('players').get().then( playerDocs => {
             playerDocs.forEach(playerDocRef => {
@@ -321,9 +338,10 @@ class App extends Component {
             }
             return (
                <div className="app">
-                   <div className="header">{game && game.gameName}</div>
+                   <div className="header">{game.gameName}</div>
 
-                   {game.votingInProgress && <div>please vote</div>}
+                   {game.votingInProgress && !player.votingFor && <div>please vote</div>}
+
                    {game.roundInProgress &&
                    <ReactCountdownClock seconds={10}
                                         color="#000"
@@ -332,11 +350,17 @@ class App extends Component {
                                         onComplete={this.endRound} />
                    }
 
-                   {this.state.players && <Players voteMode={game.votingInProgress} players={this.state.players} currentPlayer={this.state.playerRef}/>}
+                   {this.state.players &&
+                   <Players
+                      voteMode={game.votingInProgress}
+                      players={this.state.players}
+                      currentPlayer={this.state.playerRef}/>}
 
                    {player.admin && <div> IM THE GUY</div>}
 
-                   {!player.ready && <div className="footer-btn" onClick={this.playerReady}>ready</div>}
+                   {game.gameComplete && <div>GAME DONE</div>}
+
+                   {!player.ready && !game.gameComplete && <div className="footer-btn" onClick={this.playerReady}>ready</div>}
                </div>
             )
         }

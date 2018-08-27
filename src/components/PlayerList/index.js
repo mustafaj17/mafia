@@ -9,13 +9,11 @@ class PlayerList extends Component {
 
     getPlayers = () => {
         const { players } = this.props;
-        let currentPlayer = this.props.currentPlayer.data()
+        let currentPlayer = this.props.currentPlayer.data();
+
         return players.map(player => {
-            if(this.props.voteMode){
-                if(currentPlayer.inGame &&
-                !currentPlayer.votedFor &&
-                player.inGame &&
-                (currentPlayer.name !== player.name))
+            if(this.props.voteMode && currentPlayer.inGame && !currentPlayer.votedFor ){
+                if( player.inGame && (currentPlayer.name !== player.name))
                 return(
                     <div className="player">
                         <div key={player.name} className="player-name">{player.name}</div>
