@@ -176,7 +176,7 @@ class App extends Component {
                     this.votingComplete();
                 }
             }
-            if(!this.state.gameDocRef.data().voteMode) {
+            else {
                 this.setState({
                     roundInProgress: true
                 })
@@ -225,9 +225,6 @@ class App extends Component {
         })
 
         this.state.gameDocRef.ref.update('voteMode' , false)
-        this.setState({
-            roundInProgress: false
-        })
 
     }
 

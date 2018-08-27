@@ -4,7 +4,6 @@ import './PlayerList.css'
 class PlayerList extends Component {
 
     castVote = player => {
-        debugger;
         this.props.currentPlayer.ref.update('votingFor', player.name)
     }
 
