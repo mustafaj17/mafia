@@ -30,10 +30,7 @@ class App extends Component {
         let hasUser = false;
         if(userName){
             this.user = {
-                name: userName,
-                type: null,
-                inGame: true,
-                ready: false
+                name: userName
             }
             hasUser = true;
         }
@@ -59,10 +56,7 @@ class App extends Component {
 
     createUser = () => {
         this.user = {
-            name: this.state.inputUserName,
-            type: null,
-            inGame: true,
-            ready: false
+            name: this.state.inputUserName
         }
 
         localStorage.setItem('mafiaUserName', this.state.inputUserName);
@@ -73,7 +67,13 @@ class App extends Component {
     }
 
     createGame = () => {
-        this.mafiaGamesCollectionRef.add( { gameName: this.state.inputGameName } ).then( gameDocRef => {
+        this.mafiaGamesCollectionRef.add(
+           {
+               gameName: this.state.inputGameName,
+               roundInProgress: false,
+               votingInProgress: false
+           }
+        ).then( gameDocRef => {
             this.user.admin = true;
             this.selectGame(gameDocRef);
             this.setState({
@@ -99,6 +99,7 @@ class App extends Component {
             this.setState({
                 gameDocRef
             })
+            this.runGame();
         });
 
         let playersColRef = gameDoc.collection('players');
@@ -120,28 +121,39 @@ class App extends Component {
         let currentPlayerRef;
 
         playersColRef.get().then(playerDocsRefs => {
+
             playerDocsRefs.forEach(playerDocRef => {
                 if(playerDocRef.data().name === this.user.name){
-                    currentPlayerRef = playerDocRef;
                     playerDocRef.ref.onSnapshot( playerRef => {
                         this.setState({
                             playerRef: playerRef
                         })
+                    })
+                    this.setState({
+                        playerRef: playerDocRef
                     })
                     console.log('player exists');
                 }
             })
 
             if(!currentPlayerRef){
-                playersColRef.add(this.user).then(playerDocRef => {
-                    console.log('added new player');
+                playersColRef
+                   .add(
+                      { type: null,
+                          inGame: true,
+                          ready: false,
+                          ...this.user
+                      }).then(playerDocRef => {
                     playerDocRef.get().then( playerDoc => {
-                        currentPlayerRef = playerDoc;
+                        this.setState({
+                            playerRef: playerDocRef
+                        })
                         playerDoc.ref.onSnapshot( playerRef => {
                             this.setState({
                                 playerRef: playerRef
                             })
                         })
+                        console.log('added new player');
                     })
 
                 })
@@ -156,32 +168,29 @@ class App extends Component {
     }
 
     playerReady = () => {
-        this.user = {
-            ...this.user,
-            ready: true
-        }
-        this.state.playerRef.ref.set(this.user)
+        this.state.playerRef.ref.update('ready', true);
     }
 
     runGame = () => {
 
-        if(this.state.players.length > 0 &&
-           this.state.players.every( player => player.ready === true)){
-            if(this.user.admin){
+        if(this.state.players && this.state.players.length) {
+            if (this.user.admin) {
                 this.setTypes()
-            }
 
-            if(this.state.gameDocRef.data().voteMode){
-                if(this.state.players.filter( player => player.inGame).every( player => player.votingFor)){
-                    this.votingComplete();
+                let game = this.state.gameDocRef.data();
+                let playersInTheGame = this.state.players.filter(player => player.inGame);
+                let allPlayersAreReady = playersInTheGame.every(player => player.ready);
+                if (allPlayersAreReady) {
+                    this.startGameRound();
+                }
+
+                if (game.votingInProgress) {
+                    let allPlayersHaveVoted = playersInTheGame.every(player => player.votingFor);
+                    if (allPlayersHaveVoted) {
+                        this.votingComplete();
+                    }
                 }
             }
-            else {
-                this.setState({
-                    roundInProgress: true
-                })
-            }
-
         }
     }
 
@@ -220,20 +229,25 @@ class App extends Component {
 
                 }
                 playerDocRef.ref.update('votingFor', null)
-                playerDocRef.ref.update('ready', false)
             })
+            this.state.gameDocRef.ref.update('votingInProgress' , false)
         })
 
-        this.state.gameDocRef.ref.update('voteMode' , false)
 
     }
 
+    startGameRound = () => {
+        this.state.gameDocRef.ref.update('roundInProgress' , true);
+    }
     endRound = () => {
-        this.setState({
-            roundInProgress : false
+        this.state.gameDocRef.ref.collection('players').get().then( playerDocs => {
+            playerDocs.forEach(playerDocRef => {
+                playerDocRef.ref.update('ready', false)
+            })
+            this.state.gameDocRef.ref.update('roundInProgress' , false);
+            this.state.gameDocRef.ref.update('votingInProgress' , true)
         })
 
-        this.state.gameDocRef.ref.update('voteMode' , true)
     }
 
     setTypes = () => {
@@ -299,7 +313,7 @@ class App extends Component {
         if(this.state.gameDocRef) {
 
             let game = this.state.gameDocRef.data && this.state.gameDocRef.data();
-            let player = this.state.playerRef && this.state.playerRef.data();
+            let player = this.state.playerRef && this.state.playerRef.data && this.state.playerRef.data();
             if(!player || !game){
                 return(
                    <div>loading</div>
@@ -309,8 +323,8 @@ class App extends Component {
                <div className="app">
                    <div className="header">{game && game.gameName}</div>
 
-                   {game.voteMode && <div>please vote</div>}
-                   {this.state.roundInProgress &&
+                   {game.votingInProgress && <div>please vote</div>}
+                   {game.roundInProgress &&
                    <ReactCountdownClock seconds={10}
                                         color="#000"
                                         alpha={0.9}
@@ -318,7 +332,7 @@ class App extends Component {
                                         onComplete={this.endRound} />
                    }
 
-                   {this.state.players && <Players voteMode={game.voteMode} players={this.state.players} currentPlayer={this.state.playerRef}/>}
+                   {this.state.players && <Players voteMode={game.votingInProgress} players={this.state.players} currentPlayer={this.state.playerRef}/>}
 
                    {player.admin && <div> IM THE GUY</div>}
 
