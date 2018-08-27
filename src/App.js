@@ -225,6 +225,9 @@ class App extends Component {
         })
 
         this.state.gameDocRef.ref.update('voteMode' , false)
+        this.setState({
+            roundInProgress: false
+        })
 
     }
 
