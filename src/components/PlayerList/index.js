@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './PlayerList.css'
-import ReactCountdownClock from 'react-countdown-clock'
 
 class PlayerList extends Component {
     constructor(props) {

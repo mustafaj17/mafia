@@ -3,6 +3,7 @@ import firebase from 'firebase/app';
 import Players from './components/PlayerList'
 import 'firebase/firestore';
 import './App.css';
+import ReactCountdownClock from 'react-countdown-clock';
 
 class App extends Component {
 
@@ -30,7 +31,7 @@ class App extends Component {
         if(userName){
             this.user = {
                 name: userName,
-                type: 'none',
+                type: null,
                 inGame: true,
                 ready: false
             }
@@ -59,7 +60,7 @@ class App extends Component {
     createUser = () => {
         this.user = {
             name: this.state.inputUserName,
-            type: 'none',
+            type: null,
             inGame: true,
             ready: false
         }
@@ -168,12 +169,41 @@ class App extends Component {
     runGame = () => {
 
         if(this.state.players.every( player => player.ready === true)){
-            //everyone is ready
+            if(this.user.admin){
+                this.setTypes()
+            }
 
-            //check if types are set
-            // this.setTypes
+            this.setState({
+                roundInProgress : true
+            })
 
+        }
+    }
 
+    setTypes = () => {
+
+        if(this.state.players.every( player => player.type === null)){
+            //no types are set
+            let mafiaCount = 1;
+            this.state.players.forEach( player => {
+                if(mafiaCount) {
+                    player.type = 'Mafia';
+                    mafiaCount--;
+                }else{
+                    player.type = 'Civilian'
+                }
+            });
+
+            this.state.gameDocRef.ref.collection('players').get().then( playerDoc => {
+                let playerType = null;
+                this.state.players.forEach( player => {
+                    if(player.name === playerDoc.data().name){
+                        playerType = player.type
+                    }
+                })
+                playerDoc.ref.update('type', playerType);
+               }
+            )
         }
     }
 
@@ -213,6 +243,15 @@ class App extends Component {
                <div className="app">
                    <div className="header">{game.gameName}</div>
 
+                   {this.state.voteInProgress && <div>please vote</div>}
+                   {this.state.roundInProgress &&
+                   <ReactCountdownClock seconds={10}
+                                        color="#000"
+                                        alpha={0.9}
+                                        size={150}
+                                        onComplete={()=>this.setState({roundInProgress: false, voteInProgress: true})} />
+                   }
+
                    {this.state.players && <Players players={this.state.players} />}
 
                    {player.admin && <div> IM THE GUY</div>}
@@ -232,10 +271,3 @@ class App extends Component {
 }
 
 export default App;
-
-{/*{this.gameReady() && <ReactCountdownClock seconds={60}*/}
-// color="#000"
-// alpha={0.9}
-// size={150}
-// onComplete={()=>console.log('time done')} />
-// }
