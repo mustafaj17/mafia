@@ -56,22 +56,35 @@ class App extends Component {
         });
     }
 
+    createUser = () => {
+        this.user = {
+            name: this.state.inputUserName,
+            type: 'none',
+            inGame: true,
+            ready: false
+        }
+
+        localStorage.setItem('mafiaUserName', this.state.inputUserName);
+
+        this.setState({
+            hasUser: true
+        })
+    }
+
+    createGame = () => {
+        this.mafiaGamesCollectionRef.add( { gameName: this.state.inputGameName } ).then( gameDoc => {
+            this.user.admin = true;
+            this.selectGame(gameDoc);
+            this.setState({
+                createGame: false
+            })
+        })
+    }
+
     getGames = () => {
         return this.state.games.map( gameDoc => {
             return (<div className="game" onClick={() => this.selectGame(gameDoc)}>{gameDoc.data().gameName}</div>)
         })
-    }
-
-    runGame = () => {
-
-        if(this.state.players.every( player => player.ready === true)){
-            //everyone is ready
-
-            //check if types are set
-            // this.setTypes
-
-
-        }
     }
 
     selectGame = gameDoc => {
@@ -144,16 +157,6 @@ class App extends Component {
 
     }
 
-    createGame = () => {
-        this.mafiaGamesCollectionRef.add( { gameName: this.state.inputGameName } ).then( gameDoc => {
-            this.user.admin = true;
-            this.selectGame(gameDoc);
-            this.setState({
-                createGame: false
-            })
-        })
-    }
-
     playerReady = () => {
         this.user = {
             ...this.user,
@@ -162,19 +165,16 @@ class App extends Component {
         this.state.playerRef.ref.set(this.user)
     }
 
-    createUser = () => {
-        this.user = {
-            name: this.state.inputUserName,
-            type: 'none',
-            inGame: true,
-            ready: false
+    runGame = () => {
+
+        if(this.state.players.every( player => player.ready === true)){
+            //everyone is ready
+
+            //check if types are set
+            // this.setTypes
+
+
         }
-
-        localStorage.setItem('mafiaUserName', this.state.inputUserName);
-
-        this.setState({
-            hasUser: true
-        })
     }
 
     render() {
