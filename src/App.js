@@ -212,12 +212,6 @@ class App extends Component {
             return (
                <div className="app">
                    <div className="header">{game.gameName}</div>
-                   {/*{this.gameReady() && <ReactCountdownClock seconds={60}*/}
-                                                             // color="#000"
-                                                             // alpha={0.9}
-                                                             // size={150}
-                                                             // onComplete={()=>console.log('time done')} />
-                   // }
 
                    {this.state.players && <Players players={this.state.players} />}
 
@@ -238,3 +232,10 @@ class App extends Component {
 }
 
 export default App;
+
+{/*{this.gameReady() && <ReactCountdownClock seconds={60}*/}
+// color="#000"
+// alpha={0.9}
+// size={150}
+// onComplete={()=>console.log('time done')} />
+// }
