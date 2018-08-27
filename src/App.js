@@ -200,11 +200,11 @@ class App extends Component {
         let civilianCount = playersInTheGame.filter( player => player.type === 'Civilian')
         let mafiaCount = playersInTheGame.filter( player => player.type === 'Mafia')
 
-        if(mafiaCount === 0){
+        if(mafiaCount.length === 0){
             this.state.gameDocRef.ref.update('gameComplete' , true);
         }
 
-        if(mafiaCount >= civilianCount){
+        if(mafiaCount.length >= civilianCount.length){
             this.state.gameDocRef.ref.update('gameComplete' , true);
         }
 
