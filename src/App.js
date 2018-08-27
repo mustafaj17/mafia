@@ -177,9 +177,6 @@ class App extends Component {
             if(this.user.admin){
                 this.setTypes()
             }
-
-            debugger;
-
             this.setState({
                 roundInProgress : true
             })
@@ -270,7 +267,7 @@ class App extends Component {
                                         onComplete={()=>this.setState({roundInProgress: false, voteInProgress: true})} />
                    }
 
-                   {this.state.players && <Players players={this.state.players} />}
+                   {this.state.players && <Players players={this.state.players} currentPlayer={this.state.playerRef}/>}
 
                    {player.admin && <div> IM THE GUY</div>}
 

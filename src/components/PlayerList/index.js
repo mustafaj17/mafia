@@ -10,18 +10,18 @@ class PlayerList extends Component {
     }
 
     getPlayers = () => {
-        const { players } = this.props;
-        return (players.map(player => {
-            console.log(player);
-            return (
-                <div className="player">
-                    <div key={player.name} className="player-name">{player.name}</div>
-                    <div className="player-type">{player.type || '-'}</div>
-                    <div className="player-in-game">{player.inGame}</div>
-                    <div className='player-ready'>{player.ready ? 'ready' : '-'}</div>
-                </div>
-            )
-        }))
+        const { players, currentPlayer } = this.props;
+        let currentPlayerType = currentPlayer.data().type
+            return (players.map(player => {
+                return (
+                    <div className="player">
+                        <div key={player.name} className="player-name">{player.name}</div>
+                        <div className="player-type">{currentPlayerType === 'Mafia'? player.type : '-'}</div>
+                        <div className="player-in-game">{player.inGame}</div>
+                        <div className='player-ready'>{player.ready ? 'ready' : '-'}</div>
+                    </div>
+                )
+            }))
     }
 
     render(){
