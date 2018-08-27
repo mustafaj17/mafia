@@ -134,6 +134,11 @@ class App extends Component {
                     playersColRef.add(this.user).then(playerDocRef => {
                         playerDocRef.get().then( playerDoc => {
                             currentPlayerRef = playerDoc;
+                            playerDoc.ref.onSnapshot( playerRef => {
+                                this.setState({
+                                    playerRef: playerRef
+                                })
+                            })
                             playersArray.push(playerDoc.data())
                             this.setState({
                                 gameDocRef,
