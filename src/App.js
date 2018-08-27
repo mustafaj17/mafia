@@ -175,12 +175,12 @@ class App extends Component {
 
         if(this.state.players && this.state.players.length) {
             if (this.user.admin) {
-                this.setTypes()
 
                 let game = this.state.gameDocRef.data();
                 let playersInTheGame = this.state.players.filter(player => player.inGame);
                 let allPlayersAreReady = playersInTheGame.every(player => player.ready);
                 if (allPlayersAreReady) {
+                    this.setTypes()
                     this.startGameRound();
                 }
 
