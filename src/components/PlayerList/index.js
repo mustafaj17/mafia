@@ -21,7 +21,10 @@ class PlayerList extends Component {
                        <div className="player-in-game">{player.inGame ? 'playing' : 'out'}</div>
                        <div className='player-ready'>{player.ready ? 'ready' : '-'}</div>
                    </div>}
-                   {this.props.voteMode && !currentPlayer.votedFor &&
+                   {this.props.voteMode &&
+                   currentPlayer.inGame &&
+                   !currentPlayer.votedFor &&
+                   (currentPlayer.name !== player.name) &&
                    <div>
                        <div className="cast-vote" onClick={() => this.castVote(player)}> Vote </div>
                    </div>
