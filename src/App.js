@@ -360,7 +360,7 @@ class App extends Component {
 
                    {game.gameComplete && <div>GAME DONE</div>}
 
-                   {!player.ready && !game.gameComplete && <div className="footer-btn" onClick={this.playerReady}>ready</div>}
+                   {player.inGame && !player.ready && !game.gameComplete && <div className="footer-btn" onClick={this.playerReady}>ready</div>}
                </div>
             )
         }
