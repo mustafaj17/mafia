@@ -62,11 +62,11 @@ class App extends Component {
     onUnload = (event) => { // the method that will be used for both add and remove event
         let playersColRef = this.state.gameDocRef.ref.collection('players')
         playersColRef.onSnapshot(playersSnapshot => {
-                playersSnapshot.forEach( playerDoc => {
-                    if (playerDoc.data().name === this.user.name){
-                    }
-                })
-            }
+               playersSnapshot.forEach( playerDoc => {
+                   if (playerDoc.data().name === this.user.name){
+                   }
+               })
+           }
         )
         event.returnValue = "player left"
         // when admin leaves game, select another admin from the list of players.
@@ -87,11 +87,11 @@ class App extends Component {
 
     createGame = () => {
         this.mafiaGamesCollectionRef.add(
-            {
-                gameName: this.state.inputGameName,
-                roundInProgress: false,
-                votingInProgress: false
-            }
+           {
+               gameName: this.state.inputGameName,
+               roundInProgress: false,
+               votingInProgress: false
+           }
         ).then( gameDocRef => {
             this.user.admin = true;
             this.selectGame(gameDocRef);
@@ -159,12 +159,12 @@ class App extends Component {
             if(!currentPlayerRef){
                 console.log('this shouldnt be running')
                 playersColRef
-                    .add(
-                        { type: null,
-                            inGame: true,
-                            ready: false,
-                            ...this.user
-                        }).then(playerDocRef => {
+                   .add(
+                      { type: null,
+                          inGame: true,
+                          ready: false,
+                          ...this.user
+                      }).then(playerDocRef => {
                     playerDocRef.get().then( playerDoc => {
                         this.setState({
                             playerRef: playerDocRef
@@ -193,7 +193,6 @@ class App extends Component {
     }
 
     runGame = () => {
-
         if(this.state.players && this.state.players.length) {
             if (this.user.admin) {
 
@@ -209,27 +208,35 @@ class App extends Component {
                     let allPlayersHaveVoted = playersInTheGame.every(player => player.votingFor);
                     if (allPlayersHaveVoted) {
                         this.votingComplete();
-                        this.hasGameEnded();
                     }
                 }
+                this.hasGameEnded();
             }
         }
     }
 
     hasGameEnded = () => {
-        let playersInTheGame = this.state.players.filter( player => player.inGame)
-        let civilianCount = playersInTheGame.filter( player => player.type === 'Civilian')
-        let mafiaCount = playersInTheGame.filter( player => player.type === 'Mafia')
+        if (this.state.players && this.state.players.length) {
+            if (this.user.admin) {
+                if (this.state.players.every(player => player.type)) {
 
-        if(mafiaCount.length === 0){
-            this.state.gameDocRef.ref.update('gameComplete' , true);
+                    let playersInTheGame = this.state.players.filter(player => player.inGame)
+                    let civilianCount = playersInTheGame.filter(player => player.type === 'Civilian')
+                    let mafiaCount = playersInTheGame.filter(player => player.type === 'Mafia')
+
+                    if (mafiaCount.length === 0) {
+                        debugger
+                        this.state.gameDocRef.ref.update('gameComplete', true);
+                    }
+
+
+                    if (mafiaCount.length >= civilianCount.length) {
+                        this.state.gameDocRef.ref.update('gameComplete', true);
+                    }
+
+                }
+            }
         }
-
-        if(mafiaCount.length >= civilianCount.length){
-            this.state.gameDocRef.ref.update('gameComplete' , true);
-        }
-
-
     }
     votingComplete = () => {
         let inGamePlayers = this.state.players.filter( player => player.inGame)
@@ -291,7 +298,7 @@ class App extends Component {
     setTypes = () => {
         let players = this.state.players
         if(players.length > 1 &&
-            players.every( player => player.type === null)){
+           players.every( player => player.type === null)){
             //no types are set
             let mafiaCount;
             switch (true){
@@ -321,17 +328,17 @@ class App extends Component {
 
             this.state.gameDocRef.ref.collection('players').get().then( playerDocs => {
 
-                    playerDocs.forEach ( playerDoc => {
-                        let playerType = null;
-                        this.state.players.forEach( player => {
-                            if(player.name === playerDoc.data().name){
-                                playerType = player.type
-                            }
-                        })
-                        playerDoc.ref.update('type', playerType);
-                    })
+                   playerDocs.forEach ( playerDoc => {
+                       let playerType = null;
+                       this.state.players.forEach( player => {
+                           if(player.name === playerDoc.data().name){
+                               playerType = player.type
+                           }
+                       })
+                       playerDoc.ref.update('type', playerType);
+                   })
 
-                }
+               }
             )
         }
     }
@@ -340,27 +347,27 @@ class App extends Component {
 
         if(!this.state.hasUser){
             return(
-                <div className="app">
-                    <div className="header">Mafia</div>
-                    Username <input type="text" value={this.state.inputUserName} onChange={ e => { this.setState({inputUserName : e.target.value })}}/>
-                    <div className="footer-btn" onClick={this.createUser}>Done</div>
-                </div>
+               <div className="app">
+                   <div className="header">Mafia</div>
+                   Username <input type="text" value={this.state.inputUserName} onChange={ e => { this.setState({inputUserName : e.target.value })}}/>
+                   <div className="footer-btn" onClick={this.createUser}>Done</div>
+               </div>
             )
         }
 
         if(this.state.createGame){
             return(
-                <div className="app">
+               <div className="app">
 
-                    <div className="header">Mafia</div>
-                    <div className="create-game">
+                   <div className="header">Mafia</div>
+                   <div className="create-game">
 
-                        <div className="input-title">Game name </div>
-                        <input className="input-text-box" type="text" value={this.state.inputGameName}
-                               onChange={ e => { this.setState({inputGameName : e.target.value })}}/>
-                        <div className="footer-btn" onClick={this.createGame}>Done</div>
-                    </div>
-                </div>
+                       <div className="input-title">Game name </div>
+                       <input className="input-text-box" type="text" value={this.state.inputGameName}
+                              onChange={ e => { this.setState({inputGameName : e.target.value })}}/>
+                       <div className="footer-btn" onClick={this.createGame}>Done</div>
+                   </div>
+               </div>
             )
         }
 
@@ -370,43 +377,47 @@ class App extends Component {
             let player = this.state.playerRef && this.state.playerRef.data && this.state.playerRef.data();
             if(!player || !game){
                 return(
-                    <div>loading</div>
+                   <div>loading</div>
                 )
             }
             return (
-                <div className="app">
-                    <div className="header">{game.gameName}</div>
+               <div className="app">
+                   <div className="header">{game.gameName}</div>
 
-                    {game.votingInProgress && !player.votingFor && <div>please vote</div>}
+                   {game.votingInProgress && !player.votingFor && <div>please vote</div>}
 
-                    {game.roundInProgress &&
-                    <ReactCountdownClock seconds={10}
-                                         color="#000"
-                                         alpha={0.9}
-                                         size={150}
-                                         onComplete={this.endRound} />
-                    }
+                   {game.roundInProgress &&
+                   <ReactCountdownClock seconds={10}
+                                        color="#000"
+                                        alpha={0.9}
+                                        size={150}
+                                        onComplete={this.endRound} />
+                   }
 
-                    {this.state.players &&
-                    <Players
-                        voteMode={game.votingInProgress}
-                        players={this.state.players}
-                        currentPlayer={this.state.playerRef}/>}
+                   {this.state.players &&
+                   <Players
+                      voteMode={game.votingInProgress}
+                      players={this.state.players}
+                      currentPlayer={this.state.playerRef}/>}
 
-                    {player.admin && <div> IM THE GUY</div>}
+                   {player.admin && <div> IM THE GUY</div>}
 
-                    {game.gameComplete && <div>GAME DONE</div>}
+                   {game.gameComplete && <div>GAME DONE</div>}
 
-                    {player.inGame && !player.ready && !game.gameComplete && <div className="footer-btn" onClick={this.playerReady}>ready</div>}
-                </div>
+                   {player.inGame &&
+                   !player.ready &&
+                   !game.gameComplete &&
+                   !game.votingInProgress  &&
+                   <div className="footer-btn" onClick={this.playerReady}>ready</div>}
+               </div>
             )
         }
         return (
-            <div className="app">
-                <div className="header">Mafia</div>
-                {this.getGames()}
-                <div className="footer-btn" onClick={ () => { this.setState({createGame: true})}}>Start New Game</div>
-            </div>
+           <div className="app">
+               <div className="header">Mafia</div>
+               {this.getGames()}
+               <div className="footer-btn" onClick={ () => { this.setState({createGame: true})}}>Start New Game</div>
+           </div>
         );
     }
 }
