@@ -43,6 +43,7 @@ class App extends Component {
 
     componentWillMount(){
 
+        window.addEventListener("beforeunload", this.deletePlayer)
         this.disconnectFromGames = this.mafiaGamesCollectionRef.onSnapshot(gamesSnapshot => {
             let games = [];
             gamesSnapshot.forEach(gameDoc => {
@@ -52,6 +53,23 @@ class App extends Component {
         }, err => {
             console.log(err);
         });
+    }
+
+    componentWillUnmount(){
+        window.removeEventListener("beforeunload", this.deletePlayer)
+    }
+
+    deletePlayer = (event) => { // the method that will be used for both add and remove event
+        let playersColRef = this.state.gameDocRef.ref.collection('players')
+        playersColRef.onSnapshot(playersSnapshot => {
+                playersSnapshot.forEach( playerDoc => {
+                    if (playerDoc.data().name === this.user.name){
+                        playerDoc.ref.delete()
+                    }
+                })
+            }
+        )
+        // when admin leaves game, update another player to become admin.
     }
 
     createUser = () => {
@@ -68,11 +86,11 @@ class App extends Component {
 
     createGame = () => {
         this.mafiaGamesCollectionRef.add(
-           {
-               gameName: this.state.inputGameName,
-               roundInProgress: false,
-               votingInProgress: false
-           }
+            {
+                gameName: this.state.inputGameName,
+                roundInProgress: false,
+                votingInProgress: false
+            }
         ).then( gameDocRef => {
             this.user.admin = true;
             this.selectGame(gameDocRef);
@@ -132,18 +150,20 @@ class App extends Component {
                     this.setState({
                         playerRef: playerDocRef
                     })
+                    currentPlayerRef = playerDocRef
                     console.log('player exists');
                 }
             })
 
             if(!currentPlayerRef){
+                console.log('this shouldnt be running')
                 playersColRef
-                   .add(
-                      { type: null,
-                          inGame: true,
-                          ready: false,
-                          ...this.user
-                      }).then(playerDocRef => {
+                    .add(
+                        { type: null,
+                            inGame: true,
+                            ready: false,
+                            ...this.user
+                        }).then(playerDocRef => {
                     playerDocRef.get().then( playerDoc => {
                         this.setState({
                             playerRef: playerDocRef
@@ -210,6 +230,7 @@ class App extends Component {
 
 
     }
+
     votingComplete = () => {
         let inGamePlayers = this.state.players.filter( player => player.inGame)
         let votes = inGamePlayers.map( player => player.votingFor)
@@ -270,7 +291,7 @@ class App extends Component {
     setTypes = () => {
 
         if(this.state.players.length > 1 &&
-           this.state.players.every( player => player.type === null)){
+            this.state.players.every( player => player.type === null)){
             //no types are set
             let mafiaCount = 1;
             this.state.players.forEach( player => {
@@ -284,17 +305,17 @@ class App extends Component {
 
             this.state.gameDocRef.ref.collection('players').get().then( playerDocs => {
 
-                   playerDocs.forEach ( playerDoc => {
-                       let playerType = null;
-                       this.state.players.forEach( player => {
-                           if(player.name === playerDoc.data().name){
-                               playerType = player.type
-                           }
-                       })
-                       playerDoc.ref.update('type', playerType);
-                   })
+                    playerDocs.forEach ( playerDoc => {
+                        let playerType = null;
+                        this.state.players.forEach( player => {
+                            if(player.name === playerDoc.data().name){
+                                playerType = player.type
+                            }
+                        })
+                        playerDoc.ref.update('type', playerType);
+                    })
 
-               }
+                }
             )
         }
     }
@@ -303,27 +324,27 @@ class App extends Component {
 
         if(!this.state.hasUser){
             return(
-               <div className="app">
-                   <div className="header">Mafia</div>
-                   Username <input type="text" value={this.state.inputUserName} onChange={ e => { this.setState({inputUserName : e.target.value })}}/>
-                   <div className="footer-btn" onClick={this.createUser}>Done</div>
-               </div>
+                <div className="app">
+                    <div className="header">Mafia</div>
+                    Username <input type="text" value={this.state.inputUserName} onChange={ e => { this.setState({inputUserName : e.target.value })}}/>
+                    <div className="footer-btn" onClick={this.createUser}>Done</div>
+                </div>
             )
         }
 
         if(this.state.createGame){
             return(
-               <div className="app">
+                <div className="app">
 
-                   <div className="header">Mafia</div>
-                   <div className="create-game">
+                    <div className="header">Mafia</div>
+                    <div className="create-game">
 
-                       <div className="input-title">Game name </div>
-                       <input className="input-text-box" type="text" value={this.state.inputGameName}
-                              onChange={ e => { this.setState({inputGameName : e.target.value })}}/>
-                       <div className="footer-btn" onClick={this.createGame}>Done</div>
-                   </div>
-               </div>
+                        <div className="input-title">Game name </div>
+                        <input className="input-text-box" type="text" value={this.state.inputGameName}
+                               onChange={ e => { this.setState({inputGameName : e.target.value })}}/>
+                        <div className="footer-btn" onClick={this.createGame}>Done</div>
+                    </div>
+                </div>
             )
         }
 
@@ -333,43 +354,43 @@ class App extends Component {
             let player = this.state.playerRef && this.state.playerRef.data && this.state.playerRef.data();
             if(!player || !game){
                 return(
-                   <div>loading</div>
+                    <div>loading</div>
                 )
             }
             return (
-               <div className="app">
-                   <div className="header">{game.gameName}</div>
+                <div className="app">
+                    <div className="header">{game.gameName}</div>
 
-                   {game.votingInProgress && !player.votingFor && <div>please vote</div>}
+                    {game.votingInProgress && !player.votingFor && <div>please vote</div>}
 
-                   {game.roundInProgress &&
-                   <ReactCountdownClock seconds={10}
-                                        color="#000"
-                                        alpha={0.9}
-                                        size={150}
-                                        onComplete={this.endRound} />
-                   }
+                    {game.roundInProgress &&
+                    <ReactCountdownClock seconds={10}
+                                         color="#000"
+                                         alpha={0.9}
+                                         size={150}
+                                         onComplete={this.endRound} />
+                    }
 
-                   {this.state.players &&
-                   <Players
-                      voteMode={game.votingInProgress}
-                      players={this.state.players}
-                      currentPlayer={this.state.playerRef}/>}
+                    {this.state.players &&
+                    <Players
+                        voteMode={game.votingInProgress}
+                        players={this.state.players}
+                        currentPlayer={this.state.playerRef}/>}
 
-                   {player.admin && <div> IM THE GUY</div>}
+                    {player.admin && <div> IM THE GUY</div>}
 
-                   {game.gameComplete && <div>GAME DONE</div>}
+                    {game.gameComplete && <div>GAME DONE</div>}
 
-                   {player.inGame && !player.ready && !game.gameComplete && <div className="footer-btn" onClick={this.playerReady}>ready</div>}
-               </div>
+                    {player.inGame && !player.ready && !game.gameComplete && <div className="footer-btn" onClick={this.playerReady}>ready</div>}
+                </div>
             )
         }
         return (
-           <div className="app">
-               <div className="header">Mafia</div>
-               {this.getGames()}
-               <div className="footer-btn" onClick={ () => { this.setState({createGame: true})}}>Start New Game</div>
-           </div>
+            <div className="app">
+                <div className="header">Mafia</div>
+                {this.getGames()}
+                <div className="footer-btn" onClick={ () => { this.setState({createGame: true})}}>Start New Game</div>
+            </div>
         );
     }
 }
