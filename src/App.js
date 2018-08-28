@@ -64,9 +64,6 @@ class App extends Component {
         playersColRef.onSnapshot(playersSnapshot => {
                 playersSnapshot.forEach( playerDoc => {
                     if (playerDoc.data().name === this.user.name){
-                        playerToDelete = playerDoc
-                        console.log(playerDoc)
-                        playerDoc.ref.delete()
                     }
                 })
             }
@@ -292,16 +289,32 @@ class App extends Component {
     }
 
     setTypes = () => {
-
-        if(this.state.players.length > 1 &&
-            this.state.players.every( player => player.type === null)){
+        let players = this.state.players
+        if(players.length > 1 &&
+            players.every( player => player.type === null)){
             //no types are set
-            let mafiaCount = 1;
-            this.state.players.forEach( player => {
-                if(mafiaCount) {
-                    player.type = 'Mafia';
+            let mafiaCount;
+            switch (true){
+                case (players.length < 6):
+                    mafiaCount = 1;
+                    break;
+                case (players.length < 9):
+                    mafiaCount = 2;
+                    break;
+                default:
+                    break
+            }
+
+            while(mafiaCount){
+                let rand = Math.floor(Math.random() * players.length);
+                if(!players[rand].type){
+                    players[rand].type = 'Mafia';
                     mafiaCount--;
-                }else{
+                }
+            }
+
+            players.forEach( player => {
+                if(!player.type) {
                     player.type = 'Civilian'
                 }
             });
