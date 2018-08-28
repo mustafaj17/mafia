@@ -43,7 +43,7 @@ class App extends Component {
 
     componentWillMount(){
 
-        window.addEventListener("beforeunload", this.deletePlayer)
+        window.addEventListener("beforeunload", this.onUnload)
         this.disconnectFromGames = this.mafiaGamesCollectionRef.onSnapshot(gamesSnapshot => {
             let games = [];
             gamesSnapshot.forEach(gameDoc => {
@@ -56,20 +56,24 @@ class App extends Component {
     }
 
     componentWillUnmount(){
-        window.removeEventListener("beforeunload", this.deletePlayer)
+        window.removeEventListener("beforeunload", this.onUnload)
     }
 
-    deletePlayer = (event) => { // the method that will be used for both add and remove event
+    onUnload = (event) => { // the method that will be used for both add and remove event
         let playersColRef = this.state.gameDocRef.ref.collection('players')
         playersColRef.onSnapshot(playersSnapshot => {
                 playersSnapshot.forEach( playerDoc => {
                     if (playerDoc.data().name === this.user.name){
+                        playerToDelete = playerDoc
+                        console.log(playerDoc)
                         playerDoc.ref.delete()
                     }
                 })
             }
         )
-        // when admin leaves game, update another player to become admin.
+        event.returnValue = "player left"
+        // when admin leaves game, select another admin from the list of players.
+        // when normal player closes window, we must delete them from the player collection.
     }
 
     createUser = () => {
@@ -230,7 +234,6 @@ class App extends Component {
 
 
     }
-
     votingComplete = () => {
         let inGamePlayers = this.state.players.filter( player => player.inGame)
         let votes = inGamePlayers.map( player => player.votingFor)
