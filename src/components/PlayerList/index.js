@@ -22,7 +22,7 @@ class PlayerList extends Component {
             let isMafia = player.type === 'Mafia';
             let votedOut = game.votedOut;
 
-            if(isVoteMode){
+            if(isVoteMode && currentPlayer.inGame){
                 if(isInTheGame & !isCurrentPlayer){
                     return(
                        <div className="player">
