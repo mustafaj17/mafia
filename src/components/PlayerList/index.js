@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import './PlayerList.css'
+import './PlayerList.css';
+import Tick from './../../icons/Tick';
+import User from "../../icons/User";
 
 class PlayerList extends Component {
 
@@ -12,27 +14,36 @@ class PlayerList extends Component {
         let currentPlayer = this.props.currentPlayer.data();
 
         return players.map(player => {
-            if(this.props.voteMode && currentPlayer.inGame && !currentPlayer.votedFor ){
-                if( player.inGame && (currentPlayer.name !== player.name))
-                return(
-                    <div className="player">
-                        <div key={player.name} className="player-name">{player.name}</div>
-                        <div>
-                            <div className="cast-vote" onClick={() => this.castVote(player)}> Vote </div>
-                        </div>
-                    </div>
-                )
-            } else {
-            return (
-                <div className="player">
-                   <div key={player.name} className="player-name">{player.name}</div>
-                   <div>
-                       <div className="player-type">{currentPlayer.type === 'Mafia'? player.type : '-'}</div>
-                       <div className="player-in-game">{player.inGame ? 'playing' : 'out'}</div>
-                       <div className='player-ready'>{player.ready ? 'ready' : '-'}</div>
+
+            let isVoteMode = this.props.voteMode;
+            let isCurrentPlayer = currentPlayer.name === player.name;
+            let isCurrentPlayerMafia = currentPlayer.type === 'Mafia';
+            let isInTheGame = player.inGame;
+            let isMafia = player.type === 'Mafia';
+
+            if(isVoteMode){
+                if(isInTheGame & !isCurrentPlayer){
+                    return(
+                       <div className="player">
+                           <div key={player.name} className="player-name">{player.name}</div>
+                           <div>
+                               <div className="cast-vote" onClick={() => this.castVote(player)}> Vote </div>
+                           </div>
+                       </div>
+                    )
+                }
+
+            }else{
+                return (
+                   <div className="player">
+                       {isCurrentPlayer && <div className="current-player"><User/></div>}
+                       <div key={player.name} className="player-name">{player.name}</div>
+                       {!isInTheGame && <div className="player-type">{player.type}</div>}
+                       {isMafia && isCurrentPlayerMafia && <div className="player-type">{player.type}</div>}
+                       {player.ready  && <div className='player-ready'><Tick/></div>}
                    </div>
-               </div>
-            )}
+                )
+            }
         })
     }
 

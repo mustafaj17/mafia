@@ -1,12 +1,13 @@
 .player{
     display: flex;
-    justify-content: center;
     align-items: center;
     margin: 10px;
     margin-bottom: 20px;
-    padding: 20px;
-    justify-content: space-between;
     box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    padding: 20px 60px;
+    position: relative;
+    text-transform: capitalize;
+    font-size: 18px;
 }
 
 .type {
@@ -24,4 +25,23 @@
     align-items: center;
     margin: 25px;
     border: solid silver 1px;
+}
+
+.player-ready {
+    position: absolute;
+    right: 16px;
+}
+.player-ready svg{
+    height: 32px;
+    width: 32px;
+}
+
+.current-player svg{
+    fill: #8f8f8f;
+    height: 24px;
+    width: 24px;
+}
+.current-player {
+    position: absolute;
+    left: 16px;
 }
