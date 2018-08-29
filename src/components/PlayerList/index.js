@@ -10,7 +10,7 @@ class PlayerList extends Component {
     }
 
     getPlayers = () => {
-        const { players } = this.props;
+        const { players, game } = this.props;
         let currentPlayer = this.props.currentPlayer.data();
 
         return players.map(player => {
@@ -20,6 +20,7 @@ class PlayerList extends Component {
             let isCurrentPlayerMafia = currentPlayer.type === 'Mafia';
             let isInTheGame = player.inGame;
             let isMafia = player.type === 'Mafia';
+            let votedOut = game.votedOut;
 
             if(isVoteMode){
                 if(isInTheGame & !isCurrentPlayer){
@@ -35,7 +36,7 @@ class PlayerList extends Component {
 
             }else{
                 return (
-                   <div className={'player' + (isCurrentPlayer ? ' current-player' : '')} >
+                   <div className={'player' + (isCurrentPlayer ? ' current-player' : '') + (player.name === votedOut ? ' player-out' : '')} >
                        {!isMafia && isCurrentPlayer && <div className="player-type"><div>{player.type}</div></div>}
                        {isMafia && isCurrentPlayerMafia && <div className="player-type"><Mafia/></div>}
                        <div key={player.name} className="player-name">{isCurrentPlayer ? 'You' : player.name}</div>

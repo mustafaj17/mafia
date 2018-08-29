@@ -306,7 +306,7 @@ class App extends Component {
                     }
                     playerDocRef.ref.update('votingFor', null)
                 })
-                this.state.gameDocRef.ref.update('votingInProgress', false, 'isDraw', null)
+                this.state.gameDocRef.ref.update('votingInProgress', false, 'isDraw', null, 'votedOut', mostVotedName)
             })
         }
 
@@ -445,6 +445,7 @@ class App extends Component {
 
                     {this.state.players &&
                     <Players
+                        game={game}
                         voteMode={game.votingInProgress}
                         players={this.state.players}
                         currentPlayer={this.state.playerRef}/>}
