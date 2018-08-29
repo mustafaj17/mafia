@@ -436,6 +436,13 @@ class App extends Component {
                                          onComplete={this.endRound} />
                     }
 
+                    {game.isDraw && <div>There has been a draw between:</div>}
+                    {game.isDraw && game.isDraw.map(player =>{
+                        return(
+                            <div>{player}</div>
+                        )
+                    })}
+
                     {this.state.players &&
                     <Players
                         voteMode={game.votingInProgress}
