@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './PlayerList.css';
 import Tick from './../../icons/Tick';
-import User from "../../icons/User";
+import Mafia from "../../icons/Mafia";
 
 class PlayerList extends Component {
 
@@ -27,7 +27,7 @@ class PlayerList extends Component {
                        <div className="player">
                            <div key={player.name} className="player-name">{player.name}</div>
                            <div>
-                               <div className="cast-vote" onClick={() => this.castVote(player)}> Vote </div>
+                               <div className="cast-vote-btn" onClick={() => this.castVote(player)}> Vote </div>
                            </div>
                        </div>
                     )
@@ -35,11 +35,10 @@ class PlayerList extends Component {
 
             }else{
                 return (
-                   <div className="player">
-                       {isCurrentPlayer && <div className="current-player"><User/></div>}
-                       <div key={player.name} className="player-name">{player.name}</div>
+                   <div className={'player' + (isCurrentPlayer ? ' current-player' : '')} >
+                       {isMafia && isCurrentPlayerMafia && <div className="player-type"><Mafia/></div>}
+                       <div key={player.name} className="player-name">{isCurrentPlayer ? 'You' : player.name}</div>
                        {!isInTheGame && <div className="player-type">{player.type}</div>}
-                       {isMafia && isCurrentPlayerMafia && <div className="player-type">{player.type}</div>}
                        {player.ready  && <div className='player-ready'><Tick/></div>}
                    </div>
                 )

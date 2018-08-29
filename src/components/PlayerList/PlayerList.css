@@ -10,6 +10,10 @@
     font-size: 18px;
 }
 
+.player.current-player{
+    border: 2px solid #7f7f7f;
+}
+
 .type {
     display: flex;
     justify-content: center;
@@ -36,12 +40,24 @@
     width: 32px;
 }
 
-.current-player svg{
-    fill: #8f8f8f;
-    height: 24px;
-    width: 24px;
+.player-type svg{
+    width: 50px
 }
-.current-player {
+.player-type{
     position: absolute;
-    left: 16px;
+    left: 0;
+}
+
+.cast-vote-btn{
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: rgba(239, 62, 54, 1);
+    margin: 8px;
+    border-radius: 2px;
 }
