@@ -36,6 +36,7 @@ class PlayerList extends Component {
             }else{
                 return (
                    <div className={'player' + (isCurrentPlayer ? ' current-player' : '')} >
+                       {!isMafia && isCurrentPlayer && <div className="player-type"><div>{player.type}</div></div>}
                        {isMafia && isCurrentPlayerMafia && <div className="player-type"><Mafia/></div>}
                        <div key={player.name} className="player-name">{isCurrentPlayer ? 'You' : player.name}</div>
                        {!isInTheGame && <div className="player-type">{player.type}</div>}

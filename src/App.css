@@ -21,7 +21,7 @@
   height: 100vh;
   position: relative;
   flex-direction:column;
-  padding-top: 90px;
+  padding-top: 72px;
 }
 
 .header{
@@ -68,8 +68,16 @@
 /*start new game*/
 
 .input-text-box{
-  maring:5px;
-  padding: 10px;
+  margin:8px;
+  padding: 16px;
 }
 
 .input-title{}
+
+.name-heading{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 8px;
+;
+}
