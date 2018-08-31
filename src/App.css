@@ -29,7 +29,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  background-color: rgba(161, 232, 204, 1);
+  background-color: #32A287;
   color: white;
   font-size: 16px;
   display: flex;
@@ -38,6 +38,19 @@
   padding: 20px;
 ;
 }
+
+.screen-title{
+  padding: 8px;
+  margin: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  background: #F46036;
+  color: white;
+}
+
+
 .game{
   display: flex;
   font-size: 24px;
@@ -67,17 +80,71 @@
 /*start new game*/
 /*start new game*/
 
-.input-text-box{
-  margin:8px;
-  padding: 16px;
+.form-holder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 100px;
 }
 
-.input-title{}
+.input-text-box{
+  margin: 8px;
+  padding: 16px;
+  font-size: 18px;
+  width: 260px;
+  border: 1px solid #F46036;
+  color: #3c3c3c;
+}
+
+.input-title{
+font-size: 18px;
+  padding: 8px;
+  margin: 8px;
+}
 
 .name-heading{
   display: flex;
   justify-content: center;
   align-items: center;
   padding-bottom: 8px;
-;
+}
+
+
+/*Voting Screen*/
+/*Voting Screen*/
+/*Voting Screen*/
+.draw-game-text{
+  padding: 8px;
+  margin: 8px auto;
+  background-color: #202020;
+  margin-bottom: 0;
+  padding-bottom: 4px;
+  color: #f6f6f6;
+}
+
+.drawn-players{
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  padding: 8px;
+  justify-content: center;
+}
+
+.player-draw{
+  padding: 8px;
+  margin: 4px;
+  background: #f0f0f0;
+  text-transform: capitalize;
+}
+
+.react-countdown-clock {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%!important;
+  margin-bottom: 8px;
 }

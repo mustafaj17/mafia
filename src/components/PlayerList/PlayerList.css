@@ -1,10 +1,10 @@
 .player{
     display: flex;
     align-items: center;
-    margin: 10px;
-    margin-bottom: 20px;
+    margin: 8px;
+    margin-bottom: 16px;
     box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
-    padding: 20px 60px;
+    padding: 12px 60px;
     position: relative;
     text-transform: capitalize;
     font-size: 18px;
@@ -14,6 +14,16 @@
     border: 2px solid #7f7f7f;
 }
 
+.player.vote-mode{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8px;
+}
+
+.player.selected {
+    border: 2px solid #F46036;
+}
 .type {
     display: flex;
     justify-content: center;
@@ -41,7 +51,8 @@
 }
 
 .player-type svg{
-    width: 50px
+    width: 30px;
+    margin-left: 5px;
 }
 .player-type{
     position: absolute;
@@ -63,5 +74,19 @@
 }
 
 .player-out{
-    background-color: darkred;
+    background-color: #f54336;
+    color: white;
+}
+
+.players-out {
+    border-top: 1px solid black;
+    padding-top: 8px;
+}
+.players-out .title{
+    font-size: 16px;
+    background-color: #F44336;
+    color: white;
+    padding: 8px;
+    width: fit-content;
+    margin-left: 8px;
 }
