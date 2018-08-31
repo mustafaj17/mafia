@@ -67,7 +67,7 @@
 .footer-btn{
   display: flex;
   justify-content: center;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
   left: 0;
@@ -151,7 +151,7 @@ font-size: 18px;
   margin-bottom: 8px;
 }
 
-.winnder-text{
+.winner-text{
   position: fixed;
   bottom: 0;
   padding: 16px;
