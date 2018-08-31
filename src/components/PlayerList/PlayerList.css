@@ -1,3 +1,8 @@
+.players{
+    overflow-y: scroll;
+    padding-bottom: 50px;
+}
+
 .player{
     display: flex;
     align-items: center;

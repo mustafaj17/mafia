@@ -394,8 +394,8 @@ class App extends Component {
                    <div className="header">Mafia</div>
                    <div className="form-holder">
                        <div className="input-title">Enter your name </div>
-                   Username <input type="text" className="input-text-box" value={this.state.inputUserName}
-                                   onChange={ e => { this.setState({inputUserName : e.target.value })}}/>
+                       Username <input type="text" className="input-text-box" value={this.state.inputUserName}
+                                       onChange={ e => { this.setState({inputUserName : e.target.value })}}/>
                        { (this.state.inputUserName && this.state.inputUserName.length > 2) && <div className="footer-btn" onClick={this.createUser}>Done</div>}
                    </div>
                </div>
@@ -459,8 +459,8 @@ class App extends Component {
                       currentPlayer={this.state.playerRef}/>}
 
 
-                   {game.gameComplete && game.mafiasWin && <div>Mafias Win</div>}
-                   {game.gameComplete && game.civiliansWin && <div>Civilians Win</div>}
+                   {game.gameComplete && game.mafiasWin && <div className="winnet-text">Mafias Win</div>}
+                   {game.gameComplete && game.civiliansWin && <div className="winner-text">Civilians Win</div>}
 
                    {player.inGame &&
                    !player.ready &&
@@ -473,8 +473,11 @@ class App extends Component {
         return (
            <div className="app">
                <div className="header">Mafia</div>
+
                <div className="screen-title">Hello {this.user.name}</div>
-               {this.getGames()}
+               <div className="games">
+                   {this.getGames()}
+               </div>
                <div className="footer-btn" onClick={ () => { this.setState({createGame: true})}}>Start New Game</div>
            </div>
         );
