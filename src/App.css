@@ -13,15 +13,20 @@
   box-sizing: border-box;
 }
 
+.app-holder{
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .app{
   border: 1px solid black;
   display: flex;
-  max-width: 400px;
-  margin: 0 auto;
+  width: 400px;
   height: 100vh;
   position: relative;
   flex-direction:column;
   padding-top: 60px;
+  transform: scale(0.5);
 }
 
 .header{
@@ -67,7 +72,7 @@
 .footer-btn{
   display: flex;
   justify-content: center;
-  position: fixed;
+  position: absolute;
   bottom: 0;
   width: 100%;
   left: 0;

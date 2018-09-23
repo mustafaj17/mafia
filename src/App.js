@@ -26,7 +26,8 @@ class App extends Component {
         this.db = firebase.firestore();
         this.db.settings(settings);
         this.mafiaGamesCollectionRef = this.db.collection('mafia-games');
-        let userName = localStorage.getItem('mafiaUserName');
+        // let userName = localStorage.getItem(this.props.username);
+        let userName = this.props.username;
         let hasUser = false;
         if (userName) {
             this.user = {
@@ -61,14 +62,18 @@ class App extends Component {
     }
 
     onUnload = (event) => { // the method that will be used for both add and remove event
-        let playersColRef = this.state.gameDocRef.ref.collection('players')
-        playersColRef.onSnapshot(playersSnapshot => {
-               playersSnapshot.forEach(playerDoc => {
-                   if (playerDoc.data().name === this.user.name) {
-                   }
-               })
-           }
-        )
+
+        if(this.state.gameDocRef) {
+            let playersColRef = this.state.gameDocRef.ref.collection('players')
+            playersColRef.onSnapshot(playersSnapshot => {
+                   playersSnapshot.forEach(playerDoc => {
+                       if (playerDoc.data().name === this.user.name) {
+                           //todo: remove player
+                       }
+                   })
+               }
+            )
+        }
         event.returnValue = "player left"
         // when admin leaves game, select another admin from the list of players.
         // when normal player closes window, we must delete them from the player collection.
@@ -459,7 +464,7 @@ class App extends Component {
                       currentPlayer={this.state.playerRef}/>}
 
 
-                   {game.gameComplete && game.mafiasWin && <div className="winnet-text">Mafias Win</div>}
+                   {game.gameComplete && game.mafiasWin && <div className="winner-text">Mafias Win</div>}
                    {game.gameComplete && game.civiliansWin && <div className="winner-text">Civilians Win</div>}
 
                    {player.inGame &&
