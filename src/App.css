@@ -28,7 +28,7 @@
     /*transform: scale(0.5);*/
     background-image:
             url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAG0lEQVQYV2NMKL/ty4ADMIIkF3SqbsYmP+gkAayXGgfe8HOVAAAAAElFTkSuQmCC),
-            linear-gradient(to right top, #730e88, #005ab4, #007ba6, #269087, #849e83);
+            linear-gradient(to right top, #730e88, #005ab4, #006385, #662ea8, #849e83);
 }
 
 
@@ -58,7 +58,7 @@
     -webkit-box-shadow: 0px 0px 29px 1px rgba(117,113,117,1);
     -moz-box-shadow: 0px 0px 29px 1px rgba(117,113,117,1);
     box-shadow: 0px 0px 29px 1px rgba(117,113,117,1);
-    background-color: whitesmoke;
+    background-color: white;
     border-radius: 2px;
 }
 
