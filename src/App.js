@@ -477,7 +477,6 @@ class App extends Component {
         }
         return (
            <div className="app">
-               <div className="header">Mafia</div>
 
                <div className="screen-title">Hello {this.user.name}</div>
                <div className="games">

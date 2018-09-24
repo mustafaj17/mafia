@@ -7,80 +7,72 @@
 
 
 *{
-  margin:0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Teen, sans-serif;
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Teen, sans-serif;
 }
 
 .app-holder{
-  display: flex;
-  flex-wrap: wrap;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .app{
-  border: 1px solid black;
-  display: flex;
-  width: 400px;
-  height: 100vh;
-  position: relative;
-  flex-direction:column;
-  padding-top: 60px;
-  /*transform: scale(0.5);*/
+    border: 1px solid black;
+    display: flex;
+    width: 400px;
+    height: 100vh;
+    position: relative;
+    flex-direction:column;
+    /*transform: scale(0.5);*/
+    background-image:
+            url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAG0lEQVQYV2NMKL/ty4ADMIIkF3SqbsYmP+gkAayXGgfe8HOVAAAAAElFTkSuQmCC),
+            linear-gradient(to right top, #730e88, #005ab4, #007ba6, #269087, #849e83);
 }
 
-.header{
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background-color: #32A287;
-  color: white;
-  font-size: 16px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-;
-}
 
 .screen-title{
-  padding: 8px;
-  margin: 8px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 18px;
-  background: #187795;
-  color: white;
+    padding: 8px;
+    margin: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background:rgba(20, 189, 235, 1);
+    font-size: 18px;
+    color: white;
 }
 
 .games{
-  overflow-y: scroll;
-  padding-bottom: 50px;
+    overflow-y: scroll;
+    padding-bottom: 50px;
 }
 
 .game{
-  display: flex;
-  font-size: 18px;
-  justify-content: center;
-  padding: 8px;
-  margin: 8px;
-  border: solid #bcbcbc 1px;
-  margin-bottom: 16px;
+    display: flex;
+    font-size: 18px;
+    justify-content: center;
+    padding: 8px;
+    margin: 16px;
+    border: solid #bcbcbc 1px;
+    -webkit-box-shadow: 0px 0px 29px 1px rgba(117,113,117,1);
+    -moz-box-shadow: 0px 0px 29px 1px rgba(117,113,117,1);
+    box-shadow: 0px 0px 29px 1px rgba(117,113,117,1);
+    background-color: whitesmoke;
+    border-radius: 2px;
 }
 
 .footer-btn{
-  display: flex;
-  justify-content: center;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  left: 0;
-  background-color: rgba(73, 81, 89, 1);
-  color: white;
-  padding:15px 5px;
-  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(239, 62, 54, 1);
+    margin: 8px;
+    color: white;
+    padding:15px 5px;
 }
 
 
@@ -89,33 +81,33 @@
 /*start new game*/
 
 .form-holder {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  margin-top: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 100px;
 }
 
 .input-text-box{
-  margin: 8px;
-  padding: 16px;
-  font-size: 18px;
-  width: 260px;
-  border: 1px solid #F46036;
-  color: #3c3c3c;
+    margin: 8px;
+    padding: 16px;
+    font-size: 18px;
+    width: 260px;
+    border: 1px solid #F46036;
+    color: #3c3c3c;
 }
 
 .input-title{
-font-size: 18px;
-  padding: 8px;
-  margin: 8px;
+    font-size: 18px;
+    padding: 8px;
+    margin: 8px;
 }
 
 .name-heading{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-bottom: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 8px;
 }
 
 
@@ -123,48 +115,48 @@ font-size: 18px;
 /*Voting Screen*/
 /*Voting Screen*/
 .draw-game-text{
-  padding: 8px;
-  margin: 8px auto;
-  background-color: #202020;
-  margin-bottom: 0;
-  padding-bottom: 4px;
-  color: #f6f6f6;
+    padding: 8px;
+    margin: 8px auto;
+    background-color: #202020;
+    margin-bottom: 0;
+    padding-bottom: 4px;
+    color: #f6f6f6;
 }
 
 .drawn-players{
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -ms-flex-wrap: wrap;
-  flex-wrap: wrap;
-  padding: 8px;
-  justify-content: center;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    padding: 8px;
+    justify-content: center;
 }
 
 .player-draw{
-  padding: 8px;
-  margin: 4px;
-  background: #f0f0f0;
-  text-transform: capitalize;
+    padding: 8px;
+    margin: 4px;
+    background: #f0f0f0;
+    text-transform: capitalize;
 }
 
 .react-countdown-clock {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%!important;
-  margin-bottom: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%!important;
+    margin-bottom: 8px;
 }
 
 .winner-text{
-  position: fixed;
-  bottom: 0;
-  padding: 16px;
-  background: #484654;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  color: white;
-  font-size: 22px;
+    position: fixed;
+    bottom: 0;
+    padding: 16px;
+    background: #484654;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    color: white;
+    font-size: 22px;
 }
