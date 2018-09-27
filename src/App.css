@@ -44,25 +44,6 @@
     color: white;
 }
 
-.games{
-    overflow-y: scroll;
-    padding-bottom: 50px;
-}
-
-.game{
-    display: flex;
-    font-size: 18px;
-    justify-content: center;
-    padding: 8px;
-    margin: 16px;
-    border: solid #bcbcbc 1px;
-    -webkit-box-shadow: 0px 0px 29px 1px rgba(117,113,117,1);
-    -moz-box-shadow: 0px 0px 29px 1px rgba(117,113,117,1);
-    box-shadow: 0px 0px 29px 1px rgba(117,113,117,1);
-    background-color: white;
-    border-radius: 2px;
-}
-
 .footer-btn{
     display: flex;
     justify-content: center;
@@ -81,6 +62,19 @@
 /*start new game*/
 /*start new game*/
 
+.form-holder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 100px;
+}
+
+.input-title{
+    font-size: 18px;
+    padding: 8px;
+    margin: 8px;
+}
 
 .name-heading{
     display: flex;

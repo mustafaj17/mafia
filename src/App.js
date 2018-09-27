@@ -7,6 +7,8 @@ import ReactCountdownClock from 'react-countdown-clock';
 import Logo from './components/logo/logo';
 import EnterNameScreen from "./screens/enter-name/enter-name-screen";
 import EnterGameNameScreen from "./screens/enter-game-name/enter-game-name-screen";
+import LobbyScreen from "./screens/lobby-screen/lobby-screen";
+import Modal from "./components/modal/modal";
 
 class App extends Component {
 
@@ -474,11 +476,13 @@ class App extends Component {
 		return (
 			<div className="app">
 
-				<div className="screen-title">Hello {this.user.name}</div>
-				<div className="games">
-					{this.getGames()}
-				</div>
-				<div className="footer-btn" onClick={ () => { this.setState({createGame: true})}}>Start New Game</div>
+             <Modal/>
+
+             <LobbyScreen
+                createNewGame={() => { this.setState({createGame: true})}}
+                games={this.getGames()}
+             />
+
 			</div>
 		);
 	}
