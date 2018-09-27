@@ -1,0 +1,68 @@
+.enter-name-screen{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-top: 48px;
+}
+
+.header{
+    font-size: 48px;
+    letter-spacing: 0.1em;
+    color: #01FFC2;
+    margin-bottom: 12px;
+    /*linear-gradient(180deg, #01D4A1 0%, #01FFC2 25.97%, #01FFC2 100%);*/
+}
+
+
+.mafia-text-logo{
+margin-bottom: 24px;
+}
+
+.logo{
+    margin-bottom: 70px;
+}
+
+.form-holder{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.form-holder .input-title{
+    font-size: 18px;
+    letter-spacing: 0.1em;
+}
+
+
+.input-text-box {
+    background: rgba(245, 245, 245, 0.9);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 2px;
+    width: 270px;
+    height: 45px;
+    border: 0;
+    text-align: center;
+    font-size: 14px;
+    color: #161616;
+    margin-top: 16px;
+}
+.input-text-box:focus {
+    /*todo: remove default styles*/
+    border:0
+}
+
+.ok-btn{
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: #00FFC2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    font-size: 16px;
+    letter-spacing: 0.1em;
+    color: #000000;
+    margin-top: 30px;
+}

@@ -26,9 +26,10 @@
     position: relative;
     flex-direction:column;
     /*transform: scale(0.5);*/
-    background-image:
-            url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAG0lEQVQYV2NMKL/ty4ADMIIkF3SqbsYmP+gkAayXGgfe8HOVAAAAAElFTkSuQmCC),
-            linear-gradient(to right top, #730e88, #005ab4, #006385, #662ea8, #849e83);
+    /*background-image:*/
+            /*url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAG0lEQVQYV2NMKL/ty4ADMIIkF3SqbsYmP+gkAayXGgfe8HOVAAAAAElFTkSuQmCC),*/
+            /*linear-gradient(to right top, #730e88, #005ab4, #006385, #662ea8, #849e83);*/
+    background: linear-gradient(209.88deg, #00A57D 0.89%, #86C3B4 50.27%, rgba(36, 15, 80, 0.74) 99.29%);
 }
 
 
@@ -80,28 +81,6 @@
 /*start new game*/
 /*start new game*/
 
-.form-holder {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    margin-top: 100px;
-}
-
-.input-text-box{
-    margin: 8px;
-    padding: 16px;
-    font-size: 18px;
-    width: 260px;
-    border: 1px solid #F46036;
-    color: #3c3c3c;
-}
-
-.input-title{
-    font-size: 18px;
-    padding: 8px;
-    margin: 8px;
-}
 
 .name-heading{
     display: flex;
