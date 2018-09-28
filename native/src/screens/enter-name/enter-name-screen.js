@@ -16,7 +16,6 @@ export default class EnterNameScreen extends Component{
 							onChangeText={(text) => this.props.updateName(text)}
 							value={this.props.inputUserName}
 						/></View>
-						<Text>{this.props.inputUserName}</Text>
 						<TouchableOpacity onPress={this.props.createUser}>
 						<View style={styles['ok-btn']}>
 							<Text >ok</Text>

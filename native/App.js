@@ -427,11 +427,12 @@ export default class App extends Component {
 
 		return (
 			<View style={styles.app}>
-
+				<ImageBackground source={background} style={{width: '100%', height: '100%'}}>
 				<LobbyScreen
 					createNewGame={() => { this.setState({createGame: true})}}
 					games={this.getGames()}
 				/>
+				</ImageBackground>
 
 			</View>
 		);

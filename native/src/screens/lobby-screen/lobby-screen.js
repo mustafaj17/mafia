@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import styles from './lobby-screen.styles';
+import mafiaText from '../../assets/mafia-text.png';
 
 export default class LobbyScreen extends Component{
     render(){
         return(
             <View style={[styles['screen'], styles['lobby-screen']]}>
+
+					<Image source={mafiaText}>
 					<View >
 						<Text style={styles['header']}>Select Game</Text>
 					</View>
@@ -15,7 +18,6 @@ export default class LobbyScreen extends Component{
 					<View style={styles['new-game']} onClick={this.props.createNewGame}>
 						<View ><Text style={styles['new-game-btn']}>+</Text></View>
 						<View ><Text style={styles['new-game-btn-text']}>start new game</Text></View>
-
 					</View>
 				</View>
         )

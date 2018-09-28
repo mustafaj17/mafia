@@ -12,7 +12,7 @@ export default StyleSheet.create(
 		padding: 0,
 		margin: 0,
 		flex: 1,
-		marginTop: 48
+		paddingTop: 16
 	},
   'screen-title':
    { paddingTop: 8,
