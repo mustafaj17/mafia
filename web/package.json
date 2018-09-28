@@ -2,6 +2,7 @@
   "name": "mafia",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://storage.googleapis.com/mafiagame",
   "dependencies": {
     "firebase": "^5.4.0",
     "react": "^16.4.2",
