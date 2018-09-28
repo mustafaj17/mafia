@@ -8,15 +8,14 @@ import plusIcon from '../../assets/plus-btn.png';
 export default class LobbyScreen extends Component{
 
     getGames = (games) => {
-        let gamesArray = []
-        games.map(game =>{
-            gamesArray.push(
-                <View style={styles['game']}>
-                    <Text style={styles['game-text']}>{game.props.children}</Text>
-                </View>
-            )
-        })
-        return gamesArray
+        console.log(games);
+        return games.filter(gameDoc => !gameDoc.data().gameInProgress).map(gameDoc => {
+			return ( <TouchableOpacity onPress={() => this.props.selectGame(gameDoc)}>
+                        <View style={styles['game']}>   
+                          <Text style={styles['game-text']}>{gameDoc.data().gameName}</Text>
+                         </View>
+                      </TouchableOpacity>)
+		});
     }
     render(){
         const {createNewGame, games} = this.props
