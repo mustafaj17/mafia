@@ -7,7 +7,7 @@ export default class EnterNameScreen extends Component{
     render(){
         return(
             <View style={[styles.screen, styles['enter-name-screen']]}>
-					<Image source={mafiaLogo}/>
+					<Image source={mafiaLogo}></Image>
 					<View style={styles['form-holder']}>
 						<View>
 							<Text style={styles['input-title']}>Enter your name</Text>
