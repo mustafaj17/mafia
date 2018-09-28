@@ -1,94 +1,430 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import React, {Component} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import LobbyScreen from "./src/screens/lobby-screen/lobby-screen";
+import EnterNameScreen from "./src/screens/enter-name/enter-name-screen";
+import styles from './src/app.style';
 
 export default class App extends Component {
-    constructor(props) {
-        super(props);
+	constructor(props) {
+		super(props);
+		if (firebase.apps && ( firebase.apps.length < 1 )) {
+			let config = {
+				apiKey: "AIzaSyAJoYge9agHxipUEtP-RFulZCUTif9Mi3o",
+				authDomain: "mafia-7c60c.firebaseapp.com",
+				databaseURL: "https://mafia-7c60c.firebaseio.com",
+				projectId: "mafia-7c60c",
+				storageBucket: "mafia-7c60c.appspot.com",
+				messagingSenderId: "328931836560"
+			};
 
-        if (firebase.apps && ( firebase.apps.length < 1 )) {
-            let config = {
-                apiKey: "AIzaSyAJoYge9agHxipUEtP-RFulZCUTif9Mi3o",
-                authDomain: "mafia-7c60c.firebaseapp.com",
-                databaseURL: "https://mafia-7c60c.firebaseio.com",
-                projectId: "mafia-7c60c",
-                storageBucket: "mafia-7c60c.appspot.com",
-                messagingSenderId: "328931836560"
-            };
+			firebase.initializeApp(config);
 
-            firebase.initializeApp(config);
+		}
+		const settings = {timestampsInSnapshots: true};
+		this.db = firebase.firestore();
+		this.db.settings(settings);
+		this.mafiaGamesCollectionRef = this.db.collection('mafia-games');
+		// let userName = localStorage.getItem(this.props.username);
+		let userName = this.props.username;
+		let hasUser = false;
+		if (userName) {
+			this.user = {
+				name: userName
+			}
+			hasUser = true;
+		}
+		this.state = {
+			games: [],
+			createGame: false,
+			inputGameName: '',
+			hasUser
+		}
+	}
 
-        }
-        const settings = {timestampsInSnapshots: true};
-        this.db = firebase.firestore();
-        this.db.settings(settings);
-        this.mafiaGamesCollectionRef = this.db.collection('mafia-games');
-        // let userName = localStorage.getItem(this.props.username);
-        let userName = this.props.username;
-        let hasUser = false;
-        if (userName) {
-            this.user = {
-                name: userName
-            }
-            hasUser = true;
-        }
-        this.state = {
-            games: [],
-            createGame: false,
-            inputGameName: '',
-            hasUser
-        }
-    }
+	componentWillMount() {
 
-    componentWillMount() {
-        console.log("collectionRef: ", this.mafiaGamesCollectionRef)
-        this.disconnectFromGames = this.mafiaGamesCollectionRef.onSnapshot(gamesSnapshot => {
-            let games = [];
-            console.log("gameSnapshot: ", gamesSnapshot)
-            gamesSnapshot.forEach(gameDoc => {
-                console.log("gameDoc: ", gameDoc)
-                games.push(gameDoc);
-            });
-            this.setState({games});
-        }, err => {
-            console.log(err);
-        });
-    }
+		// window.addEventListener("beforeunload", this.onUnload)
+		this.disconnectFromGames = this.mafiaGamesCollectionRef.onSnapshot(gamesSnapshot => {
+			let games = [];
+			gamesSnapshot.forEach(gameDoc => {
+				games.push(gameDoc);
+			});
+			this.setState({games});
+		}, err => {
+			console.log(err);
+		});
+	}
 
-    render() {
-        console.log("Game state: " ,this.state.games)
-        return (
-            <View style={styles.container}>
-                <Text style={styles.welcome}>Wagwan My Guy</Text>
-                <Text style={styles.welcome}>Debug JS remotely to view you snapshots in the console</Text>
-            </View>
-        );
-    }
+	componentWillUnmount() {
+		// window.removeEventListener("beforeunload", this.onUnload)
+	}
+
+	// onUnload = (event) => { // the method that will be used for both add and remove event
+	//
+	// 	if(this.state.gameDocRef) {
+	// 		let playersColRef = this.state.gameDocRef.ref.collection('players')
+	// 		playersColRef.onSnapshot(playersSnapshot => {
+	// 				playersSnapshot.forEach(playerDoc => {
+	// 					if (playerDoc.data().name === this.user.name) {
+	// 						//todo: remove player
+	// 					}
+	// 				})
+	// 			}
+	// 		)
+	// 	}
+	// 	event.returnValue = "player left"
+	// 	// when admin leaves game, select another admin from the list of players.
+	// 	// when normal player closes window, we must delete them from the player collection.
+	// }
+
+	createUser = () => {
+		this.user = {
+			name: this.state.inputUserName
+		}
+
+		localStorage.setItem('mafiaUserName', this.state.inputUserName);
+
+		this.setState({
+			hasUser: true
+		})
+	}
+
+	createGame = () => {
+		this.setState({
+			createGame: false,
+			joiningGame: true
+		})
+		this.mafiaGamesCollectionRef.add(
+			{
+				gameName: this.state.inputGameName,
+				roundInProgress: false,
+				votingInProgress: false
+			}
+		).then(gameDocRef => {
+			this.user.admin = true;
+			this.selectGame(gameDocRef);
+		})
+	}
+
+	getGames = () => {
+		return this.state.games.filter(gameDoc => !gameDoc.data().gameInProgress).map(gameDoc => {
+			return (<View className="game"
+							  onClick={() => this.selectGame(gameDoc)}
+							  onDoubleClick={ e => e.preventDefault()}>{gameDoc.data().gameName}</View>)
+		})
+	}
+
+	selectGame = gameDoc => {
+		this.setState({
+			createGame: false,
+			joiningGame: true
+		})
+
+		gameDoc = gameDoc.ref || gameDoc;
+		this.disconnectFromGames();
+
+		//connect to the game doc and update state whenever it changes
+		this.disconnectFromGame = gameDoc.onSnapshot(gameDocRef => {
+			this.state.gameDocRef = gameDocRef;
+			this.setState({
+				gameDocRef
+			})
+			if(this.state.joiningGame){
+				this.setState({joiningGame: false})
+			}
+			this.runGame();
+		});
+
+		let playersColRef = gameDoc.collection('players');
+
+		//connect to the player collection and update when it changes
+		playersColRef.onSnapshot(playersSnapshot => {
+			let playersArray = [];
+			playersSnapshot.forEach(playerDoc => {
+				playersArray.push(playerDoc.data())
+			})
+
+			this.setState({
+				players: playersArray
+			})
+
+			this.runGame();
+		})
+
+		let currentPlayerRef;
+
+		playersColRef.get().then(playerDocsRefs => {
+
+			playerDocsRefs.forEach(playerDocRef => {
+				if (playerDocRef.data().name === this.user.name) {
+					playerDocRef.ref.onSnapshot(playerRef => {
+						this.setState({
+							playerRef: playerRef
+						})
+					})
+					this.setState({
+						playerRef: playerDocRef
+					})
+					currentPlayerRef = playerDocRef
+					console.log('player exists');
+				}
+			})
+
+			if (!currentPlayerRef) {
+				console.log('this shouldnt be running')
+				playersColRef
+					.add(
+						{
+							type: null,
+							inGame: true,
+							ready: false,
+							...this.user
+						}).then(playerDocRef => {
+					playerDocRef.get().then(playerDoc => {
+						this.setState({
+							playerRef: playerDocRef
+						})
+						playerDoc.ref.onSnapshot(playerRef => {
+							this.setState({
+								playerRef: playerRef
+							})
+						})
+						console.log('added new player');
+					})
+
+				})
+
+			}
+		})
+	}
+
+
+
+	playerReady = () => {
+		this.state.playerRef.ref.update('ready', true);
+	}
+
+	runGame = () => {
+		if(this.state.players && this.state.players.length) {
+			if (this.user.admin) {
+
+				let game = this.state.gameDocRef.data();
+				let playersInTheGame = this.state.players.filter(player => player.inGame);
+				let playersHaveType= this.state.players.every(player => player.type);
+				let allPlayersAreReady = playersInTheGame.every(player => player.ready);
+				if (allPlayersAreReady) {
+					if(!game.gameInProgress){
+						this.state.gameDocRef.ref.update('gameInProgress', true);
+					}
+					this.setTypes()
+					this.startGameRound(allPlayersAreReady, playersHaveType);
+				}
+
+				if (game.votingInProgress) {
+					let allPlayersHaveVoted = playersInTheGame.every(player => player.votingFor);
+					if (allPlayersHaveVoted) {
+						this.votingComplete();
+					}
+				}
+				this.hasGameEnded();
+			}
+		}
+	}
+
+	hasGameEnded = () => {
+		if (this.state.players && this.state.players.length) {
+			if (this.user.admin) {
+				if (this.state.players.every(player => player.type)) {
+
+					let playersInTheGame = this.state.players.filter(player => player.inGame)
+					let civilianCount = playersInTheGame.filter(player => player.type === 'Civilian')
+					let mafiaCount = playersInTheGame.filter(player => player.type === 'Mafia')
+
+					if (mafiaCount.length === 0) {
+						debugger
+						this.state.gameDocRef.ref.update('gameComplete', true, 'civiliansWin', true);
+					}
+
+
+					if (mafiaCount.length >= civilianCount.length) {
+						this.state.gameDocRef.ref.update('gameComplete', true, 'mafiasWin', true);
+					}
+
+				}
+			}
+		}
+	}
+
+	votingComplete = () => {
+		let inGamePlayers = this.state.players.filter( player => player.inGame)
+		let votes = inGamePlayers.map( player => player.votingFor)
+		let votingCount = {}
+
+		inGamePlayers.forEach(player => {
+			if(votingCount[player.votingFor]){
+				votingCount[player.votingFor] = votingCount[player.votingFor] + 1
+			} else {
+				votingCount[player.votingFor] = 1
+			}
+		})
+
+		let mostVoted
+		let mostVotedName;
+		let drawArray = []
+		Object.keys(votingCount).forEach( player => {
+			if(mostVoted){
+				if(mostVoted < votingCount[player]){
+					mostVoted = votingCount[player];
+					mostVotedName = player
+				}
+			}else{
+				mostVoted = votingCount[player];
+				mostVotedName = player
+			}
+		})
+
+		drawArray.push(mostVotedName)
+
+		Object.keys(votingCount).forEach(player => {
+			if((votingCount[player] === mostVoted) && (mostVotedName !== player)){
+				drawArray.push(player)
+			}
+		})
+
+		if(drawArray.length > 1){
+			this.state.gameDocRef.ref.collection('players').get().then(playerDocs => {
+				playerDocs.forEach(playerDocRef => {
+					playerDocRef.ref.update('votingFor', null)
+				})
+				this.state.gameDocRef.ref.update('isDraw', drawArray)
+			})
+
+
+		} else {
+
+			this.state.gameDocRef.ref.collection('players').get().then(playerDocs => {
+				playerDocs.forEach(playerDocRef => {
+					if (playerDocRef.data().name === mostVotedName) {
+						playerDocRef.ref.update('inGame', false)
+
+					}
+					playerDocRef.ref.update('votingFor', null)
+				})
+				this.state.gameDocRef.ref.update('votingInProgress', false, 'isDraw', null, 'votedOut', mostVotedName)
+			})
+		}
+
+	}
+
+	startGameRound = (allPlayersAreReady, playersHaveType) => {
+		if (allPlayersAreReady && playersHaveType) {
+			debugger
+			this.state.gameDocRef.ref.update('roundInProgress', true);
+		}
+	}
+
+	endRound = () => {
+		this.state.gameDocRef.ref.collection('players').get().then( playerDocs => {
+			playerDocs.forEach(playerDocRef => {
+				playerDocRef.ref.update('ready', false)
+			})
+			this.state.gameDocRef.ref.update('roundInProgress' , false);
+			this.state.gameDocRef.ref.update('votingInProgress' , true)
+		})
+
+	}
+
+	setTypes = () => {
+		let players = this.state.players
+		if(players.length > 1 &&
+			players.every( player => player.type === null)){
+			//no types are set
+			let mafiaCount;
+			switch (true){
+				case (players.length < 6):
+					mafiaCount = 1;
+					break;
+				case (players.length < 9):
+					mafiaCount = 2;
+					break;
+				default:
+					break
+			}
+
+			while(mafiaCount){
+				let rand = Math.floor(Math.random() * players.length);
+				if(!players[rand].type){
+					players[rand].type = 'Mafia';
+					players.ready = false
+					mafiaCount--;
+				}
+			}
+
+			players.forEach( player => {
+				if(!player.type) {
+					player.type = 'Civilian'
+					player.ready = false
+				}
+			});
+
+			this.state.gameDocRef.ref.collection('players').get().then( playerDocs => {
+
+					playerDocs.forEach ( playerDoc => {
+						let playerType = null;
+						this.state.players.forEach( player => {
+							if(player.name === playerDoc.data().name){
+								playerType = player.type
+							}
+						})
+						playerDoc.ref.update('type', playerType, 'ready', false);
+					})
+
+				}
+			)
+		}
+	}
+
+	render() {
+		if(this.state.joiningGame){
+			return(
+		     <View><Text>loading</Text></View>
+			)
+		}
+
+		if(!this.state.hasUser){
+			return(
+				<View style={styles.app}>
+					<EnterNameScreen
+						updateName={name=>this.setState({inputUserName : name})}
+						inputUserName={this.state.inputUserName}
+						createUser={this.createUser}/>
+		     </View>
+			)
+		}
+
+		// if(this.state.createGame){
+		// 	return(
+		// 		<View style={styles.app}>
+		// 			<EnterGameNameScreen
+		// 				updateGameName={name=>this.setState({inputGameName : name})}
+		// 				inputGameName={this.state.inputGameName}
+		// 				createGame={this.createGame}
+		// 			/>
+		// 		</View>
+		// 	)
+		// }
+
+		return (
+			<View style={styles.app}>
+
+				<LobbyScreen
+					createNewGame={() => { this.setState({createGame: true})}}
+					games={this.getGames()}
+				/>
+
+			</View>
+		);
+	}
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF',
-    },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10,
-    },
-    instructions: {
-        textAlign: 'center',
-        color: '#333333',
-        marginBottom: 5,
-    },
-});
