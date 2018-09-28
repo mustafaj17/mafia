@@ -4,6 +4,7 @@ import React, {Component} from 'react';
 import { Text, View, ImageBackground, AsyncStorage} from 'react-native';
 import LobbyScreen from "./src/screens/lobby-screen/lobby-screen";
 import EnterNameScreen from "./src/screens/enter-name/enter-name-screen";
+import EnterGameNameScreen from "./src/screens/enter-game-name/enter-game-name-screen";
 import styles from './src/app.style';
 import background from './src/assets/background.png';
 
@@ -41,7 +42,7 @@ export default class App extends Component {
 			let value = await AsyncStorage.getItem('@Mafia:username');
 			if (value !== null) {
 				value = JSON.parse(value);
-				this.setState({hasUser: false, inputUserName: value})
+				this.setState({hasUser: true, inputUserName: value})
 			}else{
 				this.setState({hasUser: false})
 			}
@@ -413,17 +414,18 @@ export default class App extends Component {
 			)
 		}
 
-		// if(this.state.createGame){
-		// 	return(
-		// 		<View style={styles.app}>
-		// 			<EnterGameNameScreen
-		// 				updateGameName={name=>this.setState({inputGameName : name})}
-		// 				inputGameName={this.state.inputGameName}
-		// 				createGame={this.createGame}
-		// 			/>
-		// 		</View>
-		// 	)
-		// }
+		if(this.state.createGame){
+			return(
+				<View style={styles.app}>
+
+					<EnterGameNameScreen
+						updateGameName={name=>this.setState({inputGameName : name})}
+						inputGameName={this.state.inputGameName}
+						createGame={this.createGame}
+					/>
+				</View>
+			)
+		}
 
 		return (
 			<View style={styles.app}>

@@ -1,22 +1,30 @@
 import React, { Component } from 'react';
-import Logo from "../../components/logo/logo";
-import './enter-game-name-screen.css';
-import MafiaTextLogo from "../../icons/mafia-text-logo-";
+import {Text, View, TextInput, Image, TouchableOpacity} from 'react-native';
+import styles from './enter-name-screen.styles.js';
+import mafiaLogo from '../../assets/mafia-logo.png';
+import mafiaText from '../../assets/mafia-text.png';
 
 export default class EnterGameNameScreen extends Component{
     render(){
         return(
-            <div className='screen enter-name-screen'>
-					<MafiaTextLogo/>
-					<Logo/>
-					<div className="form-holder">
-						<div className="input-title">Enter game name </div>
-						<input type="text" className="input-text-box" value={this.props.inputGameName}
-											 onChange={ e => this.props.updateGameName(e.target.value )}/>
-						{/*{ (this.props.inputUserName && this.props.inputUserName.length > 2) &&*/
-						<div className="ok-btn" onClick={this.createGame}>ok</div>}
-					</div>
-				</div>
+			  <View style={[styles.screen, styles['new-game-screen']]}>
+				  <Image style={styles['logo']} source={mafiaText}></Image>
+				  <Image style={styles['mafia-text-logo']} source={mafiaLogo}></Image>
+				  <View style={styles['form-holder']}>
+					  <View>
+						  <Text style={styles['input-title']}>Enter game name</Text>
+					  </View>
+					  <View><TextInput style={styles['input-text-box']}
+											 onChangeText={(text) => this.props.updateGameName(text)}
+											 value={this.props.inputGameName}
+					  /></View>
+					  <TouchableOpacity onPress={this.props.createGame}>
+						  <View style={styles['ok-btn']}>
+							  <Text >ok</Text>
+						  </View>
+					  </TouchableOpacity>
+				  </View>
+			  </View>
         )
     }
 }
