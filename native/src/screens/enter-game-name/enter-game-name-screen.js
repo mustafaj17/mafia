@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import {Text, View, TextInput, Image, TouchableOpacity} from 'react-native';
-import styles from './enter-name-screen.styles.js';
+import styles from './../enter-name/enter-name-screen.styles.js';
 import mafiaLogo from '../../assets/mafia-logo.png';
 import mafiaText from '../../assets/mafia-text.png';
 
-export default class EnterGameNameScreen extends Component{
+class EnterGameNameScreen extends Component{
     render(){
         return(
 			  <View style={[styles.screen, styles['new-game-screen']]}>
@@ -28,3 +28,5 @@ export default class EnterGameNameScreen extends Component{
         )
     }
 }
+
+export default EnterGameNameScreen

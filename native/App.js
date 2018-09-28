@@ -7,6 +7,7 @@ import EnterNameScreen from "./src/screens/enter-name/enter-name-screen";
 import EnterGameNameScreen from "./src/screens/enter-game-name/enter-game-name-screen";
 import styles from './src/app.style';
 import background from './src/assets/background.png';
+import backgroundLobby from './src/assets/background-lobby.png';
 
 
 export default class App extends Component {
@@ -25,9 +26,7 @@ export default class App extends Component {
 			firebase.initializeApp(config);
 
 		}
-		const settings = {timestampsInSnapshots: true};
 		this.db = firebase.firestore();
-		this.db.settings(settings);
 		this.mafiaGamesCollectionRef = this.db.collection('mafia-games');
 		this.getUsername();
 		this.state = {
@@ -429,7 +428,7 @@ export default class App extends Component {
 
 		return (
 			<View style={styles.app}>
-				<ImageBackground source={background} style={{width: '100%', height: '100%'}}>
+				<ImageBackground source={backgroundLobby} style={{width: '100%', height: '100%'}}>
 				<LobbyScreen
 					createNewGame={() => { this.setState({createGame: true})}}
 					games={this.getGames()}
