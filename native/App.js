@@ -1,10 +1,12 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import React, {Component} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import { Text, View, ImageBackground, AsyncStorage} from 'react-native';
 import LobbyScreen from "./src/screens/lobby-screen/lobby-screen";
 import EnterNameScreen from "./src/screens/enter-name/enter-name-screen";
 import styles from './src/app.style';
+import background from './src/assets/background.png';
+
 
 export default class App extends Component {
 	constructor(props) {
@@ -26,23 +28,27 @@ export default class App extends Component {
 		this.db = firebase.firestore();
 		this.db.settings(settings);
 		this.mafiaGamesCollectionRef = this.db.collection('mafia-games');
-		// let userName = localStorage.getItem(this.props.username);
-		let userName = this.props.username;
-		let hasUser = false;
-		if (userName) {
-			this.user = {
-				name: userName
-			}
-			hasUser = true;
-		}
+		this.getUsername();
 		this.state = {
 			games: [],
 			createGame: false,
-			inputGameName: '',
-			hasUser
+			inputGameName: ''
 		}
 	}
 
+	getUsername = async () => {
+		try {
+			let value = await AsyncStorage.getItem('@Mafia:username');
+			if (value !== null) {
+				value = JSON.parse(value);
+				this.setState({hasUser: true, inputUserName: value})
+			}else{
+				this.setState({hasUser: false})
+			}
+		} catch (error) {
+			return 'error';
+		}
+	}
 	componentWillMount() {
 
 		// window.addEventListener("beforeunload", this.onUnload)
@@ -80,15 +86,17 @@ export default class App extends Component {
 	// }
 
 	createUser = () => {
-		this.user = {
-			name: this.state.inputUserName
-		}
-
-		localStorage.setItem('mafiaUserName', this.state.inputUserName);
+		this.set('@Mafia:username', this.state.inputUserName);
 
 		this.setState({
 			hasUser: true
 		})
+	}
+
+	 set = (key, value) => {
+		value = JSON.stringify(value);
+		if (value) return AsyncStorage.setItem(key, value)
+		else console.log('not set, stringify failed:', key, value)
 	}
 
 	createGame = () => {
@@ -199,8 +207,6 @@ export default class App extends Component {
 			}
 		})
 	}
-
-
 
 	playerReady = () => {
 		this.state.playerRef.ref.update('ready', true);
@@ -387,20 +393,23 @@ export default class App extends Component {
 	}
 
 	render() {
+
 		if(this.state.joiningGame){
 			return(
-		     <View><Text>loading</Text></View>
+				<View><Text>loading</Text></View>
 			)
 		}
 
 		if(!this.state.hasUser){
 			return(
 				<View style={styles.app}>
-					<EnterNameScreen
-						updateName={name=>this.setState({inputUserName : name})}
-						inputUserName={this.state.inputUserName}
-						createUser={this.createUser}/>
-		     </View>
+					<ImageBackground source={background} style={{width: '100%', height: '100%'}}>
+						<EnterNameScreen
+							updateName={name=>this.setState({inputUserName : name})}
+							inputUserName={this.state.inputUserName}
+							createUser={this.createUser}/>
+					</ImageBackground>
+				</View>
 			)
 		}
 
