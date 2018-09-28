@@ -8,7 +8,7 @@ export default class LobbyScreen extends Component{
         return(
             <View style={[styles['screen'], styles['lobby-screen']]}>
 
-					<Image source={mafiaText}></Image>
+					<Image style={styles['mafia-text-logo']} source={mafiaText}></Image>
 					<View >
 						<Text style={styles['header']}>Select Game</Text>
 					</View>

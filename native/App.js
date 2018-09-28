@@ -41,7 +41,7 @@ export default class App extends Component {
 			let value = await AsyncStorage.getItem('@Mafia:username');
 			if (value !== null) {
 				value = JSON.parse(value);
-				this.setState({hasUser: true, inputUserName: value})
+				this.setState({hasUser: false, inputUserName: value})
 			}else{
 				this.setState({hasUser: false})
 			}

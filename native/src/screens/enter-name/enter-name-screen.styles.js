@@ -18,6 +18,10 @@ export default StyleSheet.create(
 				justifyContent: 'center',
 				alignItems: 'center',
 				flexDirection: 'column' },
+		'input-title':
+			{ color: '#ffffff',
+				fontSize: 18
+},
 		'input-text-box':
 			{ backgroundColor: '#ffffff',
 				shadowOffset: { width: 0, height: 4 },
