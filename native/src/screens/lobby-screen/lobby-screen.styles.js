@@ -14,20 +14,21 @@ export default StyleSheet.create(
         'game':
             { width: 250,
                 height: 40,
-                fontSize: 14,
                 color: '#161616',
                 backgroundColor: '#FFFFFF',
                 shadowOffset: { width: 2, height: 4 },
-                shadowRadius: 4,
+                shadowRadius: 2,
                 shadowColor: 'rgba(34, 23, 83, 0.27)',
                 shadowOpacity: 1,
                 borderRadius: 4,
                 marginBottom: 16,
                 display: 'flex',
                 justifyContent: 'center',
-                alignItems: 'center',
-                textAlign: 'center'
+                alignItems: 'center'
             },
+        'game-text': {
+            fontSize: 18,
+        },
         'mafia-text-logo': { marginBottom: 24 },
         logo: { marginBottom: 70 },
         'new-game':
@@ -49,7 +50,7 @@ export default StyleSheet.create(
                 fontSize: 36,
                 color: '#4B4B4B' },
         'new-game-btn-text': { fontSize: 18, color: '#EFEFEF', marginLeft: 8 },
-        'header': { fontSize: 18, color: '#EFEFEF', marginLeft: 8, paddingTop: 8 },
+        'header': { fontSize: 18, color: '#EFEFEF', marginLeft: 8, paddingTop: 24, paddingBottom: 8 },
     'create-game-container':
         {
             position: 'absolute',
