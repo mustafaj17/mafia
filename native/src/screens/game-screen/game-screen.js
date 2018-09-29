@@ -33,14 +33,14 @@ export default class GameScreen extends Component{
                 } else {
                     console.log(player)
                     return (
-                        <View style={!player.ready ? styles['player'] : styles['player-ready']}>
+                        <View style={player.ready && !player.type ? styles['player-ready'] : styles['player']}>
                             {/*className={'player' + (isCurrentPlayer ? ' current-player' : '') + (player.name === votedOut ? ' player-out' : '')}>*/}
                             <View style={styles['icon-name-container']}>
                                 {!isMafia && isCurrentPlayer && <Image resizeMode="contain" style={styles['type-icon']} source={peaceIcon}></Image>}
                                 {isCurrentPlayerMafia && isMafia && <Image resizeMode="contain" style={styles['type-icon']} source={gunIcon}></Image>}
                                 <Text key={player.name} style={styles['game-text']}>{player.name}</Text>
                             </View>
-                            {player.ready && <Text key={player.name} style={styles['ready-text']}>ready</Text>}
+                            {player.ready && !player.type && <Text key={player.name} style={styles['ready-text']}>ready</Text>}
                         </View>
                     )
                 }
