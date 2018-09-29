@@ -8,7 +8,7 @@ import plusIcon from '../../assets/plus-btn.png';
 export default class LobbyScreen extends Component{
 
     getGames = (games) => {
-        console.log(games);
+        console.log('games', games);
         return games.filter(gameDoc => !gameDoc.data().gameInProgress).map(gameDoc => {
 			return ( <TouchableOpacity onPress={() => this.props.selectGame(gameDoc)}>
                         <View style={styles['game']}>   
