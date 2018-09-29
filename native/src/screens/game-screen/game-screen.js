@@ -19,6 +19,7 @@ export default class GameScreen extends Component{
                 let isVoteMode = this.props.voteMode;
                 let isCurrentPlayer = currentPlayer.name === player.name;
                 let isCurrentPlayerMafia = currentPlayer.type === 'Mafia';
+                let isCurrentPlayerCivilian = currentPlayer.type === 'Civilian';
                 let isMafia = player.type === 'Mafia';
                 let votedOut = game.votedOut;
                 console.log('game:', game)
@@ -37,7 +38,7 @@ export default class GameScreen extends Component{
                         <View style={player.ready && !game.roundInProgress ? styles['player-ready'] : styles['player']}>
                             {/*className={'player' + (isCurrentPlayer ? ' current-player' : '') + (player.name === votedOut ? ' player-out' : '')}>*/}
                             <View style={styles['icon-name-container']}>
-                                {!isMafia && isCurrentPlayer && <Image resizeMode="contain" style={styles['type-icon']} source={peaceIcon}></Image>}
+                                {!isMafia && isCurrentPlayerCivilian && <Image resizeMode="contain" style={styles['type-icon']} source={peaceIcon}></Image>}
                                 {isCurrentPlayerMafia && isMafia && <Image resizeMode="contain" style={styles['type-icon']} source={gunIcon}></Image>}
                                 <Text key={player.name} style={styles['game-text']}>{player.name}</Text>
                             </View>
@@ -66,7 +67,7 @@ export default class GameScreen extends Component{
                     <TimerCountdown
                         initialSecondsRemaining={1000*60}
                         onTick={secondsRemaining => console.log('tick', secondsRemaining)}
-                        onTimeElapsed={() => console.log('complete')}
+                        onTimeElapsed={endRound}
                         allowFontScaling={true}
                         style={{ fontSize: 20 }}
                     />}
