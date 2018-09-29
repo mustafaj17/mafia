@@ -42,6 +42,7 @@ export default class App extends Component {
 			let value = await AsyncStorage.getItem('@Mafia:username');
 			if (value !== null) {
 				value = JSON.parse(value);
+				this.user.name = value;
 				this.setState({hasUser: true, inputUserName: value})
 			}else{
 				this.setState({hasUser: false})
@@ -88,6 +89,7 @@ export default class App extends Component {
 
 	createUser = () => {
 		this.set('@Mafia:username', this.state.inputUserName);
+		this.user.name =this.state.inputUserName;
 
 		this.setState({
 			hasUser: true
@@ -192,7 +194,6 @@ export default class App extends Component {
 							type: null,
 							inGame: true,
 							ready: false,
-							name: this.state.inputGameName,
 							...this.user
 						}).then(playerDocRef => {
 					playerDocRef.get().then(playerDoc => {
