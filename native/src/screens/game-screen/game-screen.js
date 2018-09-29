@@ -38,7 +38,7 @@ export default class GameScreen extends Component{
                         <View style={player.ready && !game.roundInProgress ? styles['player-ready'] : styles['player']}>
                             {/*className={'player' + (isCurrentPlayer ? ' current-player' : '') + (player.name === votedOut ? ' player-out' : '')}>*/}
                             <View style={styles['icon-name-container']}>
-                                {!isMafia && isCurrentPlayerCivilian && <Image resizeMode="contain" style={styles['type-icon']} source={peaceIcon}></Image>}
+                                {!isMafia && isCurrentPlayerCivilian && isCurrentPlayer && <Image resizeMode="contain" style={styles['type-icon']} source={peaceIcon}></Image>}
                                 {isCurrentPlayerMafia && isMafia && <Image resizeMode="contain" style={styles['type-icon']} source={gunIcon}></Image>}
                                 <Text key={player.name} style={styles['game-text']}>{player.name}</Text>
                             </View>
@@ -65,7 +65,7 @@ export default class GameScreen extends Component{
                     {game.votingInProgress && player.votingFor &&<Text className='header'> Waiting for others to vote...</Text>}
                     {game.roundInProgress &&
                     <TimerCountdown
-                        initialSecondsRemaining={1000*60}
+                        initialSecondsRemaining={1000*5}
                         onTick={secondsRemaining => console.log('tick', secondsRemaining)}
                         onTimeElapsed={endRound}
                         allowFontScaling={true}
