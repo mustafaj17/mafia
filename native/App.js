@@ -27,6 +27,7 @@ export default class App extends Component {
 			firebase.initializeApp(config);
 
 		}
+		this.user = {};
 		this.db = firebase.firestore();
 		this.mafiaGamesCollectionRef = this.db.collection('mafia-games');
 		this.getUsername();
