@@ -26,9 +26,9 @@ export default class GameScreen extends Component{
                 if (isVoteMode && currentPlayer.inGame) {
                     if (!isCurrentPlayer) {
                         return (
-                            <View style={styles['game']} onClick={() => this.castVote(player)}>
+                            <TouchableOpacity style={styles['player-vote']} onClick={() => this.castVote(player)}>
                                 <Text key={player.name} style={styles['game-text']}>{player.name}</Text>
-                            </View>
+                            </TouchableOpacity>
                         )
                     }
 

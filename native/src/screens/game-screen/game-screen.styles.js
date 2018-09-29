@@ -43,6 +43,22 @@ export default StyleSheet.create(
                 alignItems: 'center',
                 flexDirection: 'row'
             },
+        'player-vote':
+            { width: 250,
+                height: 40,
+                color: '#161616',
+                backgroundColor: '#FFFFFF',
+                shadowOffset: { width: 2, height: 4 },
+                shadowRadius: 2,
+                shadowColor: 'rgba(34, 23, 83, 0.27)',
+                shadowOpacity: 1,
+                borderRadius: 4,
+                marginBottom: 16,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row'
+            },
         'game-text': {
             fontSize: 18,
         },
