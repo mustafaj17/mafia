@@ -333,8 +333,7 @@ export default class App extends Component {
 
 	startGameRound = (allPlayersAreReady, playersHaveType) => {
 		if (allPlayersAreReady && playersHaveType) {
-			debugger
-			this.state.gameDocRef.ref.update('roundInProgress', true);
+			this.state.gameDocRef.ref.update('roundInProgress', true, 'votedOut', null);
 		}
 	}
 
@@ -343,10 +342,8 @@ export default class App extends Component {
 			playerDocs.forEach(playerDocRef => {
 				playerDocRef.ref.update('ready', false)
 			})
-			this.state.gameDocRef.ref.update('roundInProgress' , false);
-			this.state.gameDocRef.ref.update('votingInProgress' , true)
+			this.state.gameDocRef.ref.update('roundInProgress' , false, 'votingInProgress' , true);
 		})
-
 	}
 
 	setTypes = () => {
@@ -424,11 +421,11 @@ export default class App extends Component {
 			return(
 				<View style={styles.app}>
 					<ImageBackground source={background} style={{width: '100%', height: '100%'}}>
-					<EnterGameNameScreen
-						updateGameName={name=>this.setState({inputGameName : name})}
-						inputGameName={this.state.inputGameName}
-						createGame={this.createGame}
-					/>
+						<EnterGameNameScreen
+							updateGameName={name=>this.setState({inputGameName : name})}
+							inputGameName={this.state.inputGameName}
+							createGame={this.createGame}
+						/>
 					</ImageBackground>
 				</View>
 			)
@@ -447,15 +444,15 @@ export default class App extends Component {
 			}
 			return (
 				<View>
-                    <ImageBackground source={background} style={{width: '100%', height: '100%'}}>
-					<GameScreen
-						game={game}
-						voteMode={game.votingInProgress}
-						players={players}
-						currentPlayer={this.state.playerRef}
-						playerReady={this.playerReady}
-						endRound={this.endRound}
-					/>
+					<ImageBackground source={background} style={{width: '100%', height: '100%'}}>
+						<GameScreen
+							game={game}
+							voteMode={game.votingInProgress}
+							players={players}
+							currentPlayer={this.state.playerRef}
+							playerReady={this.playerReady}
+							endRound={this.endRound}
+						/>
 					</ImageBackground>
 				</View>
 

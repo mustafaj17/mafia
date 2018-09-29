@@ -18,8 +18,10 @@ export default class GameScreen extends Component{
 	}
 
 	castVote = player => {
-		console.log('voting player:', player)
-		this.props.currentPlayer.ref.update('votingFor', player.name)
+		if(!player.votingFor) {
+			this.setState({hasPlayerSeenVotedOut: false});
+			this.props.currentPlayer.ref.update('votingFor', player.name)
+		}
 	}
 
 	getPlayers = () => {
