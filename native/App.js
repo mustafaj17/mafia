@@ -446,13 +446,14 @@ export default class App extends Component {
 			}
 			return (
 				<View>
+                    <ImageBackground source={background} style={{width: '100%', height: '100%'}}>
 					<GameScreen
 						game={game}
 						voteMode={game.votingInProgress}
 						players={players}
 						currentPlayer={this.state.playerRef}
 					/>
-
+					</ImageBackground>
 				</View>
 				//         <div className="app">
 				//         <div className="header">{game.gameName}</div>

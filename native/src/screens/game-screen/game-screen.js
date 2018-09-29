@@ -11,7 +11,7 @@ export default class GameScreen extends Component{
 
         return players.map(player => {
             if(player.inGame) {
-
+                console.log(player)
                 let isVoteMode = this.props.voteMode;
                 let isCurrentPlayer = currentPlayer.name === player.name;
                 let isCurrentPlayerMafia = currentPlayer.type === 'Mafia';
@@ -21,19 +21,20 @@ export default class GameScreen extends Component{
                 if (isVoteMode && currentPlayer.inGame) {
                     if (!isCurrentPlayer) {
                         return (
-                            <View onClick={() => this.castVote(player)}>
-                                <Text key={player.name}>{player.name}</Text>
+                            <View style={styles['game']} onClick={() => this.castVote(player)}>
+                                <Text key={player.name} style={styles['game-text']}>{player.name}</Text>
                             </View>
                         )
                     }
 
                 } else {
+                    console.log(player)
                     return (
-                        <View>
+                        <View style={styles['game']}>
                             {/*className={'player' + (isCurrentPlayer ? ' current-player' : '') + (player.name === votedOut ? ' player-out' : '')}>*/}
                             {/*{!isMafia && isCurrentPlayer && <div className="player-type"><Civilian/></div>}*/}
                             {/*{isMafia && isCurrentPlayerMafia && <div className="player-type"><Mafia/></div>}*/}
-                            <Text key={player.name} className="player-name">{isCurrentPlayer ? 'You' : player.name}</Text>
+                            <Text key={player.name} style={styles['game-text']}>{player.name}</Text>
                             {/*{player.ready && <div className='player-ready'><Tick/></div>}*/}
                         </View>
                     )
@@ -53,7 +54,7 @@ export default class GameScreen extends Component{
                         <Text style={styles['header']}>{game.gameName}</Text>
                     </View>
                     <View style={styles['games']}>
-                        {this.getPlayers(players)}
+                        {this.getPlayers()}
                     </View>
                 </View>
             </View>
