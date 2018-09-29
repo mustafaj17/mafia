@@ -8,7 +8,7 @@ export default StyleSheet.create(
 				left: 0,
 				right: 0,
 				bottom: 0,
-				zIndex: 9,
+				zIndex: 99,
 				display: 'flex',
 				justifyContent: 'center',
 				alignItems: 'center' },

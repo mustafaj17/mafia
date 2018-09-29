@@ -131,7 +131,8 @@ export default class GameScreen extends Component{
 				{player.inGame &&
 				!player.ready &&
 				!game.gameComplete &&
-				!game.votingInProgress && <TouchableOpacity onPress={playerReady} style={styles['ready-button']}>
+				!game.votingInProgress &&
+				<TouchableOpacity onPress={playerReady} style={styles['ready-button']}>
 					<Text>ready</Text>
 				</TouchableOpacity>
 				}
