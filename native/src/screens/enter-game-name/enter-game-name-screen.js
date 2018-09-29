@@ -7,7 +7,7 @@ import mafiaText from '../../assets/mafia-text.png';
 class EnterGameNameScreen extends Component{
     render(){
         return(
-			  <View style={[styles.screen, styles['new-game-screen']]}>
+			  <View style={[styles.screen, styles['enter-name-screen']]}>
 				  <Image style={styles['logo']} source={mafiaText}></Image>
 				  <Image style={styles['mafia-text-logo']} source={mafiaLogo}></Image>
 				  <View style={styles['form-holder']}>
