@@ -9,6 +9,10 @@ import TimerCountdown from 'react-native-timer-countdown';
 
 export default class GameScreen extends Component{
 
+    castVote = player => {
+        this.props.currentPlayer.ref.update('votingFor', player.name)
+    }
+
     getPlayers = () => {
         const { players, game } = this.props;
         let currentPlayer = this.props.currentPlayer.data();
