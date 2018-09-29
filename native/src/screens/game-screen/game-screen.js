@@ -61,7 +61,7 @@ export default class GameScreen extends Component{
                     </View>
                     {game.votingInProgress && !player.votingFor && <Text className='header'>please vote</Text>}
                     {game.votingInProgress && player.votingFor &&<Text className='header'> Waiting for others to vote...</Text>}
-                    {game.roundInProgress && endRound}
+                    {game.roundInProgress && <Text>This is a timer</Text>}
                     {game.isDraw && <div className="draw-game-text">There has been a draw between:</div>}
                     {game.isDraw &&
                     <View>
