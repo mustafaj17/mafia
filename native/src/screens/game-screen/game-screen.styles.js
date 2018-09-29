@@ -146,7 +146,10 @@ export default StyleSheet.create(
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                flexDirection: 'row'
+                position: 'absolute',
+                bottom: '5%',
+                flexDirection: 'row',
+
             },
     }
 );
