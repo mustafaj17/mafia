@@ -454,6 +454,7 @@ export default class App extends Component {
 						players={players}
 						currentPlayer={this.state.playerRef}
 						playerReady={this.playerReady}
+						endRound={this.endRound}
 					/>
 					</ImageBackground>
 				</View>

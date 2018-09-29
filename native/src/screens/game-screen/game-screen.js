@@ -49,7 +49,7 @@ export default class GameScreen extends Component{
 
     }
     render(){
-        const {game, currentPlayer, playerReady} = this.props
+        const {game, currentPlayer, playerReady, endRound} = this.props
         const player = currentPlayer.data()
         console.log('current', currentPlayer.data())
         return(
@@ -61,7 +61,7 @@ export default class GameScreen extends Component{
                     </View>
                     {game.votingInProgress && !player.votingFor && <Text className='header'>please vote</Text>}
                     {game.votingInProgress && player.votingFor &&<Text className='header'> Waiting for others to vote...</Text>}
-                    {game.roundInProgress && <Text>This is a timer</Text>}
+                    {game.roundInProgress && endRound}
                     {game.isDraw && <div className="draw-game-text">There has been a draw between:</div>}
                     {game.isDraw &&
                     <View>
