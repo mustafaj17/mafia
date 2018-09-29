@@ -11,7 +11,7 @@ export default StyleSheet.create(
                 marginTop: 24,
                 position: 'relative'},
         'games': { marginTop: 16, width: '100%', display: 'flex', alignItems: 'center'},
-        'game':
+        'player':
             { width: 250,
                 height: 40,
                 color: '#161616',
@@ -23,8 +23,25 @@ export default StyleSheet.create(
                 borderRadius: 4,
                 marginBottom: 16,
                 display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center'
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexDirection: 'row'
+            },
+        'player-ready':
+            { width: 250,
+                height: 40,
+                color: '#161616',
+                backgroundColor: '#00FFC2',
+                shadowOffset: { width: 2, height: 4 },
+                shadowRadius: 2,
+                shadowColor: 'rgba(34, 23, 83, 0.27)',
+                shadowOpacity: 1,
+                borderRadius: 4,
+                marginBottom: 16,
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexDirection: 'row'
             },
         'game-text': {
             fontSize: 18,
@@ -51,21 +68,53 @@ export default StyleSheet.create(
                 color: '#4B4B4B' },
         'new-game-btn-text': { fontSize: 18, color: '#EFEFEF', marginLeft: 8 },
         'header': { fontSize: 18, color: '#EFEFEF', marginLeft: 8, paddingTop: 24, paddingBottom: 8 },
-    'create-game-container':
-        {
-            position: 'absolute',
-            bottom: '5%',
-            left: '5%',
-            display: 'flex',
-            flexDirection: "row",
-            alignItems: 'center'
-        },
+        'create-game-container':
+            {
+                position: 'absolute',
+                bottom: '5%',
+                left: '5%',
+                display: 'flex',
+                flexDirection: "row",
+                alignItems: 'center'
+            },
         'title-container':
             {
-                    position: 'absolute',
-                    display: 'flex',
-                    alignItems: 'center',
-                    top: 0
-            }
+                position: 'absolute',
+                display: 'flex',
+                alignItems: 'center',
+                top: 0
+            },
+        'icon-name-container':
+            {
+                display: 'flex',
+                flexDirection: 'row',
+                paddingLeft: 8,
+                alignItems: 'center'
+            },
+        'type-icon':
+            {
+                height: 30,
+                width: 30
+            },
+        'ready-text':
+            {
+                paddingRight: 8
+            },
+        'ready-button':
+            { width: 250,
+                height: 40,
+                color: '#161616',
+                backgroundColor: '#00FFC2',
+                shadowOffset: { width: 2, height: 4 },
+                shadowRadius: 2,
+                shadowColor: 'rgba(34, 23, 83, 0.27)',
+                shadowOpacity: 1,
+                borderRadius: 4,
+                marginBottom: 16,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row'
+            },
     }
 );

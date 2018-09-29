@@ -452,49 +452,10 @@ export default class App extends Component {
 						voteMode={game.votingInProgress}
 						players={players}
 						currentPlayer={this.state.playerRef}
+						playerReady={this.playerReady}
 					/>
 					</ImageBackground>
 				</View>
-				//         <div className="app">
-				//         <div className="header">{game.gameName}</div>
-				//
-				// {game.votingInProgress && !player.votingFor && <div className="screen-title">please vote</div>}
-				// {game.votingInProgress && player.votingFor &&<div className="screen-title"> Waiting for others to vote...</div>}
-				//
-				// {game.roundInProgress &&
-				// <ReactCountdownClock seconds={5}
-				//                      color="#F46036"
-				//                      alpha={0.7}
-				//                      size={150}
-				//                      onComplete={this.endRound} />
-				// }
-				//
-				// {game.isDraw && <div className="draw-game-text">There has been a draw between:</div>}
-				// {game.isDraw &&
-				// <div className="drawn-players">
-				//     {game.isDraw.map(player =>{return(
-				//         <div className="player-draw">{player}</div>
-				//     )})
-				//     }
-				// </div>}
-				//
-				// {this.state.players &&
-				// <Players
-				//     game={game}
-				//     voteMode={game.votingInProgress}
-				//     players={this.state.players}
-				//     currentPlayer={this.state.playerRef}/>}
-				//
-				//
-				// {game.gameComplete && game.mafiasWin && <div className="winner-text">Mafias Win</div>}
-				// {game.gameComplete && game.civiliansWin && <div className="winner-text">Civilians Win</div>}
-				//
-				// {player.inGame &&
-				// !player.ready &&
-				// !game.gameComplete &&
-				// !game.votingInProgress  &&
-				// <div className="footer-btn" onClick={this.playerReady}>ready</div>}
-				// </div>
 
 			)
 		}
