@@ -64,7 +64,8 @@ export default class GameScreen extends Component{
         console.log('current', currentPlayer.data())
         return(
             <View style={[styles['screen'], styles['lobby-screen']]}>
-
+                {game.gameComplete && game.mafiasWin && <Modal mafia={true} text='Mafias win'/>}
+                {game.gameComplete && game.civiliansWin && <Modal text='Civilians'/>}
                 <View style={styles['title-container']}>
                     <View >
                         <Text style={styles['header']}>{game.gameName}</Text>
@@ -91,10 +92,6 @@ export default class GameScreen extends Component{
                         )})
                         }
                     </View>}
-
-                    {game.gameComplete && game.mafiasWin && <Modal mafia={true} text='Mafias win'/>}
-                    {game.gameComplete && game.civiliansWin && <Modal text='Civilians'/>}
-
 
                     <View style={styles['games']}>
                         {this.getPlayers()}
