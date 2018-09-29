@@ -423,12 +423,13 @@ export default class App extends Component {
 		if(this.state.createGame){
 			return(
 				<View style={styles.app}>
-
+					<ImageBackground source={background} style={{width: '100%', height: '100%'}}>
 					<EnterGameNameScreen
 						updateGameName={name=>this.setState({inputGameName : name})}
 						inputGameName={this.state.inputGameName}
 						createGame={this.createGame}
 					/>
+					</ImageBackground>
 				</View>
 			)
 		}
