@@ -20,7 +20,7 @@ export default class GameScreen extends Component{
                 let isCurrentPlayerMafia = currentPlayer.type === 'Mafia';
                 let isMafia = player.type === 'Mafia';
                 let votedOut = game.votedOut;
-
+                console.log('game:', game)
                 if (isVoteMode && currentPlayer.inGame) {
                     if (!isCurrentPlayer) {
                         return (
@@ -33,14 +33,14 @@ export default class GameScreen extends Component{
                 } else {
                     console.log(player)
                     return (
-                        <View style={player.ready && !player.type ? styles['player-ready'] : styles['player']}>
+                        <View style={player.ready && !game.roundInProgress ? styles['player-ready'] : styles['player']}>
                             {/*className={'player' + (isCurrentPlayer ? ' current-player' : '') + (player.name === votedOut ? ' player-out' : '')}>*/}
                             <View style={styles['icon-name-container']}>
                                 {!isMafia && isCurrentPlayer && <Image resizeMode="contain" style={styles['type-icon']} source={peaceIcon}></Image>}
                                 {isCurrentPlayerMafia && isMafia && <Image resizeMode="contain" style={styles['type-icon']} source={gunIcon}></Image>}
                                 <Text key={player.name} style={styles['game-text']}>{player.name}</Text>
                             </View>
-                            {player.ready && !player.type && <Text key={player.name} style={styles['ready-text']}>ready</Text>}
+                            {player.ready && !game.roundInProgress && <Text key={player.name} style={styles['ready-text']}>ready</Text>}
                         </View>
                     )
                 }
@@ -86,7 +86,7 @@ export default class GameScreen extends Component{
                 !player.ready &&
                 !game.gameComplete &&
                 !game.votingInProgress && <TouchableOpacity onPress={playerReady} style={styles['ready-button']}>
-                    <Text>ready?</Text>
+                    <Text>ready</Text>
                 </TouchableOpacity>
                 }
             </View>
