@@ -168,6 +168,9 @@ export default class App extends Component {
 
 			playerDocsRefs.forEach(playerDocRef => {
 				if (playerDocRef.data().name === this.state.inputUserName) {
+					if(playerDocRef.data().admin){
+						this.user.admin = true;
+					}
 					playerDocRef.ref.onSnapshot(playerRef => {
 						this.setState({
 							playerRef: playerRef
