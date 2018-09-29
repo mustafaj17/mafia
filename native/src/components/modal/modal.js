@@ -1,18 +1,23 @@
 import React, { Component } from 'react';
-import './modal.css';
-import GunIcon from "../../icons/GunIcon";
+import { View, Text, Image } from 'react-native';
+import styles from './modal.styles';
+import gunIcon from'../../assets/gun.png';
+import peaceIcon from'../../assets/peace.png';
 
 export default class Modal extends Component{
     render(){
         return(
-            <div className='modal'>
-					<div className="modal-box">
-						<div className="title">You’re a Mafia</div>
-						<GunIcon/>
-						<div className="ok-btn">ok</div>
-
-					</div>
-				</div>
+            <View style={styles.modal}>
+					<View style={styles['modal-box']}>
+						<View style={styles.title}>
+							<Text style={styles['title-text']}>{this.props.text}</Text>
+						</View>
+						<Image source={this.props.mafia ? gunIcon : peaceIcon}></Image>
+						<View style={styles['ok-btn']}>
+							<Text style={styles['ok-btn-txt']}>ok</Text>
+						</View>
+					</View>
+				</View>
         )
     }
 }

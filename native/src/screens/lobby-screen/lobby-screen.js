@@ -4,6 +4,7 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import styles from './lobby-screen.styles';
 import mafiaText from '../../assets/mafia-text.png';
 import plusIcon from '../../assets/plus-btn.png';
+import Modal from "../../components/modal/modal";
 
 export default class LobbyScreen extends Component{
 
@@ -11,7 +12,7 @@ export default class LobbyScreen extends Component{
         console.log('games', games);
         return games.filter(gameDoc => !gameDoc.data().gameInProgress).map(gameDoc => {
 			return ( <TouchableOpacity onPress={() => this.props.selectGame(gameDoc)}>
-                        <View style={styles['game']}>   
+                        <View style={styles['game']}>
                           <Text style={styles['game-text']}>{gameDoc.data().gameName}</Text>
                          </View>
                       </TouchableOpacity>)
