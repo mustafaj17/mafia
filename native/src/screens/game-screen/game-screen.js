@@ -10,6 +10,7 @@ import TimerCountdown from 'react-native-timer-countdown';
 export default class GameScreen extends Component{
 
     castVote = player => {
+        console.log('voting player:', player)
         this.props.currentPlayer.ref.update('votingFor', player.name)
     }
 
@@ -30,7 +31,10 @@ export default class GameScreen extends Component{
                 if (isVoteMode && currentPlayer.inGame) {
                     if (!isCurrentPlayer) {
                         return (
-                            <TouchableOpacity style={currentPlayer.votingFor === player.name ? styles['player-selected'] : styles['player-vote']} onClick={() => this.castVote(player)}>
+                            <TouchableOpacity
+                                style={currentPlayer.votingFor === player.name ? styles['player-selected'] : styles['player-vote']}
+                                onPress={() => this.castVote(player)}
+                            >
                                 <Text key={player.name} style={styles['game-text']}>{player.name}</Text>
                             </TouchableOpacity>
                         )
