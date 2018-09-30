@@ -9,9 +9,12 @@ import EnterGameNameScreen from "./src/screens/enter-game-name/enter-game-name-s
 import styles from './src/app.style';
 import background from './src/assets/background.png';
 import backgroundLobby from './src/assets/background-lobby.png';
+import Image from 'react-native-remote-svg';
+import loadingSpinner from './src/assets/loading1.svg';
 
 
 export default class App extends Component {
+
 	constructor(props) {
 		super(props);
 		if (firebase.apps && ( firebase.apps.length < 1 )) {
@@ -52,18 +55,10 @@ export default class App extends Component {
 			return 'error';
 		}
 	}
+
 	componentWillMount() {
 
-		// window.addEventListener("beforeunload", this.onUnload)
-		this.disconnectFromGames = this.mafiaGamesCollectionRef.onSnapshot(gamesSnapshot => {
-			let games = [];
-			gamesSnapshot.forEach(gameDoc => {
-				games.push(gameDoc);
-			});
-			this.setState({games});
-		}, err => {
-			console.log(err);
-		});
+		this.getGames()
 	}
 
 	componentWillUnmount() {
@@ -88,13 +83,24 @@ export default class App extends Component {
 	// 	// when normal player closes window, we must delete them from the player collection.
 	// }
 
-	createUser = () => {
-		this.set('@Mafia:username', this.state.inputUserName);
-		this.user.name =this.state.inputUserName;
+	getGames = () => {
+		this.disconnectFromGames = this.mafiaGamesCollectionRef.onSnapshot(gamesSnapshot => {
+			let games = [];
+			gamesSnapshot.forEach(gameDoc => {
+				games.push(gameDoc);
+			});
+			this.setState({games});
+		}, err => {
+			console.log(err);
+		});
+	}
 
+	createUser = () => {
 		this.setState({
 			hasUser: true
 		})
+		this.user.name =this.state.inputUserName;
+		this.set('@Mafia:username', this.state.inputUserName);
 	}
 
 	set = (key, value) => {
@@ -108,6 +114,7 @@ export default class App extends Component {
 			createGame: false,
 			joiningGame: true
 		})
+
 		this.mafiaGamesCollectionRef.add(
 			{
 				gameName: this.state.inputGameName,
@@ -120,18 +127,11 @@ export default class App extends Component {
 		})
 	}
 
-	getGames = () => {
-		return this.state.games.filter(gameDoc => !gameDoc.data().gameInProgress).map(gameDoc => {
-			return (<View className="game"
-							  onClick={() => this.selectGame(gameDoc)}
-							  onDoubleClick={ e => e.preventDefault()}>{gameDoc.data().gameName}</View>)
-		})
-	}
-
 	selectGame = gameDoc => {
 		this.setState({
 			createGame: false,
-			joiningGame: true
+			joiningGame: true,
+			games : []
 		})
 
 		gameDoc = gameDoc.ref || gameDoc;
@@ -139,6 +139,7 @@ export default class App extends Component {
 
 		//connect to the game doc and update state whenever it changes
 		this.disconnectFromGame = gameDoc.onSnapshot(gameDocRef => {
+			debugger;
 			this.state.gameDocRef = gameDocRef;
 			this.setState({
 				gameDocRef
@@ -188,7 +189,6 @@ export default class App extends Component {
 			})
 
 			if (!currentPlayerRef) {
-				console.log('this shouldnt be running')
 				playersColRef
 					.add(
 						{
@@ -215,14 +215,20 @@ export default class App extends Component {
 		})
 	}
 
+	leaveGame = () => {
+		this.disconnectFromGame();
+		this.state.playerRef.ref.delete();
+		this.setState({gameDocRef: null, players: null, playerRef: null, joiningGame: false});
+		this.getGames();
+	}
+
 	playerReady = () => {
 		this.state.playerRef.ref.update('ready', true);
 	}
 
 	runGame = () => {
 		if(this.state.players && this.state.players.length) {
-			if (this.user && this.user.admin) {
-
+			if (this.user && this.user.admin && this.state.gameDocRef) {
 				let game = this.state.gameDocRef.data();
 				let playersInTheGame = this.state.players.filter(player => player.inGame);
 				let playersHaveType= this.state.players.every(player => player.type);
@@ -256,7 +262,6 @@ export default class App extends Component {
 					let mafiaCount = playersInTheGame.filter(player => player.type === 'Mafia')
 
 					if (mafiaCount.length === 0) {
-						debugger
 						this.state.gameDocRef.ref.update('gameComplete', true, 'civiliansWin', true);
 					}
 
@@ -400,7 +405,11 @@ export default class App extends Component {
 
 		if(this.state.joiningGame){
 			return(
-				<View><Text>loading</Text></View>
+				<View>
+					<ImageBackground source={background} style={{width: '100%', height: '100%'}}>
+						<Image source={loadingSpinner}></Image>
+					</ImageBackground>
+				</View>
 			)
 		}
 
@@ -425,12 +434,12 @@ export default class App extends Component {
 							updateGameName={name=>this.setState({inputGameName : name})}
 							inputGameName={this.state.inputGameName}
 							createGame={this.createGame}
+							backToLobby={() => { this.setState({createGame: false})}}
 						/>
 					</ImageBackground>
 				</View>
 			)
 		}
-
 
 		if(this.state.gameDocRef) {
 
@@ -439,7 +448,11 @@ export default class App extends Component {
 			let players = this.state.players;
 			if(!player || !game){
 				return(
-					<View><Text>Loadingggggggg</Text></View>
+					<View>
+						<ImageBackground source={background} style={{width: '100%', height: '100%'}}>
+							<Image source={loadingSpinner}></Image>
+						</ImageBackground>
+					</View>
 				)
 			}
 			return (
@@ -452,6 +465,7 @@ export default class App extends Component {
 							currentPlayer={this.state.playerRef}
 							playerReady={this.playerReady}
 							endRound={this.endRound}
+							leaveGame={this.leaveGame}
 						/>
 					</ImageBackground>
 				</View>

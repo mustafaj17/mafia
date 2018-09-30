@@ -3,25 +3,32 @@ import { StyleSheet } from 'react-native';
 export default StyleSheet.create(
 	{ 'enter-name-screen':
 			{ display: 'flex',
-				justifyContent: 'center',
 				alignItems: 'center',
 				flexDirection: 'column',
-				marginTop: 48, },
+				height: '100%',
+				position: 'relative',
+				paddingTop: 56
+			},
 		'header':
 			{ fontSize: 48, color: '#01FFC2', marginBottom: 12 },
 		'mafia-text-logo':
-			{ marginBottom: 24 },
+			{
+				marginTop: 56,
+				marginBottom: 24
+			},
 		logo:
 			{ marginBottom: 70 },
 		'form-holder':
-			{ display: 'flex',
+			{
+				marginTop: 70,
+				display: 'flex',
 				justifyContent: 'center',
 				alignItems: 'center',
 				flexDirection: 'column' },
 		'input-title':
 			{ color: '#ffffff',
 				fontSize: 18
-},
+			},
 		'input-text-box':
 			{ backgroundColor: '#ffffff',
 				shadowOffset: { width: 0, height: 4 },
@@ -53,10 +60,10 @@ export default StyleSheet.create(
 				fontSize: 16,
 				color: '#000000',
 				marginTop: 30 },
-      background: {
+		'back-btn': {
 			position: 'absolute',
-			flex: 1,
-			resizeMode: 'cover'
-      }
+			top: 20,
+			left: 20
+		}
 	}
 );

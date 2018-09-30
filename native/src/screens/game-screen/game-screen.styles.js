@@ -79,8 +79,13 @@ export default StyleSheet.create(
 		'game-text': {
 			fontSize: 18,
 		},
-		'mafia-text-logo': { marginBottom: 24 },
-		logo: { marginBottom: 70 },
+		'mafia-text-logo': {
+			marginTop: 48,
+			marginBottom: 24
+		},
+		logo: {
+			marginBottom: 70
+		},
 		'new-game':
 			{   justifyContent: 'center',
 				alignItems: 'center',
@@ -152,5 +157,10 @@ export default StyleSheet.create(
 				flexDirection: 'row',
 
 			},
+		'back-btn':{
+		position: 'absolute',
+			top: 20,
+			left: 20
+		}
 	}
 );

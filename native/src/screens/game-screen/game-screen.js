@@ -1,11 +1,13 @@
 //* eslint-disable */
 import React, { Component } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import styles from './game-screen.styles';
-import gunIcon from'../../assets/gun.png';
-import peaceIcon from'../../assets/peace.png';
+import gunIcon from'../../assets/gun-icon.svg';
+import peaceIcon from'../../assets/peace-icon.svg';
 import Modal from '../../components/modal/modal'
 import TimerCountdown from 'react-native-timer-countdown';
+import backBtn from '../../assets/back-btn.svg';
+import Image from 'react-native-remote-svg';
 
 export default class GameScreen extends Component{
 
@@ -90,6 +92,11 @@ export default class GameScreen extends Component{
 			<View style={[styles['screen'], styles['lobby-screen']]}>
 				{game.gameComplete && game.mafiasWin && <Modal mafia={true} text='Mafias win'/>}
 				{game.gameComplete && game.civiliansWin && <Modal text='Civilians win'/>}
+				{!game.gameInProgress && !player.ready
+				<TouchableOpacity style={styles['back-btn']} onPress={this.props.leaveGame}>
+					<Image source={backBtn}></Image>
+				</TouchableOpacity>
+				}
 				{!this.state.hasPlayerSeenType && player.type &&
 				<Modal text="You're a civilian" onPressHandler={() => this.setState({hasPlayerSeenType: true})}/>
 				}

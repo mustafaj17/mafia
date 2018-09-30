@@ -11,7 +11,7 @@ export default StyleSheet.create(
      flexDirection: 'column',
 		padding: 0,
 		margin: 0,
-		flex: 1
+		flex: 1,
 	},
   'screen-title':
    { paddingTop: 8,
