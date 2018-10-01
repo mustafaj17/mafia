@@ -92,7 +92,7 @@ export default class GameScreen extends Component{
 			<View style={[styles['screen'], styles['lobby-screen']]}>
 				{game.gameComplete && game.mafiasWin && <Modal mafia={true} text='Mafias win'/>}
 				{game.gameComplete && game.civiliansWin && <Modal text='Civilians win'/>}
-				{!game.gameInProgress && !player.ready
+				{!game.gameInProgress && !player.ready &&
 				<TouchableOpacity style={styles['back-btn']} onPress={this.props.leaveGame}>
 					<Image source={backBtn}></Image>
 				</TouchableOpacity>
