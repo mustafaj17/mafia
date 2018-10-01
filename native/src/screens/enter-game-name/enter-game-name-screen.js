@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import {Text, View, TextInput, TouchableOpacity} from 'react-native';
 import styles from './../enter-name/enter-name-screen.styles.js';
-import backBtn from '../../assets/back-btn.svg';
-import mafiaLogo from '../../assets/logo.svg';
-import mafiaText from '../../assets/mafia-text.svg';
+import backBtn from '../../assets/back-btn';
+import mafiaLogo from '../../assets/logo';
+import mafiaText from '../../assets/mafia-text';
 import Image from 'react-native-remote-svg';
+import SvgUri from 'react-native-svg-uri';
 
 
 class EnterGameNameScreen extends Component{
@@ -13,15 +14,15 @@ class EnterGameNameScreen extends Component{
 			<View style={[styles.screen, styles['enter-name-screen']]}>
 
 				<TouchableOpacity style={styles['back-btn']} onPress={this.props.backToLobby}>
-					<Image source={backBtn}></Image>
+					<SvgUri svgXmlData={backBtn}></SvgUri>
 				</TouchableOpacity>
 
 				<View stlye={styles['mafia-text-logo']} >
-					<Image source={mafiaText}></Image>
+					<SvgUri svgXmlData={mafiaText}></SvgUri>
 				</View>
 
 				<View stlye={styles.logo}>
-					<Image source={mafiaLogo}></Image>
+					<SvgUri svgXmlData={mafiaLogo}></SvgUri>
 				</View>
 
 				<View style={styles['form-holder']}>

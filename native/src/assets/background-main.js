@@ -1,4 +1,4 @@
-<svg width="1440" height="2560" viewBox="0 0 1440 2560" fill="none" xmlns="http://www.w3.org/2000/svg">
+export default `<svg width="1440" height="2560" viewBox="0 0 1440 2560" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect width="360" height="640" fill="white" transform="scale(4)"/>
 <rect width="1440" height="2560" fill="url(#paint0_linear)"/>
 <g filter="url(#filter0_d)">
@@ -77,3 +77,4 @@
 </linearGradient>
 </defs>
 </svg>
+`

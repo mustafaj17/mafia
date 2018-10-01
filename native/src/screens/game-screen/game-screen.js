@@ -2,12 +2,12 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import styles from './game-screen.styles';
-import gunIcon from'../../assets/gun-icon.svg';
-import peaceIcon from'../../assets/peace-icon.svg';
+import gunIcon from'../../assets/gun-icon';
+import peaceIcon from'../../assets/peace-icon';
 import Modal from '../../components/modal/modal'
 import TimerCountdown from 'react-native-timer-countdown';
-import backBtn from '../../assets/back-btn.svg';
-import Image from 'react-native-remote-svg';
+import backBtn from '../../assets/back-btn';
+import SvgUri from 'react-native-svg-uri';
 
 export default class GameScreen extends Component{
 
@@ -71,8 +71,8 @@ export default class GameScreen extends Component{
 					return (
 						<View style={stlyesArray}>
 							<View style={styles['icon-name-container']}>
-								{!isMafia && isCurrentPlayerCivilian && isCurrentPlayer && <Image resizeMode="contain" style={styles['type-icon']} source={peaceIcon}></Image>}
-								{isCurrentPlayerMafia && isMafia && <Image resizeMode="contain" style={styles['type-icon']} source={gunIcon}></Image>}
+								{!isMafia && isCurrentPlayerCivilian && isCurrentPlayer && <SvgUri svgXmlData={peaceIcon}></SvgUri>}
+								{isCurrentPlayerMafia && isMafia && <SvgUri svgXmlData={gunIcon}></SvgUri>}
 								<Text key={player.name} style={styles['game-text']}>{player.name}</Text>
 							</View>
 							{player.ready && !game.roundInProgress && <Text key={player.name} style={styles['ready-text']}>ready</Text>}
@@ -94,7 +94,7 @@ export default class GameScreen extends Component{
 				{game.gameComplete && game.civiliansWin && <Modal text='Civilians win'/>}
 				{!game.gameInProgress && !player.ready &&
 				<TouchableOpacity style={styles['back-btn']} onPress={this.props.leaveGame}>
-					<Image source={backBtn}></Image>
+					<SvgUri svgXmlData={backBtn}></SvgUri>
 				</TouchableOpacity>
 				}
 				{!this.state.hasPlayerSeenType && player.type &&

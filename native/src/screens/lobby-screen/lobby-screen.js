@@ -2,11 +2,12 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import styles from './lobby-screen.styles';
-import mafiaText from '../../assets/mafia-text.svg';
-import plusIcon from '../../assets/start-game-btn.svg';
+import mafiaText from '../../assets/loading1';
+// import plusIcon from '../../assets/start-game-btn';
 import Modal from "../../components/modal/modal";
-import loadingSpinner from '../../assets/loading1.svg';
+import LoadingSpinner from '../../assets/loading1';
 import Image from 'react-native-remote-svg';
+import SvgUri from 'react-native-svg-uri';
 
 export default class LobbyScreen extends Component{
 
@@ -28,15 +29,15 @@ export default class LobbyScreen extends Component{
 		return(
 			<View style={[styles['screen'], styles['lobby-screen']]}>
 
+			<LoadingSpinner/>
+
 				<View style={styles['title-container']}>
-					<Image source={mafiaText}></Image>
 					<View >
 						<Text style={styles['header']}>Select game</Text>
 					</View>
 					<View style={styles['games']}>
 						{games.length ? this.getGames(games) :
 							<View>
-								<Image source={loadingSpinner}></Image>
 								<Text>Loading games...</Text>
 							</View>
 						}
@@ -44,9 +45,9 @@ export default class LobbyScreen extends Component{
 				</View>
 				<View style={styles['create-game-container']}>
 					<TouchableOpacity style={styles['new-game']} onPress={createNewGame}>
-						<Image style={styles['create-game-button']} source={plusIcon}></Image>
+                        <View ><Text style={styles['new-game-btn-text']}>start new game</Text></View>
 					</TouchableOpacity>
-					<View ><Text style={styles['new-game-btn-text']}>start new game</Text></View>
+
 				</View>
 			</View>
 		)

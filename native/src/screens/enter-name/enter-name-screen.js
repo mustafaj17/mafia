@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import {Text, View, TextInput, Image, TouchableOpacity} from 'react-native';
 import styles from './enter-name-screen.styles.js';
-import mafiaLogo from '../../assets/mafia-logo.png';
-import mafiaText from '../../assets/mafia-text.png';
+import mafiaLogo from '../../assets/logo';
+import mafiaText from '../../assets/mafia-text';
+import SvgUri from 'react-native-svg-uri';
 
 export default class EnterNameScreen extends Component{
     render(){
         return(
             <View style={[styles.screen, styles['enter-name-screen']]}>
-					<Image style={styles['logo']} source={mafiaText}></Image>
-					<Image style={styles['mafia-text-logo']} source={mafiaLogo}></Image>
+					<SvgUri style={styles['logo']} svgXmlData={mafiaText}></SvgUri>
+					<SvgUri style={styles['mafia-text-logo']} svgXmlData={mafiaLogo}></SvgUri>
 					<View style={styles['form-holder']}>
 						<View>
 							<Text style={styles['input-title']}>Enter your name</Text>
