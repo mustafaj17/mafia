@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {Text, View, TextInput, Image, TouchableOpacity} from 'react-native';
 import styles from './enter-name-screen.styles.js';
-import mafiaLogo from '../../assets/mafia-logo.png';
-import mafiaText from '../../assets/mafia-text.png';
+import mafiaLogo from '../../../resources/mafia-logo.png';
+import mafiaText from '../../../resources/mafia-text.png';
 
 export default class EnterNameScreen extends Component{
     render(){

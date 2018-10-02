@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import styles from './modal.styles';
-import gunIcon from'../../assets/gun.png';
-import peaceIcon from'../../assets/peace.png';
+import gunIcon from '../../../resources/gun.png';
+import peaceIcon from '../../../resources/peace.png';
 import Image from 'react-native-remote-svg';
 
 export default class Modal extends Component{

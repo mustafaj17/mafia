@@ -7,10 +7,10 @@ import GameScreen from "./src/screens/game-screen/game-screen";
 import EnterNameScreen from "./src/screens/enter-name/enter-name-screen";
 import EnterGameNameScreen from "./src/screens/enter-game-name/enter-game-name-screen";
 import styles from './src/app.style';
-import background from './src/assets/background.png';
-import backgroundLobby from './src/assets/background-lobby.png';
+import background from './resources/background.png';
+import backgroundLobby from './resources/background-lobby.png';
 import Image from 'react-native-remote-svg';
-import loadingSpinner from './src/assets/loading1.svg';
+import loadingSpinner from './resources/loading1.svg';
 
 
 export default class App extends Component {

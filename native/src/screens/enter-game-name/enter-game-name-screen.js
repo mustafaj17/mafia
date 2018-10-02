@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import {Text, View, TextInput, TouchableOpacity} from 'react-native';
 import styles from './../enter-name/enter-name-screen.styles.js';
-import backBtn from '../../assets/back-btn.svg';
-import mafiaLogo from '../../assets/logo.svg';
-import mafiaText from '../../assets/mafia-text.svg';
+import backBtn from '../../../resources/back-btn.svg';
+import mafiaLogo from '../../../resources/logo.svg';
+import mafiaText from '../../../resources/mafia-text.svg';
 import Image from 'react-native-remote-svg';
 
 

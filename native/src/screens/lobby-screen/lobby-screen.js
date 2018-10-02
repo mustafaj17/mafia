@@ -2,10 +2,10 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import styles from './lobby-screen.styles';
-import mafiaText from '../../assets/mafia-text.svg';
-import plusIcon from '../../assets/start-game-btn.svg';
+import mafiaText from '../../../resources/mafia-text.svg';
+import plusIcon from '../../../resources/start-game-btn.svg';
 import Modal from "../../components/modal/modal";
-import loadingSpinner from '../../assets/loading1.svg';
+import loadingSpinner from '../../../resources/loading1.svg';
 import Image from 'react-native-remote-svg';
 
 export default class LobbyScreen extends Component{
