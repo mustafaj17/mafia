@@ -63,6 +63,10 @@ export default StyleSheet.create(
 			{
 				fontSize: 16,
 				color: '#000000'
-			}
+			},
+		icon:{
+			width: '108.14px',
+			height: '67.95px'
+		}
 	}
 );

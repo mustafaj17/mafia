@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import React, {Component} from 'react';
-import { Text, View, ImageBackground, AsyncStorage} from 'react-native';
+import { Text, View, ImageBackground, AsyncStorage, Image} from 'react-native';
 import LobbyScreen from "./src/screens/lobby-screen/lobby-screen";
 import GameScreen from "./src/screens/game-screen/game-screen";
 import EnterNameScreen from "./src/screens/enter-name/enter-name-screen";
@@ -9,8 +9,6 @@ import EnterGameNameScreen from "./src/screens/enter-game-name/enter-game-name-s
 import styles from './src/app.style';
 import background from './resources/background.png';
 import backgroundLobby from './resources/background-lobby.png';
-import Image from 'react-native-remote-svg';
-import loadingSpinner from './resources/loading1.svg';
 
 
 export default class App extends Component {
@@ -407,7 +405,7 @@ export default class App extends Component {
 			return(
 				<View>
 					<ImageBackground source={background} style={{width: '100%', height: '100%'}}>
-						<Image source={loadingSpinner}></Image>
+						<Text>Loading icon</Text>
 					</ImageBackground>
 				</View>
 			)
@@ -450,7 +448,7 @@ export default class App extends Component {
 				return(
 					<View>
 						<ImageBackground source={background} style={{width: '100%', height: '100%'}}>
-							<Image source={loadingSpinner}></Image>
+							<Text>Loading icon</Text>
 						</ImageBackground>
 					</View>
 				)

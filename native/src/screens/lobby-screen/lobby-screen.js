@@ -1,12 +1,10 @@
 //* eslint-disable */
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import styles from './lobby-screen.styles';
-import mafiaText from '../../../resources/mafia-text.svg';
-import plusIcon from '../../../resources/start-game-btn.svg';
-import Modal from "../../components/modal/modal";
-import loadingSpinner from '../../../resources/loading1.svg';
-import Image from 'react-native-remote-svg';
+import mafiaText from '../../../resources/mafia-text.png';
+import plusIcon from '../../../resources/plus-icon.png';
+// import Modal from "../../components/modal/modal";
 
 export default class LobbyScreen extends Component{
 
@@ -29,14 +27,13 @@ export default class LobbyScreen extends Component{
 			<View style={[styles['screen'], styles['lobby-screen']]}>
 
 				<View style={styles['title-container']}>
-					<Image source={mafiaText}></Image>
+					<Image style={styles['maifa-text']} source={mafiaText}></Image>
 					<View >
 						<Text style={styles['header']}>Select game</Text>
 					</View>
 					<View style={styles['games']}>
 						{games.length ? this.getGames(games) :
 							<View>
-								<Image source={loadingSpinner}></Image>
 								<Text>Loading games...</Text>
 							</View>
 						}

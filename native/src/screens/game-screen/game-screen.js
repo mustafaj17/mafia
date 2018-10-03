@@ -1,13 +1,12 @@
 //* eslint-disable */
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import styles from './game-screen.styles';
-import gunIcon from '../../../resources/gun-icon.svg';
-import peaceIcon from '../../../resources/peace-icon.svg';
+import gunIcon from '../../../resources/gun-icon.png';
+import peaceIcon from '../../../resources/civilian-icon.png';
 import Modal from '../../components/modal/modal'
 import TimerCountdown from 'react-native-timer-countdown';
-import backBtn from '../../../resources/back-btn.svg';
-import Image from 'react-native-remote-svg';
+import backBtn from '../../../resources/back-icon.png';
 
 export default class GameScreen extends Component{
 
