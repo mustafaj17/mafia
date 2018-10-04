@@ -16,7 +16,7 @@ export default StyleSheet.create(
 				width: 179,
 				height: 57,
 				resizeMode: 'contain',
-				marginBottom: 24
+				marginBottom: 16
 			},
 		logo:
 			{
@@ -26,7 +26,7 @@ export default StyleSheet.create(
 			},
 		'form-holder':
 			{
-				marginTop: 70,
+				marginTop: 50,
 				display: 'flex',
 				justifyContent: 'center',
 				alignItems: 'center',
@@ -56,10 +56,14 @@ export default StyleSheet.create(
 			{ width: 58,
 				height: 58,
 				marginTop: 30 },
-		'back-btn': {
+		'back-btn-holder': {
 			position: 'absolute',
-			top: 20,
-			left: 20
+			top: 30,
+			left: 20,
+		},
+		'back-btn': {
+			width: 30,
+			height: 29
 		}
 	}
 );

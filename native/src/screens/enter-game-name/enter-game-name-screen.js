@@ -12,8 +12,8 @@ class EnterGameNameScreen extends Component{
 		return(
 			<View style={[styles.screen, styles['enter-name-screen']]}>
 
-				<TouchableOpacity style={styles['back-btn']} onPress={this.props.backToLobby}>
-					<Image source={backBtn}></Image>
+				<TouchableOpacity style={styles['back-btn-holder']} onPress={this.props.backToLobby}>
+					<Image style={styles['back-btn']} source={backBtn}></Image>
 				</TouchableOpacity>
 
 				<Image style={styles['mafia-text']} source={mafiaText}></Image>

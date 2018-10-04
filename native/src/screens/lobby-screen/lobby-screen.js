@@ -11,7 +11,7 @@ export default class LobbyScreen extends Component{
 	getGames = (games) => {
 		console.log('games', games);
 		return games.filter(gameDoc => !gameDoc.data().gameInProgress).map(gameDoc => {
-			return ( <TouchableOpacity onPress={() => this.props.selectGame(gameDoc)}>
+			return ( <TouchableOpacity key={gameDoc.id} onPress={() => this.props.selectGame(gameDoc)}>
 				<View style={styles['game']}>
 					<Text style={styles['game-text']}>{gameDoc.data().gameName}</Text>
 				</View>
@@ -27,7 +27,7 @@ export default class LobbyScreen extends Component{
 			<View style={[styles['screen'], styles['lobby-screen']]}>
 
 				<View style={styles['title-container']}>
-					<Image style={styles['maifa-text']} source={mafiaText}></Image>
+					<Image style={styles['mafia-text']} source={mafiaText}></Image>
 					<View >
 						<Text style={styles['header']}>Select game</Text>
 					</View>

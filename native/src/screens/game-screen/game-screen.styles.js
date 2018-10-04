@@ -78,6 +78,7 @@ export default StyleSheet.create(
 			},
 		'game-text': {
 			fontSize: 18,
+			letterSpacing: 2
 		},
 		'mafia-text-logo': {
 			marginTop: 48,
@@ -105,7 +106,7 @@ export default StyleSheet.create(
 				fontSize: 36,
 				color: '#4B4B4B' },
 		'new-game-btn-text': { fontSize: 18, color: '#EFEFEF', marginLeft: 8 },
-		'header': { fontSize: 18, color: '#EFEFEF', marginLeft: 8, paddingTop: 24, paddingBottom: 8 },
+		'header': { fontSize: 18, color: '#EFEFEF', paddingTop: 18, paddingBottom: 8 , letterSpacing:3},
 		'create-game-container':
 			{
 				position: 'absolute',
@@ -136,7 +137,8 @@ export default StyleSheet.create(
 			},
 		'ready-text':
 			{
-				paddingRight: 8
+				paddingRight: 8,
+				letterSpacing: 1
 			},
 		'ready-button':
 			{ width: 250,
@@ -157,8 +159,12 @@ export default StyleSheet.create(
 				flexDirection: 'row',
 
 			},
-		'back-btn':{
-		position: 'absolute',
+		'back-btn': {
+			width: 30,
+			height: 29
+		},
+		'back-btn-holder':{
+		   position: 'absolute',
 			top: 20,
 			left: 20
 		}

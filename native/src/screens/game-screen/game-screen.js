@@ -92,8 +92,8 @@ export default class GameScreen extends Component{
 				{game.gameComplete && game.mafiasWin && <Modal mafia={true} text='Mafias win'/>}
 				{game.gameComplete && game.civiliansWin && <Modal text='Civilians win'/>}
 				{!game.gameInProgress && !player.ready &&
-				<TouchableOpacity style={styles['back-btn']} onPress={this.props.leaveGame}>
-					<Image source={backBtn}></Image>
+				<TouchableOpacity style={styles['back-btn-holder']} onPress={this.props.leaveGame}>
+					<Image style={styles['back-btn']} source={backBtn}></Image>
 				</TouchableOpacity>
 				}
 				{!this.state.hasPlayerSeenType && player.type &&
