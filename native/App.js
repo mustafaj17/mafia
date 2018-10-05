@@ -411,34 +411,6 @@ export default class App extends Component {
 			)
 		}
 
-		if(!this.state.hasUser){
-			return(
-				<View style={styles.app}>
-					<ImageBackground source={background} style={{width: '100%', height: '100%'}}>
-						<EnterNameScreen
-							updateName={name=>this.setState({inputUserName : name})}
-							inputUserName={this.state.inputUserName}
-							createUser={this.createUser}/>
-					</ImageBackground>
-				</View>
-			)
-		}
-
-		if(this.state.createGame){
-			return(
-				<View style={styles.app}>
-					<ImageBackground source={background} style={{width: '100%', height: '100%'}}>
-						<EnterGameNameScreen
-							updateGameName={name=>this.setState({inputGameName : name})}
-							inputGameName={this.state.inputGameName}
-							createGame={this.createGame}
-							backToLobby={() => { this.setState({createGame: false})}}
-						/>
-					</ImageBackground>
-				</View>
-			)
-		}
-
 		if(this.state.gameDocRef) {
 
 			let game = this.state.gameDocRef.data && this.state.gameDocRef.data();
@@ -473,12 +445,27 @@ export default class App extends Component {
 
 		return (
 			<View style={styles.app}>
-				<ImageBackground source={backgroundLobby} style={{width: '100%', height: '100%'}}>
+				<ImageBackground source={ background } style={{width: '100%', height: '100%'}}>
+
+
+					{ this.state.createGame && <EnterGameNameScreen
+						updateGameName={name=>this.setState({inputGameName : name})}
+						inputGameName={this.state.inputGameName}
+						createGame={this.createGame}
+						backToLobby={() => { this.setState({createGame: false})}}
+					/> }
+
+					{ !this.state.hasUser && <EnterNameScreen
+						updateName={name=>this.setState({inputUserName : name})}
+						inputUserName={this.state.inputUserName}
+						createUser={this.createUser}/> }
+
 					<LobbyScreen
 						createNewGame={() => { this.setState({createGame: true})}}
 						games={this.state.games}
 						selectGame={this.selectGame}
 					/>
+
 				</ImageBackground>
 
 			</View>

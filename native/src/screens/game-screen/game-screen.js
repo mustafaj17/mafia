@@ -38,7 +38,7 @@ export default class GameScreen extends Component{
 				let isCurrentPlayerCivilian = currentPlayer.type === 'Civilian';
 				let isMafia = player.type === 'Mafia';
 				let votedOut = game.votedOut;
-				let stlyesArray = [];
+				let stylesArray = [];
 				console.log('game:', game)
 				if (isVoteMode && currentPlayer.inGame) {
 					if (!isCurrentPlayer) {
@@ -54,25 +54,34 @@ export default class GameScreen extends Component{
 
 				} else {
 
-					stlyesArray.push(styles['player']);
+					stylesArray.push(styles['player']);
 
 					if(player.ready && !game.roundInProgress){
-						stlyesArray.push(styles['player-ready'])
+						stylesArray.push(styles['player-ready'])
 					}
 					if(player.name === votedOut){
-						stlyesArray.push(styles['player-out'])
+						stylesArray.push(styles['player-out'])
 					}
 
 					if(isCurrentPlayer){
-						stlyesArray.push(styles['current-player'])
+						stylesArray.push(styles['current-player'])
 					}
 
 					return (
-						<View style={stlyesArray}>
+						<View style={stylesArray}>
 							<View style={styles['icon-name-container']}>
-								{!isMafia && isCurrentPlayerCivilian && isCurrentPlayer && <Image resizeMode="contain" style={styles['type-icon']} source={peaceIcon}></Image>}
-								{isCurrentPlayerMafia && isMafia && <Image resizeMode="contain" style={styles['type-icon']} source={gunIcon}></Image>}
+
+								{!isMafia &&
+								isCurrentPlayerCivilian &&
+								isCurrentPlayer &&
+								<Image resizeMode="contain" style={styles['type-icon']} source={peaceIcon}></Image>}
+
+								{isCurrentPlayerMafia &&
+								isMafia &&
+								<Image resizeMode="contain" style={styles['type-icon']} source={gunIcon}></Image>}
+
 								<Text key={player.name} style={styles['game-text']}>{player.name}</Text>
+
 							</View>
 							{player.ready && !game.roundInProgress && <Text key={player.name} style={styles['ready-text']}>ready</Text>}
 						</View>
@@ -88,7 +97,7 @@ export default class GameScreen extends Component{
 		const player = currentPlayer.data()
 		console.log('current', currentPlayer.data())
 		return(
-			<View style={[styles['screen'], styles['lobby-screen']]}>
+			<View style={[styles['screen'], styles['game-screen']]}>
 				{game.gameComplete && game.mafiasWin && <Modal mafia={true} text='Mafias win'/>}
 				{game.gameComplete && game.civiliansWin && <Modal text='Civilians win'/>}
 				{!game.gameInProgress && !player.ready &&

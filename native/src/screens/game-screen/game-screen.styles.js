@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create(
-	{ 'lobby-screen':
+	{ 'game-screen':
 			{ display: 'flex',
 				height: '100%',
 				width: '100%',
