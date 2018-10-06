@@ -65,8 +65,9 @@ export default StyleSheet.create(
 				color: '#000000'
 			},
 		icon:{
-			width: '108.14px',
-			height: '67.95px'
+			width: 108,
+			height: 67,
+            resizeMode: 'contain',
 		}
 	}
 );
