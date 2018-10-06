@@ -1,3 +1,3 @@
-rootProject.name = 'MafiaNative'
+rootProject.name = 'Mafia'
 
 include ':app'
