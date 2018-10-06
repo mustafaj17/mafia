@@ -55,7 +55,6 @@ export default class App extends Component {
 	}
 
 	componentWillMount() {
-
 		this.getGames()
 	}
 
@@ -137,7 +136,6 @@ export default class App extends Component {
 
 		//connect to the game doc and update state whenever it changes
 		this.disconnectFromGame = gameDoc.onSnapshot(gameDocRef => {
-			debugger;
 			this.state.gameDocRef = gameDocRef;
 			this.setState({
 				gameDocRef
@@ -235,7 +233,7 @@ export default class App extends Component {
 					if(!game.gameInProgress){
 						this.state.gameDocRef.ref.update('gameInProgress', true);
 					}
-					this.setTypes()
+					this.setTypes();
 					this.startGameRound(allPlayersAreReady, playersHaveType);
 				}
 

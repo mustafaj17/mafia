@@ -11,6 +11,7 @@ export default class Modal extends Component{
 				<View style={styles['modal-box']}>
 					<View style={styles.title}>
 						<Text style={styles['title-text']}>{this.props.text}</Text>
+						{this.props.subText && <Text style={styles['sub-text']}>{this.props.subText}</Text>}
 					</View>
 					<Image style={styles.icon} source={this.props.mafia ? gunIcon : peaceIcon}></Image>
 					<TouchableOpacity onPress={this.props.onPressHandler}>

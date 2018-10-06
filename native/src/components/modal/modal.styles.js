@@ -35,7 +35,12 @@ export default StyleSheet.create(
 		title:
 			{
 				textAlign: 'center',
-				marginBottom: 40
+				marginBottom: 40,
+				display: 'flex',
+				alignItems: 'center',
+				justifyContent: 'center',
+				width: '100%'
+
 			},
 		'title-text':
 			{

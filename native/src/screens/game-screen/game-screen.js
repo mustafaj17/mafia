@@ -18,8 +18,8 @@ export default class GameScreen extends Component{
 		}
 	}
 
-	castVote = player => {
-		if(!player.votingFor) {
+	castVote = (currentPlayer, player) => {
+		if(!currentPlayer.votingFor) {
 			this.setState({hasPlayerSeenVotedOut: false});
 			this.props.currentPlayer.ref.update('votingFor', player.name)
 		}
@@ -45,7 +45,7 @@ export default class GameScreen extends Component{
 						return (
 							<TouchableOpacity
 								style={currentPlayer.votingFor === player.name ? styles['player-selected'] : styles['player-vote']}
-								onPress={() => this.castVote(player)}
+								onPress={() => this.castVote(currentPlayer, player)}
 							>
 								<Text key={player.name} style={styles['game-text']}>{player.name}</Text>
 							</TouchableOpacity>
@@ -89,8 +89,18 @@ export default class GameScreen extends Component{
 				}
 			}
 		})
-
 	}
+
+	getPlayerType = (playerName) => {
+		let type;
+		this.props.players.forEach(player => {
+			if(player.name === playerName){
+				type = player.type;
+			}
+		})
+		return type;
+	}
+
 
 	render(){
 		const {game, currentPlayer, playerReady, endRound} = this.props
@@ -106,10 +116,10 @@ export default class GameScreen extends Component{
 				</TouchableOpacity>
 				}
 				{!this.state.hasPlayerSeenType && player.type &&
-				<Modal text="You're a civilian" onPressHandler={() => this.setState({hasPlayerSeenType: true})}/>
+				<Modal text={"You're a " + player.type } mafia={player.type === 'Mafia'} onPressHandler={() => this.setState({hasPlayerSeenType: true})}/>
 				}
 				{!this.state.hasPlayerSeenVotedOut && game.votedOut &&
-				<Modal text="My man got voted out" onPressHandler={() => this.setState({hasPlayerSeenVotedOut: true})}/>
+				<Modal text={game.votedOut} mafia={this.getPlayerType(game.votedOut) === 'Mafia'} subText={'was voted out'} onPressHandler={() => this.setState({hasPlayerSeenVotedOut: true})}/>
 				}
 
 
@@ -129,7 +139,7 @@ export default class GameScreen extends Component{
 					/>}
 
 
-					{game.isDraw && <div className="draw-game-text">There has been a draw between:</div>}
+					{game.isDraw && <Text style={styles['draw-game-text']}>There has been a draw between:</Text>}
 					{game.isDraw &&
 					<View>
 						{game.isDraw.map(player =>{return(
