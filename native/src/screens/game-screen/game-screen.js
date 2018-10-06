@@ -108,8 +108,8 @@ export default class GameScreen extends Component{
 		console.log('current', currentPlayer.data())
 		return(
 			<View style={[styles['screen'], styles['game-screen']]}>
-				{game.gameComplete && game.mafiasWin && <Modal mafia={true} text='Mafias win'/>}
-				{game.gameComplete && game.civiliansWin && <Modal text='Civilians win'/>}
+				{game.gameComplete && game.mafiasWin && <Modal mafia={true} text='Mafias win' onPressHandler={() => this.props.endGame()} />}
+				{game.gameComplete && game.civiliansWin && <Modal text='Civilians win' onPressHandler={ () => this.props.endGame() } />}
 				{!game.gameInProgress && !player.ready &&
 				<TouchableOpacity style={styles['back-btn-holder']} onPress={this.props.leaveGame}>
 					<Image style={styles['back-btn']} source={backBtn}></Image>

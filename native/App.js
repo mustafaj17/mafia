@@ -211,6 +211,12 @@ export default class App extends Component {
 		})
 	}
 
+	endGame = () => {
+		this.disconnectFromGame();
+		this.setState({gameDocRef: null, players: null, playerRef: null, joiningGame: false});
+		this.getGames();
+	}
+
 	leaveGame = () => {
 		this.disconnectFromGame();
 		this.state.playerRef.ref.delete();
@@ -434,6 +440,7 @@ export default class App extends Component {
 							playerReady={this.playerReady}
 							endRound={this.endRound}
 							leaveGame={this.leaveGame}
+							endGame={this.endGame}
 						/>
 					</ImageBackground>
 				</View>
