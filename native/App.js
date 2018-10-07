@@ -9,6 +9,7 @@ import EnterGameNameScreen from "./src/screens/enter-game-name/enter-game-name-s
 import styles from './src/app.style';
 import background from './resources/background.png';
 import backgroundLobby from './resources/background-lobby.png';
+import LoadingSpinner from "./src/components/loadingSpinner/loadingSpinner";
 
 
 export default class App extends Component {
@@ -408,8 +409,9 @@ export default class App extends Component {
 		if(this.state.joiningGame){
 			return(
 				<View>
-					<ImageBackground source={background} style={{width: '100%', height: '100%'}}>
-						<Text>Loading icon</Text>
+					<ImageBackground source={background} style={styles.background}>
+						<LoadingSpinner/>
+						<Text style={styles['loading-text']}>Loading...</Text>
 					</ImageBackground>
 				</View>
 			)

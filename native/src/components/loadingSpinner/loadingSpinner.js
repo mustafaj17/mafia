@@ -16,7 +16,6 @@ export default class LoadingSpinner extends Component{
 		this.runAnimation();
 	}
 
-
 	runAnimation() {
 		Animated.loop(
 			Animated.sequence([
@@ -44,27 +43,14 @@ export default class LoadingSpinner extends Component{
 						duration: 200
 					})
 				]),
+				Animated.timing(this.state.rotation, {
+					// and twirl
+					toValue: 2,
+					duration: 200
+				})
 
 			])
 		).start()
-
-		// Animated.timing(                  // Animate over time
-		// 	this.state.top,            // The animated value to drive
-		// 	{
-		// 		toValue: -30,                   // Animate to opacity: 1 (opaque)
-		// 		duration: 300,              // Make it take a while
-		// 	},
-		// 	{
-		// 		toValue: -5,                   // Animate to opacity: 1 (opaque)
-		// 		duration: 300,              // Make it take a while
-		// 	}
-		// ).start(
-		// 	() => this.runAnimation()
-		// );
-	}
-
-	componentDidMount() {
-		this.runAnimation()
 	}
 
 	render() {
