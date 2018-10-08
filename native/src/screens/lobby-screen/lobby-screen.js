@@ -54,16 +54,6 @@ export default class LobbyScreen extends Component{
 					</TouchableOpacity>
 				</View>
 
-				<View >
-					<Text >{this.props.result} </Text>
-				</View>
-
-				<View style={styles['create-game-container']}>
-					<TouchableOpacity style={styles['new-game']} onPress={createNewGame}>
-						<Image style={styles['create-game-button']} source={plusIcon}></Image>
-					</TouchableOpacity>
-					<View ><Text style={styles['new-game-btn-text']}>start new game</Text></View>
-				</View>
 			</View>
 		)
 	}

@@ -5,7 +5,6 @@ import { Text, View, ImageBackground, AsyncStorage, Image} from 'react-native';
 import LobbyScreen from "./src/screens/lobby-screen/lobby-screen";
 import GameScreen from "./src/screens/game-screen/game-screen";
 import EnterNameScreen from "./src/screens/enter-name/enter-name-screen";
-import EnterGameNameScreen from "./src/screens/enter-game-name/enter-game-name-screen";
 import styles from './src/app.style';
 import background from './resources/background.png';
 import backgroundLobby from './resources/background-lobby.png';
@@ -34,9 +33,7 @@ export default class App extends Component {
 		this.mafiaGamesCollectionRef = this.db.collection('mafia-games');
 		this.getUsername();
 		this.state = {
-			createGame: false,
-			inputGameName: '',
-			result: 'nothuing'
+			inputGameName: ''
 		}
 	}
 
@@ -128,15 +125,13 @@ export default class App extends Component {
 				this.selectGame(doc);
 			}
 		}).catch( error => {
-			this.setState({result : 'error getting doc'})
-			alert(error)
+			//TODO: tell user
 		});
 
 	}
 
 	selectGame = gameDoc => {
 		this.setState({
-			createGame: false,
 			joiningGame: true
 		})
 
@@ -484,25 +479,6 @@ export default class App extends Component {
 			);
 		}
 
-		if(this.state.createGame){
-			return (
-				<View style={styles.app}>
-					<ImageBackground source={ background } style={{width: '100%', height: '100%'}}>
-
-
-						<EnterGameNameScreen
-							updateGameName={name=>this.setState({inputGameName : name})}
-							inputGameName={this.state.inputGameName}
-							createGame={this.createGame}
-							backToLobby={() => { this.setState({createGame: false})}}
-						/>
-
-					</ImageBackground>
-
-				</View>
-			);
-		}
-
 		return (
 			<View style={styles.app}>
 				<ImageBackground source={ background } style={{width: '100%', height: '100%'}}>
@@ -510,7 +486,6 @@ export default class App extends Component {
 					<LobbyScreen
 						createNewGame={() => { this.setState({createGame: true})}}
 						selectGame={this.selectGame}
-						result={this.state.result}
 						joinGame={this.joinGame}
 						createGame={this.createGame}
 					/>
