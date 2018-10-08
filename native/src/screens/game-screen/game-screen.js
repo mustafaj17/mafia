@@ -26,6 +26,16 @@ export default class GameScreen extends Component{
         }
     }
 
+    getMafiasLeft = ()=>{
+        const { players } = this.props;
+        return players.reduce ( (acc, player) => {
+            if(player.inGame && player.type === 'Mafia'){
+                return acc + 1
+            }
+            return acc
+        } , 0)
+    }
+
     getPlayers = () => {
         const { players, game } = this.props;
         let currentPlayer = this.props.currentPlayer.data();
@@ -97,13 +107,6 @@ export default class GameScreen extends Component{
 
                 }
             })
-        } else {
-            return (
-                <View>
-                    <LoadingSpinner/>
-                    <Text className='header'> Voting in progress...</Text>
-                </View>
-            )
         }
     }
 
@@ -146,10 +149,14 @@ export default class GameScreen extends Component{
 
                 <View style={styles['title-container']}>
                     <View >
-                        <Text style={styles['header']}>{game.gameName}</Text>
+                        <Text style={styles['game-header']}>{game.gameName}</Text>
                     </View>
-                    {game.votingInProgress && !player.votingFor && <Text className='header'>please vote</Text>}
-                    {game.votingInProgress && player.votingFor &&<Text className='header'> Waiting for others to vote...</Text>}
+
+                    {game.gameInProgress && !game.votingInProgress && <View>
+                        <Text style={styles['header']}>Mafias left : {this.getMafiasLeft()}</Text>
+                    </View>}
+                    {game.votingInProgress && !player.votingFor && player.inGame && <Text style={styles['header']}>Please vote</Text>}
+                    {game.votingInProgress && player.votingFor &&<Text style={styles['header']}> Waiting for others to vote...</Text>}
 
 
                     {game.isDraw && <Text style={styles['draw-game-text']}>There has been a draw between:</Text>}
@@ -170,7 +177,7 @@ export default class GameScreen extends Component{
                     }
 
                     {!game.roundInProgress &&
-                     !game.votingInProgress &&
+                    !game.votingInProgress &&
                     <View style={styles['games']}>
                         {this.getPlayers()}
                     </View>
@@ -188,6 +195,13 @@ export default class GameScreen extends Component{
                         labelS={""}
                     />
                 </View>}
+
+                {game.votingInProgress && !player.inGame &&
+                <View style={styles['timer']}>
+                    <LoadingSpinner/>
+                    <Text style={styles['header']}> Voting in progress...</Text>
+                </View>
+                }
 
                 {player.inGame &&
                 !player.ready &&

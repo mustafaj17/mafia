@@ -135,7 +135,8 @@ export default StyleSheet.create(
 				fontSize: 36,
 				color: '#4B4B4B' },
 		'new-game-btn-text': { fontSize: 18, color: '#EFEFEF', marginLeft: 8 },
-		'header': { fontSize: 18, color: '#EFEFEF', paddingTop: 18, paddingBottom: 8 , letterSpacing:3},
+		'header': { fontSize: 18, color: '#EFEFEF', paddingTop: 18, paddingBottom: 8 , letterSpacing:3, marginTop: 8},
+        'game-header': { fontSize: 24, color: '#EFEFEF', paddingTop: 18, paddingBottom: 8 , letterSpacing:3, marginTop: 8},
 		'create-game-container':
 			{
 				position: 'absolute',
