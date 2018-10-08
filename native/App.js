@@ -34,9 +34,9 @@ export default class App extends Component {
 		this.mafiaGamesCollectionRef = this.db.collection('mafia-games');
 		this.getUsername();
 		this.state = {
-			games: [],
 			createGame: false,
-			inputGameName: ''
+			inputGameName: '',
+			result: 'nothuing'
 		}
 	}
 
@@ -56,7 +56,7 @@ export default class App extends Component {
 	}
 
 	componentWillMount() {
-		this.getGames()
+		// this.getGames()
 	}
 
 	componentWillUnmount() {
@@ -107,33 +107,40 @@ export default class App extends Component {
 		else console.log('not set, stringify failed:', key, value)
 	}
 
-	createGame = () => {
-		this.setState({
-			createGame: false,
-			joiningGame: true
-		})
+	createGame = gameName => {
+		this.mafiaGamesCollectionRef.doc(gameName).get().then(doc => {
+			if (doc.exists) {
+				//cant create game
+				//TODO: tell the user
+			} else {
+				this.setState({
+					createGame: false,
+					joiningGame: true
+				})
 
-		this.mafiaGamesCollectionRef.add(
-			{
-				gameName: this.state.inputGameName,
-				roundInProgress: false,
-				votingInProgress: false
+				doc.ref.set({
+					gameName: gameName,
+					roundInProgress: false,
+					votingInProgress: false
+				})
+
+				this.user.admin = true;
+				this.selectGame(doc);
 			}
-		).then(gameDocRef => {
-			this.user.admin = true;
-			this.selectGame(gameDocRef);
-		})
+		}).catch( error => {
+			this.setState({result : 'error getting doc'})
+			alert(error)
+		});
+
 	}
 
 	selectGame = gameDoc => {
 		this.setState({
 			createGame: false,
-			joiningGame: true,
-			games : []
+			joiningGame: true
 		})
 
 		gameDoc = gameDoc.ref || gameDoc;
-		this.disconnectFromGames();
 
 		//connect to the game doc and update state whenever it changes
 		this.disconnectFromGame = gameDoc.onSnapshot(gameDocRef => {
@@ -389,18 +396,30 @@ export default class App extends Component {
 
 			this.state.gameDocRef.ref.collection('players').get().then( playerDocs => {
 
-					playerDocs.forEach ( playerDoc => {
-						let playerType = null;
-						this.state.players.forEach( player => {
-							if(player.name === playerDoc.data().name){
-								playerType = player.type
-							}
-						})
-						playerDoc.ref.update('type', playerType, 'ready', false);
+				playerDocs.forEach ( playerDoc => {
+					let playerType = null;
+					this.state.players.forEach( player => {
+						if(player.name === playerDoc.data().name){
+							playerType = player.type
+						}
 					})
+					playerDoc.ref.update('type', playerType, 'ready', false);
+				})
+			})
+		}
+	}
 
+	joinGame = gameName => {
+		if(gameName.length > 3){
+			this.mafiaGamesCollectionRef.doc(gameName).get().then(doc => {
+				if (doc.exists) {
+					this.selectGame(doc);
+				} else {
+					//TODO: tell the user
 				}
-			)
+			}).catch ( error => {
+				//TODO: tell the user
+			});
 		}
 	}
 
@@ -425,8 +444,9 @@ export default class App extends Component {
 			if(!player || !game){
 				return(
 					<View>
-						<ImageBackground source={background} style={{width: '100%', height: '100%'}}>
-							<Text>Loading icon</Text>
+						<ImageBackground source={background} style={styles.background}>
+							<LoadingSpinner/>
+							<Text style={styles['loading-text']}>Loading...</Text>
 						</ImageBackground>
 					</View>
 				)
@@ -450,27 +470,49 @@ export default class App extends Component {
 			)
 		}
 
+		if(!this.state.hasUser){
+			return (
+				<View style={styles.app}>
+					<ImageBackground source={ background } style={{width: '100%', height: '100%'}}>
+						<EnterNameScreen
+							updateName={name=>this.setState({inputUserName : name})}
+							inputUserName={this.state.inputUserName}
+							createUser={this.createUser}/>
+					</ImageBackground>
+
+				</View>
+			);
+		}
+
+		if(this.state.createGame){
+			return (
+				<View style={styles.app}>
+					<ImageBackground source={ background } style={{width: '100%', height: '100%'}}>
+
+
+						<EnterGameNameScreen
+							updateGameName={name=>this.setState({inputGameName : name})}
+							inputGameName={this.state.inputGameName}
+							createGame={this.createGame}
+							backToLobby={() => { this.setState({createGame: false})}}
+						/>
+
+					</ImageBackground>
+
+				</View>
+			);
+		}
+
 		return (
 			<View style={styles.app}>
 				<ImageBackground source={ background } style={{width: '100%', height: '100%'}}>
 
-
-					{ this.state.createGame && <EnterGameNameScreen
-						updateGameName={name=>this.setState({inputGameName : name})}
-						inputGameName={this.state.inputGameName}
-						createGame={this.createGame}
-						backToLobby={() => { this.setState({createGame: false})}}
-					/> }
-
-					{ !this.state.hasUser && <EnterNameScreen
-						updateName={name=>this.setState({inputUserName : name})}
-						inputUserName={this.state.inputUserName}
-						createUser={this.createUser}/> }
-
 					<LobbyScreen
 						createNewGame={() => { this.setState({createGame: true})}}
-						games={this.state.games}
 						selectGame={this.selectGame}
+						result={this.state.result}
+						joinGame={this.joinGame}
+						createGame={this.createGame}
 					/>
 
 				</ImageBackground>

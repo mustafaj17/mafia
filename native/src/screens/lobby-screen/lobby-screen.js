@@ -1,12 +1,16 @@
 //* eslint-disable */
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image, TextInput } from 'react-native';
 import styles from './lobby-screen.styles';
 import mafiaText from '../../../resources/mafia-text.png';
 import plusIcon from '../../../resources/plus-icon.png';
 // import Modal from "../../components/modal/modal";
 
 export default class LobbyScreen extends Component{
+
+	state = {
+		gameName : ''
+	}
 
 	getGames = (games) => {
 		console.log('games', games);
@@ -18,6 +22,8 @@ export default class LobbyScreen extends Component{
 			</TouchableOpacity>)
 		});
 	}
+
+
 	render(){
 		const {createNewGame, games} = this.props
 		console.log(games)
@@ -28,17 +34,30 @@ export default class LobbyScreen extends Component{
 
 				<View style={styles['title-container']}>
 					<Image style={styles['mafia-text']} source={mafiaText}></Image>
-					<View >
-						<Text style={styles['header']}>Select game</Text>
-					</View>
-					<View style={styles['games']}>
-						{games.length ? this.getGames(games) :
-							<View>
-								<Text>Loading games...</Text>
-							</View>
-						}
-					</View>
 				</View>
+
+				<View style={styles['join-game-container']}>
+					<TextInput style={styles['input-text-box']}
+								  onChangeText={(text) => this.setState({ gameName : text})}
+								  value={this.state.gameName}
+									placeholder='Enter game ID'/>
+					<TouchableOpacity style={styles['join-game']} onPress={() => this.props.joinGame(this.state.gameName)}>
+						<View style={styles['join-game-btn']}>
+							<Text style={styles['join-game-btn-text']}>join game</Text>
+						</View>
+					</TouchableOpacity>
+
+					<TouchableOpacity style={styles['join-game']} onPress={() => this.props.createGame(this.state.gameName)}>
+						<View style={styles['join-game-btn']}>
+							<Text style={styles['join-game-btn-text']}>start new game</Text>
+						</View>
+					</TouchableOpacity>
+				</View>
+
+				<View >
+					<Text >{this.props.result} </Text>
+				</View>
+
 				<View style={styles['create-game-container']}>
 					<TouchableOpacity style={styles['new-game']} onPress={createNewGame}>
 						<Image style={styles['create-game-button']} source={plusIcon}></Image>

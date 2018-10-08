@@ -9,8 +9,15 @@ export default StyleSheet.create(
 				alignItems: 'center',
 				flexDirection: 'column',
 				marginTop: 24,
-				position: 'relative'},
-		'games': { marginTop: 16, width: '100%', display: 'flex', alignItems: 'center'},
+				position: 'relative'
+			},
+		'games': {
+			marginTop: 16,
+			width: '100%',
+			height: 450,
+			display: 'flex',
+			paddingBottom: 40
+		},
 		'game':
 			{ width: 250,
 				height: 40,
@@ -41,7 +48,7 @@ export default StyleSheet.create(
 				height: 80,
 				resizeMode: 'contain'
 			},
-			'new-game':
+		'new-game':
 			{   justifyContent: 'center',
 				alignItems: 'center',
 				display: 'flex'},
@@ -79,6 +86,37 @@ export default StyleSheet.create(
 				display: 'flex',
 				alignItems: 'center',
 				top: 0
-			}
+			},
+		'input-text-box':
+			{ backgroundColor: '#ffffff',
+				shadowOffset: { width: 0, height: 4 },
+				shadowRadius: 4,
+				shadowColor: 'rgba(0, 0, 0, 0.25)',
+				shadowOpacity: 1,
+				borderRadius: 2,
+				width: 270,
+				height: 50,
+				borderWidth: 0,
+				borderColor: 'black',
+				borderStyle: 'solid',
+				textAlign: 'center',
+				fontSize: 18,
+				letterSpacing: 2,
+				color: '#161616',
+				marginTop: 16 },
+		'join-game-btn': {
+		 	padding: 10,
+			backgroundColor: '#00FFC2',
+			display: 'flex',
+			justifyContent: 'center',
+			alignItems: 'center',
+			margin: 40,
+			marginTop: 20,
+			borderRadius: 2
+		},
+		'join-game-btn-text': {
+			fontSize: 18,
+			letterSpacing: 2
+		}
 	}
 );

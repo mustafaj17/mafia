@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Text, View, TextInput, TouchableOpacity, Image} from 'react-native';
+import {Text, View, TextInput, TouchableHighlight, Image, TouchableOpacity} from 'react-native';
 import styles from './../enter-name/enter-name-screen.styles.js';
 import backBtn from '../../../resources/back-icon.png';
 import okBtn from '../../../resources/ok-btn.png';

@@ -108,6 +108,35 @@ export default StyleSheet.create(
 			letterSpacing:2,
 			color: 'white',
 			marginTop: 10
+		},
+		'player-draw':
+			{	height: 40,
+				marginRight: 16,
+				marginLeft: 16,
+				paddingRight:8,
+				paddingLeft: 8,
+				color: '#161616',
+				backgroundColor: '#FFFFFF',
+				shadowOffset: { width: 2, height: 4 },
+				shadowRadius: 2,
+				shadowColor: 'rgba(34, 23, 83, 0.27)',
+				shadowOpacity: 1,
+				borderRadius: 4,
+				marginBottom: 16,
+				display: 'flex',
+				alignItems: 'center',
+				justifyContent: 'center'
+			},
+		'player-draw-container': {
+			display: 'flex',
+			flexDirection: 'row',
+			flexWrap: 'wrap',
+			alignItems: 'center',
+			justifyContent: 'center'
+		},
+		'player-draw-text': {
+			fontSize: 18,
+			letterSpacing: 2
 		}
 	}
 );

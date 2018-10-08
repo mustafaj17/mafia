@@ -110,7 +110,7 @@ export default class GameScreen extends Component{
 			<View style={[styles['screen'], styles['game-screen']]}>
 				{game.gameComplete && game.mafiasWin && <Modal mafia={true} text='Mafias win' onPressHandler={() => this.props.endGame()} />}
 				{game.gameComplete && game.civiliansWin && <Modal text='Civilians win' onPressHandler={ () => this.props.endGame() } />}
-				{!game.gameInProgress && !player.ready &&
+				{!game.gameInProgress && !player.ready && !player.admin &&
 				<TouchableOpacity style={styles['back-btn-holder']} onPress={this.props.leaveGame}>
 					<Image style={styles['back-btn']} source={backBtn}></Image>
 				</TouchableOpacity>
@@ -141,10 +141,10 @@ export default class GameScreen extends Component{
 
 					{game.isDraw && <Text style={styles['draw-game-text']}>There has been a draw between:</Text>}
 					{game.isDraw &&
-					<View>
+					<View style={styles['player-draw-container']}>
 						{game.isDraw.map(player =>{return(
-							<View style={styles['player']}>
-								<Text>{player}</Text>
+							<View style={styles['player-draw']}>
+								<Text style={styles['player-draw-text']}>{player}</Text>
 							</View>
 						)})
 						}
