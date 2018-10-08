@@ -118,9 +118,14 @@ export default class GameScreen extends Component{
 				{!this.state.hasPlayerSeenType && player.type &&
 				<Modal text={"You're a " + player.type } mafia={player.type === 'Mafia'} onPressHandler={() => this.setState({hasPlayerSeenType: true})}/>
 				}
+
 				{!this.state.hasPlayerSeenVotedOut && game.votedOut &&
 				<Modal text={game.votedOut} mafia={this.getPlayerType(game.votedOut) === 'Mafia'} subText={'was voted out'} onPressHandler={() => this.setState({hasPlayerSeenVotedOut: true})}/>
 				}
+
+                {!player.inGame && game.votedOut && !game.gameComplete &&
+                <Modal text={game.votedOut} noButton mafia={this.getPlayerType(game.votedOut) === 'Mafia'} subText={'was voted out'} />
+                }
 
 
 				<View style={styles['title-container']}>

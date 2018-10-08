@@ -14,11 +14,12 @@ export default class Modal extends Component{
 						{this.props.subText && <Text style={styles['sub-text']}>{this.props.subText}</Text>}
 					</View>
 					<Image style={styles.icon} source={this.props.mafia ? gunIcon : peaceIcon}></Image>
-					<TouchableOpacity onPress={this.props.onPressHandler}>
-						<View style={styles['ok-btn']}>
-							<Text style={styles['ok-btn-txt']}>ok</Text>
-						</View>
-					</TouchableOpacity>
+                    {!this.props.noButton && <TouchableOpacity onPress={this.props.onPressHandler}>
+                        <View style={styles['ok-btn']}>
+                            <Text style={styles['ok-btn-txt']}>ok</Text>
+                        </View>
+                    </TouchableOpacity>
+                    }
 				</View>
 			</View>
 		)
