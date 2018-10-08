@@ -5,8 +5,8 @@ import styles from './game-screen.styles';
 import gunIcon from '../../../resources/gun-icon.png';
 import peaceIcon from '../../../resources/civilian-icon.png';
 import Modal from '../../components/modal/modal'
-import TimerCountdown from 'react-native-timer-countdown';
 import backBtn from '../../../resources/back-icon.png';
+import CountDown from 'react-native-countdown-component';
 
 export default class GameScreen extends Component{
 
@@ -134,15 +134,6 @@ export default class GameScreen extends Component{
 					</View>
 					{game.votingInProgress && !player.votingFor && <Text className='header'>please vote</Text>}
 					{game.votingInProgress && player.votingFor &&<Text className='header'> Waiting for others to vote...</Text>}
-					{game.roundInProgress &&
-					<TimerCountdown
-						initialSecondsRemaining={1000*5}
-						onTick={secondsRemaining => console.log('tick', secondsRemaining)}
-						onTimeElapsed={endRound}
-						allowFontScaling={true}
-						style={{ fontSize: 20 }}
-					/>}
-
 
 					{game.isDraw && <Text style={styles['draw-game-text']}>There has been a draw between:</Text>}
 					{game.isDraw &&
@@ -155,10 +146,24 @@ export default class GameScreen extends Component{
 						}
 					</View>}
 
-					<View style={styles['games']}>
-						{this.getPlayers()}
-					</View>
+					{!game.roundInProgress &&
+                    <View style={styles['games']}>
+                        {this.getPlayers()}
+                    </View>
+                    }
 				</View>
+
+                {game.roundInProgress &&
+                <View style={styles['timer']}>
+                    <CountDown
+                        digitBgColor={'#f5f5f5'}
+                        until={10}
+                        onFinish={endRound}
+                        size={80}
+                        timeToShow={['S']}
+                        labelS={""}
+                    />
+                </View>}
 
 				{player.inGame &&
 				!player.ready &&

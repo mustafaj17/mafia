@@ -196,6 +196,10 @@ export default StyleSheet.create(
 		   position: 'absolute',
 			top: 20,
 			left: 20
+		},
+		'timer':{
+			alignItems: 'center',
+			justifyContent: 'center'
 		}
 	}
 );
