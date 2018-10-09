@@ -140,9 +140,14 @@ export default StyleSheet.create(
 			letterSpacing: 2
 		},
 		'button-container': {
-			position: 'relative',
+			display: 'flex',
 			width: '100%',
-			flex: 1
+			flex: 1,
+			justifyContent: 'center',
+			alignItems: 'center'
+		},
+		'button-mid': {
+			position: 'relative'
 		},
 		'logo-container': {
             display: 'flex',
@@ -158,8 +163,14 @@ export default StyleSheet.create(
 		},
 		'text-box': {
             position: 'absolute',
-            width: 200,
-            height: 40,
+            width: 50,
+            height: 50,
+            backgroundColor: '#00FFC2',
+            shadowOffset: { width: 0, height: 4 },
+            shadowRadius: 4,
+            shadowColor: 'rgba(0, 0, 0, 0.25)',
+            shadowOpacity: 1,
+            borderRadius: 50,
 		}
 	}
 );
