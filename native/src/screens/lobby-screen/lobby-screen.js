@@ -3,13 +3,16 @@ import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, Image, TextInput } from 'react-native';
 import styles from './lobby-screen.styles';
 import mafiaText from '../../../resources/mafia-text.png';
+import info from '../../../resources/info.png';
+import InfoModal from '../../components/infoModal/infoModal'
 import plusIcon from '../../../resources/plus-icon.png';
 // import Modal from "../../components/modal/modal";
 
 export default class LobbyScreen extends Component{
 
 	state = {
-		gameName : ''
+		gameName : '',
+		viewInfoModal: false,
 	}
 
 	getGames = (games) => {
@@ -26,12 +29,10 @@ export default class LobbyScreen extends Component{
 
 	render(){
 		const {createNewGame, games} = this.props
-		console.log(games)
 
-		console.log(this.props)
 		return(
 			<View style={[styles['screen'], styles['lobby-screen']]}>
-
+				{this.state.viewInfoModal && <InfoModal onPressHandler={ () => this.setState({viewInfoModal: false}) } />}
 				<View style={styles['title-container']}>
 					<Image style={styles['mafia-text']} source={mafiaText}></Image>
 				</View>
@@ -53,7 +54,9 @@ export default class LobbyScreen extends Component{
 						</View>
 					</TouchableOpacity>
 				</View>
-
+                <TouchableOpacity style={styles['info']} onPress={ () => this.setState({viewInfoModal: true}) }>
+                	<Image style={styles['info-img']} source={info}></Image>
+				</TouchableOpacity>
 			</View>
 		)
 	}

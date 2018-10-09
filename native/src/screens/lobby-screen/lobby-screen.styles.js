@@ -42,6 +42,27 @@ export default StyleSheet.create(
 			height: 57,
 			resizeMode: 'contain'
 		},
+        'info': {
+			position: 'absolute',
+            resizeMode: 'contain',
+            bottom: 40,
+			right: 20,
+            width: 58,
+            height: 58,
+            shadowOffset: { width: 0, height: 4 },
+            shadowRadius: 4,
+            shadowColor: 'rgba(0, 0, 0, 0.25)',
+            shadowOpacity: 1,
+        },
+        'info-img': {
+            resizeMode: 'contain',
+            width: 58,
+            height: 58,
+            shadowOffset: { width: 0, height: 4 },
+            shadowRadius: 4,
+            shadowColor: 'rgba(0, 0, 0, 0.25)',
+            shadowOpacity: 1,
+        },
 		logo:
 			{
 				width: 123,

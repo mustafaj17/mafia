@@ -1,6 +1,6 @@
 //* eslint-disable */
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
 import styles from './game-screen.styles';
 import gunIcon from '../../../resources/gun-icon.png';
 import peaceIcon from '../../../resources/civilian-icon.png';
@@ -178,9 +178,9 @@ export default class GameScreen extends Component{
 
                     {!game.roundInProgress &&
                     !game.votingInProgress &&
-                    <View style={styles['games']}>
+                    <ScrollView contentContainerStyle={styles['games']}>
                         {this.getPlayers()}
-                    </View>
+                    </ScrollView>
                     }
                 </View>
 
