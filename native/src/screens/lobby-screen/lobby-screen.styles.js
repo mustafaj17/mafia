@@ -150,10 +150,15 @@ export default StyleSheet.create(
             alignItems: 'center'
 		},
 		'input-box': {
-			display: 'absolute'
+			display: 'absolute',
+			width: 200,
+			height: 40,
+
 		},
 		'text-box': {
-            display: 'absolute'
+            display: 'absolute',
+            width: 200,
+            height: 40,
 		}
 	}
 );
