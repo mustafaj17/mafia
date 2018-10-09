@@ -23,16 +23,18 @@ export default class LobbyScreen extends Component{
 				{this.state.viewInfoModal && <InfoModal onPressHandler={ () => this.setState({viewInfoModal: false}) } />}
 
 				<View style={styles['button-container']}>
-					<Text style={styles['text-box']}>Join Game</Text>
-					<TextInput style={styles['input-box']}
-								  onChangeText={(text) => this.setState({ gameName : text})}
-								  value={this.state.gameName}
-								  placeholder='Enter game ID'/>
+					<View style={styles['button-mid']}>
+						<Text style={styles['text-box']}>Join Game</Text>
+						<TextInput style={styles['input-box']}
+									  onChangeText={(text) => this.setState({ gameName : text})}
+									  value={this.state.gameName}
+									  placeholder='Enter game ID'/>
+					</View>
 				</View>
 
 				<View style={styles['logo-container']}>
 
-				<Image style={styles.logo} source={logo}></Image>
+					<Image style={styles.logo} source={logo}></Image>
 
 				</View>
 
