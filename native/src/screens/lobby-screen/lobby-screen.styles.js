@@ -138,6 +138,22 @@ export default StyleSheet.create(
 		'join-game-btn-text': {
 			fontSize: 18,
 			letterSpacing: 2
+		},
+		'button-container': {
+			position: 'relative',
+			width: '100%',
+			flex: 1
+		},
+		'logo-container': {
+            display: 'flex',
+            justifyContent:'center',
+            alignItems: 'center'
+		},
+		'input-box': {
+			display: 'absolute'
+		},
+		'text-box': {
+            display: 'absolute'
 		}
 	}
 );

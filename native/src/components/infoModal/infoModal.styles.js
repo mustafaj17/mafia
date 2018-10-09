@@ -86,6 +86,7 @@ export default StyleSheet.create(
 			textAlign: 'center',
             fontSize: 12,
             letterSpacing:3,
+			fontWeight: 'bold'
 
         },
 		icon:{
