@@ -19,8 +19,8 @@ export default StyleSheet.create(
 		'info': {
 			position: 'absolute',
 			resizeMode: 'contain',
-			bottom: 40,
-			right: 20,
+			top: 32,
+			right: 1,
 			width: 58,
 			height: 58,
 			shadowOffset: { width: 0, height: 4 },
@@ -30,12 +30,8 @@ export default StyleSheet.create(
 		},
 		'info-img': {
 			resizeMode: 'contain',
-			width: 58,
-			height: 58,
-			shadowOffset: { width: 0, height: 4 },
-			shadowRadius: 4,
-			shadowColor: 'rgba(0, 0, 0, 0.25)',
-			shadowOpacity: 1,
+			width: 40,
+			height: 40,
 		},
 		logo:
 			{
