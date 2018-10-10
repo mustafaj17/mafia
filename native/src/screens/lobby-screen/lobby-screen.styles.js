@@ -49,7 +49,7 @@ export default StyleSheet.create(
 		},
 		'button-mid': {
 			position: 'relative',
-			backgroundColor: 'red',
+			backgroundColor: 'red'
 		},
 		'logo-container': {
 			display: 'flex',
@@ -87,15 +87,14 @@ export default StyleSheet.create(
 			display: 'flex',
 			justifyContent: 'center',
 			alignItems: 'center',
-			borderRadius: 2,
-			zIndex: -1
+			borderRadius: 2
 		},
 		'text-box': {
 			display: 'flex',
 			justifyContent: 'center',
 			textAlign: 'center',
 			fontSize: 18,
-			letterSpacing: 2,
+			letterSpacing: 2
 
 		}
 	}
