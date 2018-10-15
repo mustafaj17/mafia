@@ -33,7 +33,8 @@ export default class App extends Component {
 		this.mafiaGamesCollectionRef = this.db.collection('mafia-games');
 		this.getUsername();
 		this.state = {
-			inputGameName: ''
+			inputGameName: '',
+			loadingGame: false
 		}
 	}
 
@@ -105,14 +106,15 @@ export default class App extends Component {
 	}
 
 	createGame = gameName => {
+
+		this.setState({loadingGame: true})
 		this.mafiaGamesCollectionRef.doc(gameName).get().then(doc => {
 			if (doc.exists) {
 				//cant create game
 				//TODO: tell the user
 			} else {
 				this.setState({
-					createGame: false,
-					joiningGame: true
+					createGame: false
 				})
 
 				doc.ref.set({
@@ -131,9 +133,6 @@ export default class App extends Component {
 	}
 
 	selectGame = gameDoc => {
-		this.setState({
-			joiningGame: true
-		})
 
 		gameDoc = gameDoc.ref || gameDoc;
 
@@ -143,8 +142,8 @@ export default class App extends Component {
 			this.setState({
 				gameDocRef
 			})
-			if(this.state.joiningGame){
-				this.setState({joiningGame: false})
+			if(this.state.loadingGame){
+				this.setState({loadingGame: false})
 			}
 			this.runGame();
 		});
@@ -216,14 +215,14 @@ export default class App extends Component {
 
 	endGame = () => {
 		this.disconnectFromGame();
-		this.setState({gameDocRef: null, players: null, playerRef: null, joiningGame: false});
+		this.setState({gameDocRef: null, players: null, playerRef: null});
 		this.getGames();
 	}
 
 	leaveGame = () => {
 		this.disconnectFromGame();
 		this.state.playerRef.ref.delete();
-		this.setState({gameDocRef: null, players: null, playerRef: null, joiningGame: false});
+		this.setState({gameDocRef: null, players: null, playerRef: null});
 		this.getGames();
 	}
 
@@ -420,7 +419,8 @@ export default class App extends Component {
 
 	render() {
 
-		if(this.state.joiningGame){
+
+		if(this.state.loadingGame){
 			return(
 				<View>
 					<ImageBackground source={background} style={styles.background}>
@@ -481,6 +481,7 @@ export default class App extends Component {
 
 		return (
 			<View style={styles.app}>
+
 				<ImageBackground source={ background } style={{width: '100%', height: '100%'}}>
 
 					<LobbyScreen

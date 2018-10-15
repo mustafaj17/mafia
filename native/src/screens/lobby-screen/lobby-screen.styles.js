@@ -11,16 +11,11 @@ export default StyleSheet.create(
 				marginTop: 24,
 				position: 'relative'
 			},
-		'mafia-text': {
-			width: 179,
-			height: 57,
-			resizeMode: 'contain'
-		},
 		'info': {
 			position: 'absolute',
 			resizeMode: 'contain',
-			top: 32,
-			right: 1,
+			top: 0,
+			right: 0,
 			width: 58,
 			height: 58,
 			shadowOffset: { width: 0, height: 4 },
@@ -39,42 +34,45 @@ export default StyleSheet.create(
 				height: 80,
 				resizeMode: 'contain'
 			},
+		'mafia-text':{
+			width: 123,
+			resizeMode: 'contain',
+			marginTop: -40
+		},
 		'header': { fontSize: 18, color: '#EFEFEF', paddingTop: 8, paddingBottom: 8, letterSpacing: 3 },
 		'button-container': {
 			display: 'flex',
 			width: '100%',
 			flex: 1,
-			justifyContent: 'center',
 			alignItems: 'center'
+		},
+		'button-container--top': {
+			justifyContent: 'flex-end',
+		},
+		'button-container--bottom': {
 		},
 		'button-mid': {
 			position: 'relative',
-			backgroundColor: 'red'
+			backgroundColor: 'red',
 		},
 		'logo-container': {
 			display: 'flex',
 			justifyContent:'center',
-			alignItems: 'center'
+			alignItems: 'center',
+			marginTop: 60
 		},
 		'input-box': {
-			position: 'absolute',
 			width: 250,
 			height: 50,
 			backgroundColor: 'white',
-			marginLeft: -125,
 			display: 'flex',
 			justifyContent: 'center',
 			alignItems: 'center',
-			zIndex: -1,
-			marginTop: -25,
 			textAlign: 'center',
 			fontSize: 18,
 			letterSpacing: 2,
-			borderRadius: 2
-
 		},
 		'text-box-touch': {
-			position: 'absolute',
 			width: 250,
 			height: 50,
 			backgroundColor: '#00FFC2',
@@ -82,12 +80,10 @@ export default StyleSheet.create(
 			shadowRadius: 4,
 			shadowColor: 'rgba(0, 0, 0, 0.25)',
 			shadowOpacity: 1,
-			marginLeft: -125,
-			marginTop: -25,
 			display: 'flex',
 			justifyContent: 'center',
 			alignItems: 'center',
-			borderRadius: 2
+			borderRadius: 2,
 		},
 		'text-box': {
 			display: 'flex',
@@ -95,7 +91,16 @@ export default StyleSheet.create(
 			textAlign: 'center',
 			fontSize: 18,
 			letterSpacing: 2
-
+		},
+		'go-btn':{
+			width: 50,
+			height: 50,
+			borderRadius: 25,
+			display: 'flex',
+			justifyContent: 'center',
+			alignItems: 'center',
+			backgroundColor: '#00FFC2',
+			zIndex:2
 		}
 	}
 );
