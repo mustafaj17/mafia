@@ -256,17 +256,19 @@ export default class App extends Component {
 				let allPlayersAreReady = playersInTheGame.every(player => player.ready);
 				if (allPlayersAreReady) {
 					if(!game.gameInProgress && this.state.players.length > 2){
+						//setTypes only happens once in the game
+						this.setTypes();
 						this.state.gameDocRef.ref.update('gameInProgress', true);
 					}
-					//setTypes only happens once in the game
-					this.setTypes();
-					this.startGameRound(allPlayersAreReady, playersHaveType);
+
+					if(game.gameInProgress && playersHaveType) {
+						this.startGameRound();
+					}
 				}
 
 				if (game.votingInProgress) {
 					let allPlayersHaveVoted = playersInTheGame.every(player => player.votingFor);
 					if (allPlayersHaveVoted) {
-						this.setState({hasPlayerSeenVotedOut : false})
 						this.votingComplete();
 					}
 				}
@@ -288,7 +290,6 @@ export default class App extends Component {
 						this.state.gameDocRef.ref.update('gameComplete', true, 'civiliansWin', true);
 					}
 
-
 					if (mafiaCount.length >= civilianCount.length) {
 						this.state.gameDocRef.ref.update('gameComplete', true, 'mafiasWin', true);
 					}
@@ -300,7 +301,6 @@ export default class App extends Component {
 
 	votingComplete = () => {
 		let inGamePlayers = this.state.players.filter( player => player.inGame)
-		let votes = inGamePlayers.map( player => player.votingFor)
 		let votingCount = {}
 
 		inGamePlayers.forEach(player => {
@@ -360,10 +360,9 @@ export default class App extends Component {
 
 	}
 
-	startGameRound = (allPlayersAreReady, playersHaveType) => {
-		if (allPlayersAreReady && playersHaveType) {
+	startGameRound = () => {
 			this.state.gameDocRef.ref.update('roundInProgress', true, 'votedOut', null);
-		}
+			this.setState({hasPlayerSeenVotedOut : false})
 	}
 
 	endRound = () => {
@@ -379,7 +378,7 @@ export default class App extends Component {
 		let players = this.state.players;
 
 		//if players dont have types
-		if(players.length > 2 && players.every( player => player.type === null)){
+		if(players.every( player => player.type === null)){
 			//no types are set
 			let mafiaCount;
 			switch (true){
