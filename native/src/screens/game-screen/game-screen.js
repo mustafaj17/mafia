@@ -7,6 +7,7 @@ import Player from '../../components/player/player.component';
 import backBtn from '../../../resources/back-icon.png';
 import CountDown from 'react-native-countdown-component';
 import LoadingSpinner from "../../components/loadingSpinner/loadingSpinner";
+import LoadingScreen from "../../components/loadingScreen/loadingScreen";
 
 export default class GameScreen extends Component{
 
@@ -14,15 +15,7 @@ export default class GameScreen extends Component{
 		super()
 		this.state = {
 			hasPlayerSeenType: false,
-			hasPlayerSeenVotedOut: false,
 			readyBtnOpacity: new Animated.Value(0),
-		}
-	}
-
-	castVote = (currentPlayer, player) => {
-		if(!currentPlayer.votingFor) {
-			this.setState({hasPlayerSeenVotedOut: false});
-			this.props.currentPlayer.ref.update('votingFor', player.name)
 		}
 	}
 
@@ -78,10 +71,107 @@ export default class GameScreen extends Component{
 							  isMafia={isMafia}
 							  isCurrentPlayerCivilian={isCurrentPlayerCivilian}
 							  isCurrentPlayer={isCurrentPlayer}
-							  isCurrentPlayerMafia={isCurrentPlayerMafia}/>
+							  isCurrentPlayerMafia={isCurrentPlayerMafia}
+							  game={game}
+					/>
 				)
 			}
 		})
+	}
+
+
+	getPlayerType = (playerName) => {
+		let type;
+		this.props.players.forEach(player => {
+			if(player.name === playerName){
+				type = player.type;
+			}
+		})
+		return type;
+	}
+
+
+	render(){
+		const {game, currentPlayer, playerReady, endRound, player, players} = this.props
+
+		if(!player || !game){
+			return <LoadingScreen/>;
+		}
+
+		if(game.votingInProgress){
+			return <VotingScreen game={game} player={player} players={players} currentPlayer={currentPlayer}/>;
+		}
+
+		if(game.roundInProgress){
+			return <InGameScreen game={game} endRound={endRound}/>
+		}
+
+		return(
+			<View style={[styles['screen'], styles['game-screen']]}>
+
+				{!this.props.hasPlayerSeenVotedOut && game.votedOut &&
+				<Modal text={game.votedOut} mafia={this.getPlayerType(game.votedOut) === 'Mafia'} subText={'was voted out'} onPressHandler={this.props.playerHasSeenVotedOut}/>
+				}
+
+				{game.gameComplete && game.mafiasWin && this.props.hasPlayerSeenVotedOut &&
+				<Modal mafia={true} text='Mafias win' onPressHandler={() => this.props.endGame()} />}
+
+
+				{game.gameComplete && game.civiliansWin &&
+				<Modal text='Civilians win' onPressHandler={ () => this.props.endGame() } />}
+
+
+				{!game.gameInProgress && !player.ready && !player.admin &&
+				<TouchableOpacity style={styles['back-btn-holder']} onPress={this.props.leaveGame}>
+					<Image style={styles['back-btn']} source={backBtn}></Image>
+				</TouchableOpacity>}
+
+
+				{!this.state.hasPlayerSeenType && player.type &&
+				<Modal text={"You're a " + player.type } mafia={player.type === 'Mafia'} onPressHandler={() => this.setState({hasPlayerSeenType: true})}/>
+				}
+
+
+				<View style={styles['title-container']}>
+					<View >
+						<Text style={styles['game-header']}>{game.gameName}</Text>
+					</View>
+
+					{game.gameInProgress && <View>
+						<Text style={styles['header']}>Mafias left : {this.getMafiasLeft()}</Text>
+					</View>}
+
+					<ScrollView contentContainerStyle={styles['games']}>
+						{this.getPlayers()}
+					</ScrollView>
+
+
+					{(players.length < 3) && <Text>minumum of 3 players are required to play</Text>}
+				</View>
+
+
+				{player.inGame &&
+				!player.ready &&
+				!game.gameComplete &&
+				<TouchableOpacity onPress={playerReady} style={styles['ready-button-container']}>
+					<Animated.View  style={[styles['ready-button'], {opacity: this.state.readyBtnOpacity}]}>
+						<Text>ready</Text>
+					</Animated.View>
+				</TouchableOpacity>
+				}
+			</View>
+		)
+	}
+}
+
+
+class VotingScreen extends Component{
+
+
+	castVote = (currentPlayer, player) => {
+		if(!currentPlayer.votingFor) {
+			this.props.currentPlayer.ref.update('votingFor', player.name)
+		}
 	}
 
 	getVotePlayers = () => {
@@ -109,81 +199,63 @@ export default class GameScreen extends Component{
 		}
 	}
 
-	getPlayerType = (playerName) => {
-		let type;
-		this.props.players.forEach(player => {
-			if(player.name === playerName){
-				type = player.type;
-			}
-		})
-		return type;
-	}
-
 
 	render(){
-		const {game, currentPlayer, playerReady, endRound} = this.props
-		const player = currentPlayer.data()
-		console.log('current', currentPlayer.data())
+
+		const {game, player} = this.props;
+
 		return(
 			<View style={[styles['screen'], styles['game-screen']]}>
-				{game.gameComplete && game.mafiasWin && <Modal mafia={true} text='Mafias win' onPressHandler={() => this.props.endGame()} />}
-				{game.gameComplete && game.civiliansWin && <Modal text='Civilians win' onPressHandler={ () => this.props.endGame() } />}
-				{!game.gameInProgress && !player.ready && !player.admin &&
-				<TouchableOpacity style={styles['back-btn-holder']} onPress={this.props.leaveGame}>
-					<Image style={styles['back-btn']} source={backBtn}></Image>
-				</TouchableOpacity>
-				}
-				{!this.state.hasPlayerSeenType && player.type &&
-				<Modal text={"You're a " + player.type } mafia={player.type === 'Mafia'} onPressHandler={() => this.setState({hasPlayerSeenType: true})}/>
-				}
-
-				{!this.state.hasPlayerSeenVotedOut && game.votedOut &&
-				<Modal text={game.votedOut} mafia={this.getPlayerType(game.votedOut) === 'Mafia'} subText={'was voted out'} onPressHandler={() => this.setState({hasPlayerSeenVotedOut: true})}/>
-				}
-
-				{!player.inGame && game.votedOut && !game.gameComplete &&
-				<Modal text={game.votedOut} noButton mafia={this.getPlayerType(game.votedOut) === 'Mafia'} subText={'was voted out'} />
-				}
+				{game.votingInProgress && !player.votingFor && player.inGame &&
+				<Text style={styles['header']}>Please vote</Text>}
 
 
-				<View style={styles['title-container']}>
-					<View >
-						<Text style={styles['game-header']}>{game.gameName}</Text>
-					</View>
-
-					{game.gameInProgress && !game.votingInProgress && <View>
-						<Text style={styles['header']}>Mafias left : {this.getMafiasLeft()}</Text>
-					</View>}
-					{game.votingInProgress && !player.votingFor && player.inGame && <Text style={styles['header']}>Please vote</Text>}
-					{game.votingInProgress && player.votingFor &&<Text style={styles['header']}> Waiting for others to vote...</Text>}
+				{game.votingInProgress && player.votingFor &&
+				<Text style={styles['header']}> Waiting for others to vote...</Text>}
 
 
-					{game.isDraw && <Text style={styles['draw-game-text']}>There has been a draw between:</Text>}
-					{game.isDraw &&
-					<View style={styles['player-draw-container']}>
-						{game.isDraw.map(player =>{return(
-							<View style={styles['player-draw']}>
-								<Text style={styles['player-draw-text']}>{player}</Text>
-							</View>
-						)})
-						}
-					</View>}
+				{game.isDraw && <Text style={styles['draw-game-text']}>There has been a draw between:</Text>}
 
-					{game.votingInProgress &&
-					<View style={styles['games']}>
-						{this.getVotePlayers()}
-					</View>
+				{game.isDraw &&
+				<View style={styles['player-draw-container']}>
+					{game.isDraw.map(player =>{return(
+						<View style={styles['player-draw']}>
+							<Text style={styles['player-draw-text']}>{player}</Text>
+						</View>
+					)})
 					}
+				</View>}
 
-					{!game.roundInProgress &&
-					!game.votingInProgress &&
-					<ScrollView contentContainerStyle={styles['games']}>
-						{this.getPlayers()}
-					</ScrollView>
-					}
+				{game.votingInProgress &&
+				<View style={styles['games']}>
+					{this.getVotePlayers()}
+				</View>
+				}
+
+				{game.votingInProgress && !player.inGame &&
+				<View style={styles['timer']}>
+					<LoadingSpinner/>
+					<Text style={styles['header']}> Voting in progress...</Text>
+				</View>}
+
+			</View>
+		)
+	}
+}
+
+class InGameScreen extends Component{
+	render(){
+
+		const {game, endRound} = this.props;
+
+
+		return(
+			<View style={[styles['screen'], styles['game-screen']]}>
+
+				<View >
+					<Text style={styles['game-header']}>{game.gameName}</Text>
 				</View>
 
-				{game.roundInProgress &&
 				<View style={styles['timer']}>
 					<CountDown
 						digitBgColor={'#00FFC2'}
@@ -191,28 +263,9 @@ export default class GameScreen extends Component{
 						onFinish={endRound}
 						size={80}
 						timeToShow={['S']}
-						labelS={""}
-					/>
-				</View>}
-
-				{game.votingInProgress && !player.inGame &&
-				<View style={styles['timer']}>
-					<LoadingSpinner/>
-					<Text style={styles['header']}> Voting in progress...</Text>
+						labelS={""}/>
 				</View>
-				}
 
-				{player.inGame &&
-				!player.ready &&
-				!game.gameComplete &&
-				!game.votingInProgress &&
-				<Animated.View  style={[styles['ready-button'], {opacity: this.state.readyBtnOpacity}]}>
-					<TouchableOpacity onPress={playerReady} >
-						<Text>ready</Text>
-					</TouchableOpacity>
-				</Animated.View>
-
-				}
 			</View>
 		)
 	}

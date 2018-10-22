@@ -9,6 +9,7 @@ import styles from './src/app.style';
 import background from './resources/background.png';
 import backgroundLobby from './resources/background-lobby.png';
 import LoadingSpinner from "./src/components/loadingSpinner/loadingSpinner";
+import LoadingScreen from "./src/components/loadingScreen/loadingScreen";
 
 
 export default class App extends Component {
@@ -34,7 +35,8 @@ export default class App extends Component {
 		this.getUsername();
 		this.state = {
 			inputGameName: '',
-			loadingGame: false
+			loadingGame: false,
+			hasPlayerSeenVotedOut: false,
 		}
 	}
 
@@ -130,6 +132,21 @@ export default class App extends Component {
 			//TODO: tell user
 		});
 
+	}
+
+
+	joinGame = gameName => {
+		if(gameName.length > 3){
+			this.mafiaGamesCollectionRef.doc(gameName).get().then(doc => {
+				if (doc.exists) {
+					this.selectGame(doc);
+				} else {
+					//TODO: tell the user
+				}
+			}).catch ( error => {
+				//TODO: tell the user
+			});
+		}
 	}
 
 	selectGame = gameDoc => {
@@ -232,15 +249,16 @@ export default class App extends Component {
 
 	runGame = () => {
 		if(this.state.players && this.state.players.length) {
-			if (this.user && this.user.admin && this.state.gameDocRef) {
+			if (this.state.playerRef && this.state.playerRef.data().admin && this.state.gameDocRef) {
 				let game = this.state.gameDocRef.data();
 				let playersInTheGame = this.state.players.filter(player => player.inGame);
 				let playersHaveType= this.state.players.every(player => player.type);
 				let allPlayersAreReady = playersInTheGame.every(player => player.ready);
 				if (allPlayersAreReady) {
-					if(!game.gameInProgress){
+					if(!game.gameInProgress && this.state.players.length > 2){
 						this.state.gameDocRef.ref.update('gameInProgress', true);
 					}
+					//setTypes only happens once in the game
 					this.setTypes();
 					this.startGameRound(allPlayersAreReady, playersHaveType);
 				}
@@ -248,6 +266,7 @@ export default class App extends Component {
 				if (game.votingInProgress) {
 					let allPlayersHaveVoted = playersInTheGame.every(player => player.votingFor);
 					if (allPlayersHaveVoted) {
+						this.setState({hasPlayerSeenVotedOut : false})
 						this.votingComplete();
 					}
 				}
@@ -329,10 +348,11 @@ export default class App extends Component {
 			this.state.gameDocRef.ref.collection('players').get().then(playerDocs => {
 				playerDocs.forEach(playerDocRef => {
 					if (playerDocRef.data().name === mostVotedName) {
-						playerDocRef.ref.update('inGame', false)
+						playerDocRef.ref.update('inGame', false, 'votingFor', null)
 
+					}else {
+						playerDocRef.ref.update('votingFor', null)
 					}
-					playerDocRef.ref.update('votingFor', null)
 				})
 				this.state.gameDocRef.ref.update('votingInProgress', false, 'isDraw', null, 'votedOut', mostVotedName)
 			})
@@ -356,19 +376,30 @@ export default class App extends Component {
 	}
 
 	setTypes = () => {
-		let players = this.state.players
-		if(players.length > 1 &&
-			players.every( player => player.type === null)){
+		let players = this.state.players;
+
+		//if players dont have types
+		if(players.length > 2 && players.every( player => player.type === null)){
 			//no types are set
 			let mafiaCount;
 			switch (true){
-				case (players.length < 6):
+				case (players.length < 5):
 					mafiaCount = 1;
 					break;
-				case (players.length < 9):
+				case (players.length < 8):
 					mafiaCount = 2;
 					break;
+				case (players.length < 11):
+					mafiaCount = 3;
+					break;
+				case (players.length < 14):
+					mafiaCount = 4;
+					break;
+				case (players.length < 16):
+					mafiaCount = 5;
+					break;
 				default:
+					mafiaCount = 6;
 					break
 			}
 
@@ -376,7 +407,7 @@ export default class App extends Component {
 				let rand = Math.floor(Math.random() * players.length);
 				if(!players[rand].type){
 					players[rand].type = 'Mafia';
-					players.ready = false
+					players.ready = false;
 					mafiaCount--;
 				}
 			}
@@ -403,49 +434,21 @@ export default class App extends Component {
 		}
 	}
 
-	joinGame = gameName => {
-		if(gameName.length > 3){
-			this.mafiaGamesCollectionRef.doc(gameName).get().then(doc => {
-				if (doc.exists) {
-					this.selectGame(doc);
-				} else {
-					//TODO: tell the user
-				}
-			}).catch ( error => {
-				//TODO: tell the user
-			});
-		}
-	}
-
 	render() {
 
 
 		if(this.state.loadingGame){
 			return(
-				<View>
-					<ImageBackground source={background} style={styles.background}>
-						<LoadingSpinner/>
-						<Text style={styles['loading-text']}>Loading...</Text>
-					</ImageBackground>
-				</View>
+				<LoadingScreen/>
 			)
 		}
 
+		//player has a game
 		if(this.state.gameDocRef) {
 
 			let game = this.state.gameDocRef.data && this.state.gameDocRef.data();
 			let player = this.state.playerRef && this.state.playerRef.data && this.state.playerRef.data();
 			let players = this.state.players;
-			if(!player || !game){
-				return(
-					<View>
-						<ImageBackground source={background} style={styles.background}>
-							<LoadingSpinner/>
-							<Text style={styles['loading-text']}>Loading...</Text>
-						</ImageBackground>
-					</View>
-				)
-			}
 			return (
 				<View>
 					<ImageBackground source={background} style={{width: '100%', height: '100%'}}>
@@ -458,6 +461,9 @@ export default class App extends Component {
 							endRound={this.endRound}
 							leaveGame={this.leaveGame}
 							endGame={this.endGame}
+							player={player}
+							hasPlayerSeenVotedOut={this.state.hasPlayerSeenVotedOut}
+							playerHasSeenVotedOut={ () => this.setState({hasPlayerSeenVotedOut: true})}
 						/>
 					</ImageBackground>
 				</View>

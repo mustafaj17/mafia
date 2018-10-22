@@ -170,6 +170,13 @@ export default StyleSheet.create(
 				paddingRight: 8,
 				letterSpacing: 1
 			},
+		'ready-button-container':{
+			display: 'flex',
+			justifyContent: 'center',
+			alignItems: 'center',
+			position: 'absolute',
+			bottom: '5%',
+		},
 		'ready-button':
 			{ width: 250,
 				height: 40,
@@ -184,10 +191,7 @@ export default StyleSheet.create(
 				display: 'flex',
 				justifyContent: 'center',
 				alignItems: 'center',
-				position: 'absolute',
-				bottom: '5%',
-				flexDirection: 'row',
-
+				flexDirection: 'row'
 			},
 		'back-btn': {
 			width: 30,

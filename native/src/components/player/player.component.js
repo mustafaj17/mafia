@@ -45,11 +45,11 @@ export default class Player extends Component{
 
 	render(){
 
-		let { player, isCurrentPlayerCivilian, isCurrentPlayer, stylesArray, isMafia, isCurrentPlayerMafia} = this.props;
+		let { player, isCurrentPlayerCivilian, isCurrentPlayer, stylesArray, isMafia, isCurrentPlayerMafia, game} = this.props;
 
 		const playerRotate = this.state.playerRotate.interpolate({
-			inputRange: [0, 1, 2],
-			outputRange: ['0deg', '180deg', '360deg']
+			inputRange: [0, 1],
+			outputRange: ['0deg', '60deg']
 		})
 
 		return(

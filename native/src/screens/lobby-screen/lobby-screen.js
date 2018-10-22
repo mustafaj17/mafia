@@ -207,6 +207,7 @@ export default class LobbyScreen extends Component{
 							}>
 								<TextInput style={styles['input-box']}
 											  onChangeText={(text) => this.setState({ gameName : text})}
+											  disable={!this.state.uiInputMode}
 											  value={this.state.gameName}
 											  placeholder='Enter game ID'
 											  ref={ elem => this.textInput = elem }/>
@@ -219,7 +220,7 @@ export default class LobbyScreen extends Component{
 									marginTop:20
 								}
 							}>
-								<TouchableOpacity onPress={this.startOrJoin}>
+								<TouchableOpacity onPress={this.startOrJoin} editable={!this.state.uiInputMode}>
 									<View style={styles['go-btn']}>
 										<Text style={{fontSize: 18, letterSpacing:2}}>Go</Text>
 									</View>
