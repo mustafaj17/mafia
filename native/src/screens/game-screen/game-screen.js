@@ -209,7 +209,7 @@ export default class GameScreen extends Component{
                 !game.gameComplete &&
                 !game.votingInProgress &&
                 <Animated.View  style={[styles['ready-button'], {opacity: this.state.readyBtnOpacity}]}>
-                    <TouchableOpacity onPress={playerReady} >
+                    <TouchableOpacity style={styles['ready-button-touch']} onPress={playerReady} >
                         <Text>ready</Text>
                     </TouchableOpacity>
                 </Animated.View>

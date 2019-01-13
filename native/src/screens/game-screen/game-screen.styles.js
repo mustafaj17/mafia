@@ -189,6 +189,12 @@ export default StyleSheet.create(
 				flexDirection: 'row',
 
 			},
+		'ready-button-touch': {
+            width: 250,
+            height: 40,
+            justifyContent: 'center',
+            alignItems: 'center',
+		},
 		'back-btn': {
 			width: 30,
 			height: 29
