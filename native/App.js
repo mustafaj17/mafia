@@ -214,7 +214,12 @@ export default class App extends Component {
 	}
 
 	endGame = () => {
-		this.disconnectFromGame();
+        this.mafiaGamesCollectionRef.doc(this.state.gameDocRef.data().gameName).delete().then(function() {
+            console.log("Document successfully deleted!");
+        }).catch(function(error) {
+            console.error("Error deleting game: ", error);
+        });
+        this.disconnectFromGame();
 		this.setState({gameDocRef: null, players: null, playerRef: null});
 		this.getGames();
 	}
