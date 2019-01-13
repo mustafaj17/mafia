@@ -104,7 +104,7 @@ export default class LobbyScreen extends Component{
 					}),
 					Animated.timing(this.state.logoTranslationY, {
 						// and twirl
-						toValue: -80,
+						toValue: -50,
 						duration: 500
 					}),
 					Animated.timing(this.state.textOpacity, {
@@ -219,10 +219,8 @@ export default class LobbyScreen extends Component{
 									marginTop:20
 								}
 							}>
-								<TouchableOpacity onPress={this.startOrJoin}>
-									<View style={styles['go-btn']}>
-										<Text style={{fontSize: 18, letterSpacing:2}}>Go</Text>
-									</View>
+								<TouchableOpacity style={styles['go-btn']} onPress={this.startOrJoin}>
+									<Text style={{fontSize: 18, letterSpacing:2}}>Go</Text>
 								</TouchableOpacity>
 							</Animated.View>
 
@@ -249,8 +247,8 @@ export default class LobbyScreen extends Component{
 							]}}>
 						<View style={styles['logo-container']}>
 
-							<Image style={styles.logo} source={logo}></Image>
-							<Image style={styles['mafia-text']} source={mafiaText}></Image>
+							<Image style={styles.logo} source={logo}/>
+							<Image style={styles['mafia-text']} source={mafiaText}/>
 
 						</View>
 					</Animated.View>
@@ -270,7 +268,7 @@ export default class LobbyScreen extends Component{
 
 
 					<TouchableOpacity style={styles['info']} onPress={ () => this.setState({viewInfoModal: true}) }>
-						<Image style={styles['info-img']} source={info}></Image>
+						<Image style={styles['info-img']} source={info}/>
 					</TouchableOpacity>
 				</View>
 			</TouchableWithoutFeedback>
