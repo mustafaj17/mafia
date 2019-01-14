@@ -92,7 +92,7 @@ export default class GameScreen extends Component{
 
 
 	render(){
-		const {game, currentPlayer, playerReady, endRound, player, players} = this.props
+		const {game, currentPlayer, playerReady, endRound, player, players} = this.props;
 
 		if(!player || !game){
 			return <LoadingScreen/>;
@@ -108,16 +108,19 @@ export default class GameScreen extends Component{
 
 		return(
 			<View style={[styles['screen'], styles['game-screen']]}>
+				<View><Text>{this.props.hasPlayerSeenVotedOut}</Text></View>
 
 				{!this.props.hasPlayerSeenVotedOut && game.votedOut &&
 				<Modal text={game.votedOut} mafia={this.getPlayerType(game.votedOut) === 'Mafia'} subText={'was voted out'} onPressHandler={this.props.playerHasSeenVotedOut}/>
 				}
 
 				{game.gameComplete && game.mafiasWin && this.props.hasPlayerSeenVotedOut &&
-				<Modal mafia={true} text='Mafias win' onPressHandler={() => this.props.endGame()} />}
+				<Modal mafia={true} text='Mafias win' onPressHandler={() => this.props.endGame()} >
+					<Text>{'result ' + this.props.hasPlayerSeenVotedOut}</Text>
+				</Modal>}
 
 
-				{game.gameComplete && game.civiliansWin &&
+				{game.gameComplete && game.civiliansWin && this.props.hasPlayerSeenVotedOut &&
 				<Modal text='Civilians win' onPressHandler={ () => this.props.endGame() } />}
 
 
@@ -259,7 +262,7 @@ class InGameScreen extends Component{
 				<View style={styles['timer']}>
 					<CountDown
 						digitBgColor={'#00FFC2'}
-						until={10}
+						until={1}
 						onFinish={endRound}
 						size={80}
 						timeToShow={['S']}

@@ -21,6 +21,7 @@ export default class Modal extends Component{
                     </TouchableOpacity>
                     }
 				</View>
+				{this.props.children}
 			</View>
 		)
 	}

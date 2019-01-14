@@ -36,7 +36,8 @@ export default class App extends Component {
 		this.state = {
 			inputGameName: '',
 			loadingGame: false,
-			hasPlayerSeenVotedOut: false,
+			hasPlayerSeenVotedOut: false
+
 		}
 	}
 
@@ -232,7 +233,7 @@ export default class App extends Component {
 
 	endGame = () => {
 		this.disconnectFromGame();
-		this.setState({gameDocRef: null, players: null, playerRef: null});
+		this.setState({gameDocRef: null, players: null, playerRef: null, hasGameEnded: false});
 		this.getGames();
 	}
 

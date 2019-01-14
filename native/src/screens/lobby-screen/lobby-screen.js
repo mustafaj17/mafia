@@ -104,7 +104,7 @@ export default class LobbyScreen extends Component{
 					}),
 					Animated.timing(this.state.logoTranslationY, {
 						// and twirl
-						toValue: -80,
+						toValue: -50,
 						duration: 500
 					}),
 					Animated.timing(this.state.textOpacity, {
