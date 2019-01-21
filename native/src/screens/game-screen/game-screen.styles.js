@@ -11,7 +11,7 @@ export default StyleSheet.create(
 				marginTop: 24,
 				zIndex:2,
 				position: 'relative'},
-		'games': { marginTop: 16, width: '100%', display: 'flex', alignItems: 'center'},
+		'players-container': { marginTop: 16, width: '100%', display: 'flex', alignItems: 'center'},
 		'player-draw':
 			{	height: 40,
 				marginRight: 16,
@@ -136,7 +136,7 @@ export default StyleSheet.create(
 				color: '#4B4B4B' },
 		'new-game-btn-text': { fontSize: 18, color: '#EFEFEF', marginLeft: 8 },
 		'header': { fontSize: 18, color: '#EFEFEF', paddingTop: 18, paddingBottom: 8 , letterSpacing:3, marginTop: 8},
-        'game-header': { fontSize: 24, color: '#EFEFEF', paddingTop: 18, paddingBottom: 8 , letterSpacing:3, marginTop: 8},
+		'game-header': { fontSize: 24, color: '#EFEFEF', paddingTop: 18, paddingBottom: 8 , letterSpacing:3, marginTop: 8},
 		'create-game-container':
 			{
 				position: 'absolute',
@@ -151,7 +151,8 @@ export default StyleSheet.create(
 				position: 'absolute',
 				display: 'flex',
 				alignItems: 'center',
-				top: 0
+				top: 0,
+				bottom: 200
 			},
 		'icon-name-container':
 			{
@@ -198,7 +199,7 @@ export default StyleSheet.create(
 			height: 29
 		},
 		'back-btn-holder':{
-		   position: 'absolute',
+			position: 'absolute',
 			top: 20,
 			left: 20
 		},

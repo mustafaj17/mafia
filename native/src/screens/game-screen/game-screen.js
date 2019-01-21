@@ -148,7 +148,7 @@ export default class GameScreen extends Component{
 						<Text style={styles['header']}>Mafias left : {this.getMafiasLeft()}</Text>
 					</View>}
 
-					<ScrollView contentContainerStyle={styles['games']}>
+					<ScrollView contentContainerStyle={styles['players-container']}>
 						{this.getPlayers()}
 					</ScrollView>
 
@@ -234,8 +234,10 @@ class VotingScreen extends Component{
 				</View>}
 
 				{game.votingInProgress &&
-				<View style={styles['games']}>
-					{this.getVotePlayers()}
+				<View style={styles['title-container']}>
+					<ScrollView contentContainerStyle={styles['players-container']}>
+						{this.getVotePlayers()}
+					</ScrollView>
 				</View>
 				}
 
