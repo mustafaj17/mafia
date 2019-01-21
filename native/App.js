@@ -38,7 +38,7 @@ export default class App extends Component {
 			loadingGame: false,
 			hasPlayerSeenVotedOut: false,
 			errorMessage: null,
-            showSpinner: false,
+			showSpinner: false,
 
 		}
 	}
@@ -115,8 +115,7 @@ export default class App extends Component {
 		this.setState({showSpinner: true, errorMessage: null})
 		this.mafiaGamesCollectionRef.doc(gameName).get().then(doc => {
 			if (doc.exists) {
-				console.log("game already exists with this name")
-                this.setState({errorMessage: "Game name already exists", showSpinner: false})
+				this.setState({errorMessage: "Game name already exists", showSpinner: false})
 			} else {
 				this.setState({
 					createGame: false
@@ -129,22 +128,10 @@ export default class App extends Component {
 				})
 
 				this.user.admin = true;
-                Animated.sequence([
-                    Animated.parallel([
-                        // after decay, in parallel:
-                        Animated.timing(this.state.logoTranslationY, {
-                            // and twirl
-                            toValue: -30,
-                            duration: 500
-                        }),
-                    ]),
-                ]).start(() => {
-                    this.selectGame(doc);
-                })
+				this.selectGame(doc);
 			}
 		}).catch( (error) => {
-		    console.log(error)
-            this.setState({errorMessage: "Error connecting, please try againnnn", showSpinner: false})
+			this.setState({errorMessage: "Error connecting, please try againnnn", showSpinner: false})
 		});
 
 	}
@@ -152,40 +139,26 @@ export default class App extends Component {
 
 	joinGame = gameName => {
 		if(gameName.length > 3){
-            this.setState({errorMessage: null, showSpinner: true})
+			this.setState({errorMessage: null, showSpinner: true})
 			this.mafiaGamesCollectionRef.doc(gameName).get().then(doc => {
 				if (doc.exists) {
 					if(!doc.data().gameInProgress) {
-                        this.setState({showSpinner: false})
-                        Animated.sequence([
-                            Animated.parallel([
-                                // after decay, in parallel:
-                                Animated.timing(this.state.logoTranslationY, {
-                                    // and twirl
-                                    toValue: -30,
-                                    duration: 500
-                                }),
-                            ]),
-                        ]).start(() => {
-                            this.selectGame(doc);
-                        })
-                    }else{
-                        console.log("game is already in progress")
-                        this.setState({errorMessage: "This game has already started", showSpinner: false})
+						this.setState({showSpinner: false})
+						this.selectGame(doc);
+					}else{
+						this.setState({errorMessage: "This game has already started", showSpinner: false})
 					}
 				} else {
-					console.log("game doesnt exist")
 					this.setState({errorMessage: "This game does not exist",  showSpinner: false})
 				}
 			}).catch ( error => {
-                this.setState({errorMessage: "Error connecting, please try again",  showSpinner: false})
-                console.log("this shit dont work error", error)
+				this.setState({errorMessage: "Error connecting, please try again",  showSpinner: false})
 			});
 		}
 	}
 
 	selectGame = gameDoc => {
-	    this.setState({loadingGame: true})
+		this.setState({loadingGame: true})
 		gameDoc = gameDoc.ref || gameDoc;
 
 		//connect to the game doc and update state whenever it changes
@@ -234,7 +207,6 @@ export default class App extends Component {
 						playerRef: playerDocRef
 					})
 					currentPlayerRef = playerDocRef
-					console.log('player exists');
 				}
 			})
 
@@ -256,7 +228,6 @@ export default class App extends Component {
 								playerRef: playerRef
 							})
 						})
-						console.log('added new player');
 					})
 
 				})
@@ -396,8 +367,8 @@ export default class App extends Component {
 	}
 
 	startGameRound = () => {
-			this.state.gameDocRef.ref.update('roundInProgress', true, 'votedOut', null);
-			this.setState({hasPlayerSeenVotedOut : false})
+		this.state.gameDocRef.ref.update('roundInProgress', true, 'votedOut', null);
+		this.setState({hasPlayerSeenVotedOut : false})
 	}
 
 	endRound = () => {
@@ -531,7 +502,7 @@ export default class App extends Component {
 						joinGame={this.joinGame}
 						createGame={this.createGame}
 						showSpinner={this.state.showSpinner}
-                        resetError={() => this.setState({errorMessage: null, showSpinner: false})}
+						resetError={() => this.setState({errorMessage: null, showSpinner: false})}
 					/>
 
 				</ImageBackground>
