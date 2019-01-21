@@ -111,17 +111,21 @@ export default class GameScreen extends Component{
 				<View><Text>{this.props.hasPlayerSeenVotedOut}</Text></View>
 
 				{!this.props.hasPlayerSeenVotedOut && game.votedOut &&
-				<Modal text={game.votedOut} mafia={this.getPlayerType(game.votedOut) === 'Mafia'} subText={'was voted out'} onPressHandler={this.props.playerHasSeenVotedOut}/>
+				<Modal text={game.votedOut}
+						 mafia={this.getPlayerType(game.votedOut) === 'Mafia'}
+						 subText={'was voted out'}
+						 onPressHandler={game.gameComplete ? () => this.props.endGame() : this.props.playerHasSeenVotedOut}>
+
+					{game.gameComplete && game.mafiasWin &&
+					<View><Text> Mafias win</Text></View>}
+
+
+					{game.gameComplete && game.civiliansWin &&
+					<View><Text> Civilians win</Text></View>}
+
+				</Modal>
 				}
 
-				{game.gameComplete && game.mafiasWin && this.props.hasPlayerSeenVotedOut &&
-				<Modal mafia={true} text='Mafias win' onPressHandler={() => this.props.endGame()} >
-					<Text>{'result ' + this.props.hasPlayerSeenVotedOut}</Text>
-				</Modal>}
-
-
-				{game.gameComplete && game.civiliansWin && this.props.hasPlayerSeenVotedOut &&
-				<Modal text='Civilians win' onPressHandler={ () => this.props.endGame() } />}
 
 
 				{!game.gameInProgress && !player.ready && !player.admin &&
