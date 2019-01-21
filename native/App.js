@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import React, {Component} from 'react';
-import { Text, View, ImageBackground, AsyncStorage, Image} from 'react-native';
+import {Text, View, ImageBackground, AsyncStorage, Image, Animated} from 'react-native';
 import LobbyScreen from "./src/screens/lobby-screen/lobby-screen";
 import GameScreen from "./src/screens/game-screen/game-screen";
 import EnterNameScreen from "./src/screens/enter-name/enter-name-screen";
@@ -36,7 +36,9 @@ export default class App extends Component {
 		this.state = {
 			inputGameName: '',
 			loadingGame: false,
-			hasPlayerSeenVotedOut: false
+			hasPlayerSeenVotedOut: false,
+			errorMessage: null,
+            showSpinner: false,
 
 		}
 	}
@@ -113,8 +115,8 @@ export default class App extends Component {
 		this.setState({loadingGame: true})
 		this.mafiaGamesCollectionRef.doc(gameName).get().then(doc => {
 			if (doc.exists) {
-				//cant create game
-				//TODO: tell the user
+				console.log("game already exists with this name")
+                this.setState({errorMessage: "Game name already exists"})
 			} else {
 				this.setState({
 					createGame: false
@@ -127,10 +129,21 @@ export default class App extends Component {
 				})
 
 				this.user.admin = true;
-				this.selectGame(doc);
+                Animated.sequence([
+                    Animated.parallel([
+                        // after decay, in parallel:
+                        Animated.timing(this.state.logoTranslationY, {
+                            // and twirl
+                            toValue: -30,
+                            duration: 500
+                        }),
+                    ]),
+                ]).start(() => {
+                    this.selectGame(doc);
+                })
 			}
-		}).catch( error => {
-			//TODO: tell user
+		}).catch( () => {
+            this.setState({errorMessage: "Error connecting, please try again"})
 		});
 
 	}
@@ -140,18 +153,36 @@ export default class App extends Component {
 		if(gameName.length > 3){
 			this.mafiaGamesCollectionRef.doc(gameName).get().then(doc => {
 				if (doc.exists) {
-					this.selectGame(doc);
+					if(!doc.data().gameInProgress) {
+                        Animated.sequence([
+                            Animated.parallel([
+                                // after decay, in parallel:
+                                Animated.timing(this.state.logoTranslationY, {
+                                    // and twirl
+                                    toValue: -30,
+                                    duration: 500
+                                }),
+                            ]),
+                        ]).start(() => {
+                            this.selectGame(doc);
+                        })
+                    }else{
+                        console.log("game is already in progress")
+                        this.setState({errorMessage: "This game has already started"})
+					}
 				} else {
-					//TODO: tell the user
+					console.log("game doesnt exist")
+					this.setState({errorMessage: "This game does not exist"})
 				}
 			}).catch ( error => {
-				//TODO: tell the user
+                this.setState({errorMessage: "Error connecting, please try again"})
+                console.log("this shit dont work error", error)
 			});
 		}
 	}
 
 	selectGame = gameDoc => {
-
+        this.setState({errorMessage: null})
 		gameDoc = gameDoc.ref || gameDoc;
 
 		//connect to the game doc and update state whenever it changes
@@ -491,10 +522,12 @@ export default class App extends Component {
 				<ImageBackground source={ background } style={{width: '100%', height: '100%'}}>
 
 					<LobbyScreen
+						errorMessage={this.state.errorMessage}
 						createNewGame={() => { this.setState({createGame: true})}}
 						selectGame={this.selectGame}
 						joinGame={this.joinGame}
 						createGame={this.createGame}
+						showSpinner={this.state.showSpinner}
 					/>
 
 				</ImageBackground>

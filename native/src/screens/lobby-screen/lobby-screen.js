@@ -158,25 +158,12 @@ export default class LobbyScreen extends Component{
 	}
 
 	startOrJoin = () => {
-
 		Keyboard.dismiss();
-		Animated.sequence([
-			Animated.parallel([
-				// after decay, in parallel:
-				Animated.timing(this.state.logoTranslationY, {
-					// and twirl
-					toValue: -30,
-					duration: 500
-				}),
-			]),
-		]).start( () => {
-
 			if(this.state.joinGameSelected) {
 				this.props.joinGame(this.state.gameName)
 			}else {
 				this.props.createGame(this.state.gameName)
 			}
-		})
 	}
 
 	render(){
