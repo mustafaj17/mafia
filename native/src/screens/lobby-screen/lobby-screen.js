@@ -201,8 +201,8 @@ export default class LobbyScreen extends Component{
                                            ref={ elem => this.textInput = elem }/>
 
                             </Animated.View>
-                            {this.props.errorMessage && <Text>{this.props.errorMessage}</Text>}
-                            {this.props.showSpinner && <Text>Loading</Text>}
+                            {this.props.errorMessage && <View style={styles['error-view']}><Text style={styles['error-text']}>{this.props.errorMessage}</Text></View>}
+                            {this.props.showSpinner && <View style={styles['error-view']}><Text style={styles['error-text']}>Loading</Text></View>}
 
                             <Animated.View  style={
                                 {	zIndex: this.state.inputOpacity,
