@@ -112,11 +112,11 @@ export default class App extends Component {
 
 	createGame = gameName => {
 
-		this.setState({loadingGame: true})
+		this.setState({showSpinner: true, errorMessage: null})
 		this.mafiaGamesCollectionRef.doc(gameName).get().then(doc => {
 			if (doc.exists) {
 				console.log("game already exists with this name")
-                this.setState({errorMessage: "Game name already exists"})
+                this.setState({errorMessage: "Game name already exists", showSpinner: false})
 			} else {
 				this.setState({
 					createGame: false
@@ -142,8 +142,9 @@ export default class App extends Component {
                     this.selectGame(doc);
                 })
 			}
-		}).catch( () => {
-            this.setState({errorMessage: "Error connecting, please try again"})
+		}).catch( (error) => {
+		    console.log(error)
+            this.setState({errorMessage: "Error connecting, please try againnnn", showSpinner: false})
 		});
 
 	}
@@ -151,9 +152,11 @@ export default class App extends Component {
 
 	joinGame = gameName => {
 		if(gameName.length > 3){
+            this.setState({errorMessage: null, showSpinner: true})
 			this.mafiaGamesCollectionRef.doc(gameName).get().then(doc => {
 				if (doc.exists) {
 					if(!doc.data().gameInProgress) {
+                        this.setState({showSpinner: false})
                         Animated.sequence([
                             Animated.parallel([
                                 // after decay, in parallel:
@@ -168,21 +171,21 @@ export default class App extends Component {
                         })
                     }else{
                         console.log("game is already in progress")
-                        this.setState({errorMessage: "This game has already started"})
+                        this.setState({errorMessage: "This game has already started", showSpinner: false})
 					}
 				} else {
 					console.log("game doesnt exist")
-					this.setState({errorMessage: "This game does not exist"})
+					this.setState({errorMessage: "This game does not exist",  showSpinner: false})
 				}
 			}).catch ( error => {
-                this.setState({errorMessage: "Error connecting, please try again"})
+                this.setState({errorMessage: "Error connecting, please try again",  showSpinner: false})
                 console.log("this shit dont work error", error)
 			});
 		}
 	}
 
 	selectGame = gameDoc => {
-        this.setState({errorMessage: null})
+	    this.setState({loadingGame: true})
 		gameDoc = gameDoc.ref || gameDoc;
 
 		//connect to the game doc and update state whenever it changes
@@ -528,6 +531,7 @@ export default class App extends Component {
 						joinGame={this.joinGame}
 						createGame={this.createGame}
 						showSpinner={this.state.showSpinner}
+                        resetError={() => this.setState({errorMessage: null, showSpinner: false})}
 					/>
 
 				</ImageBackground>
