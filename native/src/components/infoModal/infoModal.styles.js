@@ -92,7 +92,15 @@ export default StyleSheet.create(
 		icon:{
 			width: 27,
 			height: 16.75,
+			marginTop: 8,
+			marginRight: 8,
             resizeMode: 'contain',
+		},
+        centerIcons: {
+			marginTop: 4,
+			display: 'flex',
+			flexDirection: 'row',
+			justifyContent: 'center'
 		}
 	}
 );
