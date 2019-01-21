@@ -11,7 +11,7 @@
     "firebase": "^4.9.1",
     "react": "16.5.0",
     "react-native": "0.57.1",
-    "react-native-android-keyboard-adjust": "^1.1.1",
+    "react-native-android-keyboard-adjust": "^1.2.0",
     "react-native-countdown-component": "^1.8.2",
     "react-native-timer-countdown": "^2.0.3"
   },
