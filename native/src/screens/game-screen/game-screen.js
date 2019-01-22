@@ -221,11 +221,11 @@ class VotingScreen extends Component{
 
         const {game, player} = this.props;
 
-        return(
-            <View style={[styles['screen'], styles['game-screen']]}>
-                {game.votingInProgress &&
-                <View style={styles['title-container']}>
-                    <ScrollView contentContainerStyle={styles['players-container']}>
+		return(
+			<View style={[styles['screen'], styles['game-screen']]}>
+				{game.votingInProgress &&
+				<View style={styles['vote-screen-container']}>
+					<ScrollView contentContainerStyle={styles['players-container']}>
 
                         {game.votingInProgress && !player.votingFor && player.inGame &&
                         <Text style={styles['header']}>Please vote</Text>}
@@ -271,21 +271,21 @@ class InGameScreen extends Component{
         return(
             <View style={[styles['screen'], styles['game-screen']]}>
 
-                <View >
-                    <Text style={styles['game-header']}>{game.gameName}</Text>
-                </View>
+				<View >
+					<Text style={styles['game-header']}>{game.gameName}</Text>
+				</View>
 
-                <View style={styles['timer']}>
-                    <CountDown
-                        digitBgColor={'#00FFC2'}
-                        until={1}
-                        onFinish={endRound}
-                        size={80}
-                        timeToShow={['S']}
-                        labelS={""}/>
-                </View>
+				<View style={styles['timer']}>
+					<CountDown
+						digitBgColor={'#00FFC2'}
+						until={1}
+						onFinish={endRound}
+						size={80}
+						timeToShow={['S']}
+						labelS={""}/>
+				</View>
 
-            </View>
-        )
-    }
+			</View>
+		)
+	}
 }
