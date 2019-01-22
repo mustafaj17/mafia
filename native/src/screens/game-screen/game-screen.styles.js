@@ -152,7 +152,7 @@ export default StyleSheet.create(
 				display: 'flex',
 				alignItems: 'center',
 				top: 0,
-				bottom: 200
+				bottom: 120
 			},
 		'icon-name-container':
 			{
