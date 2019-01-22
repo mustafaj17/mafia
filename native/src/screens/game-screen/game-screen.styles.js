@@ -146,6 +146,13 @@ export default StyleSheet.create(
 				flexDirection: "row",
 				alignItems: 'center'
 			},
+		'vote-screen-container': {
+			position: 'absolute',
+			display: 'flex',
+			alignItems: 'center',
+			top: 0,
+			bottom: 20
+		},
 		'title-container':
 			{
 				position: 'absolute',
