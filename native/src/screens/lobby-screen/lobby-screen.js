@@ -210,11 +210,13 @@ export default class LobbyScreen extends Component{
                                     marginTop:20
                                 }
                             }>
+                                {this.state.uiInputMode &&
                                 <TouchableOpacity onPress={this.startOrJoin} editable={!this.state.uiInputMode}>
                                     <View style={styles['go-btn']}>
-                                        <Text style={{fontSize: 18, letterSpacing:2}}>Go</Text>
+                                        <Text style={{fontSize: 18, letterSpacing: 2}}>Go</Text>
                                     </View>
                                 </TouchableOpacity>
+                                }
                             </Animated.View>
 
                         </Animated.View>

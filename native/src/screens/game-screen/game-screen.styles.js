@@ -217,6 +217,18 @@ export default StyleSheet.create(
             color: '#ffa5a5',
             fontSize: 18,
             fontWeight: 'bold',
-        }
+        },
+		'winner-view': {
+			position: 'absolute',
+			alignItems: 'center',
+			justifyContent: 'center',
+			backgroundColor: '#00FFC2',
+			padding: 15,
+			top: -80,
+			borderRadius: 2,
+		},
+		'winner-text': {
+			fontSize: 24,
+		}
 	}
 );

@@ -14,7 +14,7 @@ export default StyleSheet.create(
         'info': {
             position: 'absolute',
             resizeMode: 'contain',
-            top: 0,
+            top: 10,
             right: 0,
             width: 58,
             height: 58,

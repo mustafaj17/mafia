@@ -117,11 +117,17 @@ export default class GameScreen extends Component{
                        onPressHandler={game.gameComplete ? () => this.props.endGame() : this.props.playerHasSeenVotedOut}>
 
                     {game.gameComplete && game.mafiasWin &&
-                    <View><Text> Mafias win</Text></View>}
+                    <View style={[styles['winner-view']]} >
+                        < Text style={[styles['winner-text']]} > Mafias win</Text>
+                    </View>
+                    }
 
 
                     {game.gameComplete && game.civiliansWin &&
-                    <View><Text> Civilians win</Text></View>}
+                    <View style={[styles['winner-view']]} >
+                        <Text style={[styles['winner-text']]} > Civilians win</Text>
+                    </View>
+                    }
 
                 </Modal>
                 }
@@ -148,16 +154,16 @@ export default class GameScreen extends Component{
                         <Text style={styles['header']}>Mafias left : {this.getMafiasLeft()}</Text>
                     </View>}
 
-                    <ScrollView contentContainerStyle={styles['games']}>
-                        {this.getPlayers()}
-                    </ScrollView>
-
-
                     {(players.length < 3) &&
                     <View style={[styles['error-view']]} >
                         <Text style={[styles['error-text']]}>Minimum of 3 players are required to play</Text>
                     </View>
                     }
+
+                    <ScrollView contentContainerStyle={styles['games']}>
+                        {this.getPlayers()}
+                    </ScrollView>
+
                 </View>
 
 
