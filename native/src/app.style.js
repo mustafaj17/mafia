@@ -97,11 +97,7 @@ export default StyleSheet.create(
 				backgroundColor: '#f0f0f0',
 				textTransform: 'capitalize'
 			},
-		'loading-text':{
-			letterSpacing:2,
-			color: 'white',
-			marginTop: 10
-		},
+		'loading-text':{ fontSize: 18, color: '#EFEFEF', paddingTop: 18, paddingBottom: 8 , letterSpacing:3, marginTop: 8},
 		'player-draw':
 			{	height: 40,
 				marginRight: 16,
