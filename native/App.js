@@ -39,8 +39,25 @@ export default class App extends Component {
 			hasPlayerSeenVotedOut: false,
 			errorMessage: null,
 			showSpinner: false,
+			roundNumber: 1
 
 		}
+	}
+
+	resetState = () => {
+		this.setState({
+			inputGameName: '',
+			loadingGame: false,
+			errorMessage: null,
+			hasPlayerSeenVotedOut: true,
+			showSpinner: false,
+			roundNumber: 1,
+			gameDocRef: null,
+			players: null,
+			playerRef: null,
+			hasGameEnded: false
+
+		})
 	}
 
 	getUsername = async () => {
@@ -58,31 +75,6 @@ export default class App extends Component {
 		}
 	}
 
-	componentWillMount() {
-		// this.getGames()
-	}
-
-	componentWillUnmount() {
-		// window.removeEventListener("beforeunload", this.onUnload)
-	}
-
-	// onUnload = (event) => { // the method that will be used for both add and remove event
-	//
-	// 	if(this.state.gameDocRef) {
-	// 		let playersColRef = this.state.gameDocRef.ref.collection('players')
-	// 		playersColRef.onSnapshot(playersSnapshot => {
-	// 				playersSnapshot.forEach(playerDoc => {
-	// 					if (playerDoc.data().name === this.user.name) {
-	// 						//todo: remove player
-	// 					}
-	// 				})
-	// 			}
-	// 		)
-	// 	}
-	// 	event.returnValue = "player left"
-	// 	// when admin leaves game, select another admin from the list of players.
-	// 	// when normal player closes window, we must delete them from the player collection.
-	// }
 
 	getGames = () => {
 		this.disconnectFromGames = this.mafiaGamesCollectionRef.onSnapshot(gamesSnapshot => {
@@ -124,7 +116,8 @@ export default class App extends Component {
 				doc.ref.set({
 					gameName: gameName,
 					roundInProgress: false,
-					votingInProgress: false
+					votingInProgress: false,
+					roundNumber: 1
 				})
 
 				this.user.admin = true;
@@ -157,6 +150,10 @@ export default class App extends Component {
 		}
 	}
 
+	resetModalFlags = () => {
+		this.setState({hasPlayerSeenVotedOut : false})
+	}
+
 	selectGame = gameDoc => {
 		this.setState({loadingGame: true})
 		gameDoc = gameDoc.ref || gameDoc;
@@ -171,6 +168,11 @@ export default class App extends Component {
 				this.setState({loadingGame: false})
 			}
 			this.runGame();
+			if((this.state.gameDocRef.data().roundNumber !== this.state.roundNumber) &&
+				(this.state.playerRef && this.state.playerRef.data() && !this.state.playerRef.data().admin)){
+				this.resetModalFlags()
+			}
+
 		});
 
 		let playersColRef = gameDoc.collection('players');
@@ -236,16 +238,18 @@ export default class App extends Component {
 		})
 	}
 
+
+
 	endGame = () => {
 		this.disconnectFromGame();
-		this.setState({gameDocRef: null, players: null, playerRef: null, hasGameEnded: false});
+		this.resetState()
 		this.getGames();
 	}
 
 	leaveGame = () => {
 		this.disconnectFromGame();
 		this.state.playerRef.ref.delete();
-		this.setState({gameDocRef: null, players: null, playerRef: null});
+		this.resetState()
 		this.getGames();
 	}
 
@@ -269,6 +273,7 @@ export default class App extends Component {
 
 					if(game.gameInProgress && playersHaveType) {
 						this.startGameRound();
+						this.state.gameDocRef.ref.update('roundHasBegun', true, 'roundNumber', this.state.roundNumber + 1);
 					}
 				}
 
@@ -317,9 +322,9 @@ export default class App extends Component {
 			}
 		})
 
-		let mostVoted
+		let mostVoted;
 		let mostVotedName;
-		let drawArray = []
+		let drawArray = [];
 		Object.keys(votingCount).forEach( player => {
 			if(mostVoted){
 				if(mostVoted < votingCount[player]){

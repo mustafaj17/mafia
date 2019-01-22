@@ -213,30 +213,33 @@ class VotingScreen extends Component{
 
 		return(
 			<View style={[styles['screen'], styles['game-screen']]}>
-				{game.votingInProgress && !player.votingFor && player.inGame &&
-				<Text style={styles['header']}>Please vote</Text>}
-
-
-				{game.votingInProgress && player.votingFor &&
-				<Text style={styles['header']}> Waiting for others to vote...</Text>}
-
-
-				{game.isDraw && <Text style={styles['draw-game-text']}>There has been a draw between:</Text>}
-
-				{game.isDraw &&
-				<View style={styles['player-draw-container']}>
-					{game.isDraw.map(player =>{return(
-						<View style={styles['player-draw']}>
-							<Text style={styles['player-draw-text']}>{player}</Text>
-						</View>
-					)})
-					}
-				</View>}
 
 				{game.votingInProgress &&
 				<View style={styles['title-container']}>
 					<ScrollView contentContainerStyle={styles['players-container']}>
+
+						{game.votingInProgress && !player.votingFor && player.inGame &&
+						<Text style={styles['header']}>Please vote</Text>}
+
+
+						{game.votingInProgress && player.votingFor &&
+						<Text style={styles['header']}> Waiting for others to vote...</Text>}
+
+
+						{game.isDraw && <Text style={styles['draw-game-text']}>There has been a draw between:</Text>}
+
+						{game.isDraw &&
+						<View style={styles['player-draw-container']}>
+							{game.isDraw.map(player =>{return(
+								<View style={styles['player-draw']}>
+									<Text style={styles['player-draw-text']}>{player}</Text>
+								</View>
+							)})
+							}
+						</View>}
+
 						{this.getVotePlayers()}
+
 					</ScrollView>
 				</View>
 				}
