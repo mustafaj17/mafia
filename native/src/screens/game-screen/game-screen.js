@@ -223,6 +223,10 @@ class VotingScreen extends Component{
 
         return(
             <View style={[styles['screen'], styles['game-screen']]}>
+                {game.votingInProgress &&
+                <View style={styles['title-container']}>
+                    <ScrollView contentContainerStyle={styles['players-container']}>
+
                 {game.votingInProgress && !player.votingFor && player.inGame &&
                 <Text style={styles['header']}>Please vote</Text>}
 
@@ -243,9 +247,9 @@ class VotingScreen extends Component{
                     }
                 </View>}
 
-                {game.votingInProgress &&
-                <View style={styles['games']}>
                     {this.getVotePlayers()}
+
+                    </ScrollView>
                 </View>
                 }
 
