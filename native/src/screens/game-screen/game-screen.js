@@ -278,7 +278,7 @@ class InGameScreen extends Component{
 				<View style={styles['timer']}>
 					<CountDown
 						digitBgColor={'#00FFC2'}
-						until={1}
+						until={59}
 						onFinish={endRound}
 						size={80}
 						timeToShow={['S']}
