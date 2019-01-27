@@ -5,6 +5,7 @@ import gunIcon from '../../../resources/gun-icon.png';
 import peaceIcon from '../../../resources/civilian-icon.png';
 
 export default class Modal extends Component{
+	//TODO: SHOW WHO WAS MAFIA WHEN GAME IS OVER
 	render(){
 		return(
 			<View style={styles.modal}>

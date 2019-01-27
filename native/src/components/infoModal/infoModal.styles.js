@@ -16,7 +16,6 @@ export default StyleSheet.create(
 			{
 				backgroundColor: '#D4D4D4',
 				width: 307,
-				height: 500,
 				borderWidth: 1,
 				borderStyle: 'solid',
 				borderColor: '#00FFC2',

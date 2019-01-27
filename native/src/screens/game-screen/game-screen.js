@@ -133,11 +133,10 @@ export default class GameScreen extends Component{
                 }
 
 
-
-                {!game.gameInProgress && !player.ready && !player.admin &&
-                <TouchableOpacity style={styles['back-btn-holder']} onPress={this.props.leaveGame}>
-                    <Image style={styles['back-btn']} source={backBtn} />
-                </TouchableOpacity>}
+				{(!game.gameInProgress || !player.inGame) &&
+				<TouchableOpacity style={styles['back-btn-holder']} onPress={this.props.leaveGame}>
+					<Image style={styles['back-btn']} source={backBtn}></Image>
+				</TouchableOpacity>}
 
 
                 {!this.state.hasPlayerSeenType && player.type &&
