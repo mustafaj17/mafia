@@ -8,6 +8,7 @@ import backBtn from '../../../resources/back-icon.png';
 import CountDown from 'react-native-countdown-component';
 import LoadingSpinner from "../../components/loadingSpinner/loadingSpinner";
 import LoadingScreen from "../../components/loadingScreen/loadingScreen";
+import FadeIn from "../../components/fadeIn/fadeIn";
 
 export default class GameScreen extends Component{
 
@@ -111,7 +112,8 @@ export default class GameScreen extends Component{
                 <View><Text>{this.props.hasPlayerSeenVotedOut}</Text></View>
 
                 {!this.props.hasPlayerSeenVotedOut && game.votedOut &&
-                <Modal text={game.votedOut}
+                <FadeIn>
+						 <Modal text={game.votedOut}
                        mafia={this.getPlayerType(game.votedOut) === 'Mafia'}
                        subText={'was voted out'}
                        onPressHandler={game.gameComplete ? () => this.props.endGame() : this.props.playerHasSeenVotedOut}>
@@ -129,7 +131,8 @@ export default class GameScreen extends Component{
                     </View>
                     }
 
-                </Modal>
+					 	</Modal>
+					 </FadeIn>
                 }
 
 
@@ -140,7 +143,7 @@ export default class GameScreen extends Component{
 
 
                 {!this.state.hasPlayerSeenType && player.type &&
-                <Modal text={"You're a " + player.type } mafia={player.type === 'Mafia'} onPressHandler={() => this.setState({hasPlayerSeenType: true})}/>
+                <FadeIn><Modal text={"You're a " + player.type } mafia={player.type === 'Mafia'} onPressHandler={() => this.setState({hasPlayerSeenType: true})}/></FadeIn>
                 }
 
 

@@ -9,6 +9,7 @@ import plusIcon from '../../../resources/plus-icon.png';
 import logo from '../../../resources/logo.png';
 // import Modal from "../../components/modal/modal";
 import AndroidKeyboardAdjust from 'react-native-android-keyboard-adjust';
+import FadeIn from "../../components/fadeIn/fadeIn";
 
 export default class LobbyScreen extends Component{
 
@@ -183,7 +184,11 @@ export default class LobbyScreen extends Component{
         return(
             <TouchableWithoutFeedback onPress={() => {this.handleScreenPress()}}>
                 <View style={styles['lobby-screen']}>
-                    {this.state.viewInfoModal && <InfoModal onPressHandler={ () => this.setState({viewInfoModal: false}) } />}
+                   {this.state.viewInfoModal &&
+                   <FadeIn>
+                      <InfoModal onPressHandler={ () => this.setState({viewInfoModal: false}) } />
+                   </FadeIn>
+                   }
 
                     <View style={[styles['button-container'], styles['button-container--top']]}>
 
