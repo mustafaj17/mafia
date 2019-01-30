@@ -194,7 +194,7 @@ export default class LobbyScreen extends Component{
 
                         <Animated.View  style={{zIndex: this.state.inputOpacity, display: 'flex', alignItems: 'center'} }>
                             <Animated.View  style={
-                                {	zIndex: this.state.inputOpacity,
+                                {
                                     opacity: this.state.inputOpacity,
                                 }
                             }>
@@ -209,20 +209,20 @@ export default class LobbyScreen extends Component{
                             {this.props.errorMessage && <View style={styles['error-view']}><Text style={styles['error-text']}>{this.props.errorMessage}</Text></View>}
                             {this.props.showSpinner && <View style={styles['error-view']}><Text style={styles['error-text']}>Loading</Text></View>}
 
-                            <Animated.View  style={
+									{this.state.uiInputMode && <Animated.View  style={
                                 {	zIndex: this.state.inputOpacity,
                                     opacity: this.state.inputOpacity,
                                     marginTop:20
                                 }
                             }>
-                                {this.state.uiInputMode &&
+
                                 <TouchableOpacity onPress={this.startOrJoin} editable={!this.state.uiInputMode}>
                                     <View style={styles['go-btn']}>
                                         <Text style={{fontSize: 18, letterSpacing: 2}}>Go</Text>
                                     </View>
                                 </TouchableOpacity>
-                                }
-                            </Animated.View>
+
+                            </Animated.View>}
 
                         </Animated.View>
 
