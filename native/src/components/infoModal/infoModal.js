@@ -3,10 +3,9 @@ import { View, Text, TouchableOpacity, Image, Animated } from 'react-native';
 import styles from './infoModal.styles';
 import gunIcon from '../../../resources/gun-icon.png';
 import peaceIcon from '../../../resources/civilian-icon.png';
+import FadeIn from '../../components/fadeIn/fadeIn';
 
-export default class InfoModal extends Component{
-
-
+class InfoModal extends Component{
 	render(){
 		return(
 
@@ -43,3 +42,5 @@ export default class InfoModal extends Component{
 		)
 	}
 }
+
+export default FadeIn(InfoModal);

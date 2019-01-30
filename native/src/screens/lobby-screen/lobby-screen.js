@@ -184,11 +184,9 @@ export default class LobbyScreen extends Component{
         return(
             <TouchableWithoutFeedback onPress={() => {this.handleScreenPress()}}>
                 <View style={styles['lobby-screen']}>
-                   {this.state.viewInfoModal &&
+                    {this.state.viewInfoModal && <InfoModal onPressHandler={ () => this.setState({viewInfoModal: false}) } />
 
-                      <InfoModal onPressHandler={ () => this.setState({viewInfoModal: false}) } />
-
-                   }
+                    }
 
                     <View style={[styles['button-container'], styles['button-container--top']]}>
 
@@ -209,7 +207,7 @@ export default class LobbyScreen extends Component{
                             {this.props.errorMessage && <View style={styles['error-view']}><Text style={styles['error-text']}>{this.props.errorMessage}</Text></View>}
                             {this.props.showSpinner && <View style={styles['error-view']}><Text style={styles['error-text']}>Loading</Text></View>}
 
-									{this.state.uiInputMode && <Animated.View  style={
+                            {this.state.uiInputMode && <Animated.View  style={
                                 {	zIndex: this.state.inputOpacity,
                                     opacity: this.state.inputOpacity,
                                     marginTop:20
