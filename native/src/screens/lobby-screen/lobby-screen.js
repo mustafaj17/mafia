@@ -185,9 +185,9 @@ export default class LobbyScreen extends Component{
             <TouchableWithoutFeedback onPress={() => {this.handleScreenPress()}}>
                 <View style={styles['lobby-screen']}>
                    {this.state.viewInfoModal &&
-                   <FadeIn>
+
                       <InfoModal onPressHandler={ () => this.setState({viewInfoModal: false}) } />
-                   </FadeIn>
+
                    }
 
                     <View style={[styles['button-container'], styles['button-container--top']]}>

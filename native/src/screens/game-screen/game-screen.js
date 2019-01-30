@@ -67,14 +67,14 @@ export default class GameScreen extends Component{
                 }
 
                 return (
-                    <Player stylesArray={stylesArray}
-                            player={player}
-                            isMafia={isMafia}
-                            isCurrentPlayerCivilian={isCurrentPlayerCivilian}
-                            isCurrentPlayer={isCurrentPlayer}
-                            isCurrentPlayerMafia={isCurrentPlayerMafia}
-                            game={game}
-                    />
+                   <Player stylesArray={stylesArray}
+                           player={player}
+                           isMafia={isMafia}
+                           isCurrentPlayerCivilian={isCurrentPlayerCivilian}
+                           isCurrentPlayer={isCurrentPlayer}
+                           isCurrentPlayerMafia={isCurrentPlayerMafia}
+                           game={game}
+                   />
                 )
             }
         })
@@ -108,77 +108,73 @@ export default class GameScreen extends Component{
         }
 
         return(
-            <View style={[styles['screen'], styles['game-screen']]}>
-                <View><Text>{this.props.hasPlayerSeenVotedOut}</Text></View>
+           <View style={[styles['screen'], styles['game-screen']]}>
 
-                {!this.props.hasPlayerSeenVotedOut && game.votedOut &&
-                <FadeIn>
-						 <Modal text={game.votedOut}
-                       mafia={this.getPlayerType(game.votedOut) === 'Mafia'}
-                       subText={'was voted out'}
-                       onPressHandler={game.gameComplete ? () => this.props.endGame() : this.props.playerHasSeenVotedOut}>
+               {!this.props.hasPlayerSeenVotedOut && game.votedOut &&
+               <Modal text={game.votedOut}
+                      mafia={this.getPlayerType(game.votedOut) === 'Mafia'}
+                      subText={'was voted out'}
+                      onPressHandler={game.gameComplete ? () => this.props.endGame() : this.props.playerHasSeenVotedOut}>
 
-                    {game.gameComplete && game.mafiasWin &&
-                    <View style={[styles['winner-view']]} >
-                        < Text style={[styles['winner-text']]} > Mafias win</Text>
-                    </View>
-                    }
+                   {game.gameComplete && game.mafiasWin &&
+                   <View style={[styles['winner-view']]} >
+                       < Text style={[styles['winner-text']]} >
+                           {game.mafiasWin ?
+                              'Mafias win' : 'Civilians win'
+                           }
+                       </Text>
+                   </View>
+                   }
 
-
-                    {game.gameComplete && game.civiliansWin &&
-                    <View style={[styles['winner-view']]} >
-                        <Text style={[styles['winner-text']]} > Civilians win</Text>
-                    </View>
-                    }
-
-					 	</Modal>
-					 </FadeIn>
-                }
+               </Modal>
+               }
 
 
-				{(!game.gameInProgress || !player.inGame) &&
-				<TouchableOpacity style={styles['back-btn-holder']} onPress={this.props.leaveGame}>
-					<Image style={styles['back-btn']} source={backBtn}></Image>
-				</TouchableOpacity>}
+               {(!game.gameInProgress || !player.inGame) &&
+               <TouchableOpacity style={styles['back-btn-holder']} onPress={this.props.leaveGame}>
+                   <Image style={styles['back-btn']} source={backBtn}></Image>
+               </TouchableOpacity>}
 
 
-                {!this.state.hasPlayerSeenType && player.type &&
-                <FadeIn><Modal text={"You're a " + player.type } mafia={player.type === 'Mafia'} onPressHandler={() => this.setState({hasPlayerSeenType: true})}/></FadeIn>
-                }
+               {!this.state.hasPlayerSeenType && player.type &&
+               <Modal text={"You're a " + player.type }
+                      mafia={player.type === 'Mafia'}
+                      onPressHandler={() => this.setState({hasPlayerSeenType: true})}/>
+               }
 
 
-                <View style={styles['title-container']}>
-                    <View >
-                        <Text style={styles['game-header']}>{game.gameName}</Text>
-                    </View>
+               <View style={styles['title-container']}>
+                   <View >
+                       <Text style={styles['game-header']}>{game.gameName}</Text>
+                   </View>
 
-                    {game.gameInProgress && <View>
-                        <Text style={styles['header']}>Mafias left : {this.getMafiasLeft()}</Text>
-                    </View>}
+                   {game.gameInProgress && <View>
+                       <Text style={styles['header']}>Mafias left : {this.getMafiasLeft()}</Text>
+                   </View>}
 
-                    {(players.length < 3) &&
-                    <View style={[styles['error-view']]} >
-                        <Text style={[styles['error-text']]}>Minimum of 3 players are required to play</Text>
-                    </View>
-                    }
+                   {(players.length < 3) &&
+                   <View style={[styles['error-view']]} >
+                       <Text style={[styles['error-text']]}>Minimum of 3 players are required to play</Text>
+                   </View>
+                   }
 
-                    <ScrollView contentContainerStyle={styles['games']}>
-                        {this.getPlayers()}
-                    </ScrollView>
+                   <ScrollView contentContainerStyle={styles['games']}>
+                       {this.getPlayers()}
+                   </ScrollView>
 
-                </View>
+               </View>
 
 
-                {player.inGame &&
-                !player.ready &&
-                !game.gameComplete &&
-                <TouchableOpacity onPress={playerReady} style={styles['ready-button-container']}>
-                    <Animated.View  style={[styles['ready-button'], {opacity: this.state.readyBtnOpacity}]}>
-                        <Text>ready</Text>
-                    </Animated.View>
-                </TouchableOpacity>
-                }
-            </View>
+               {player.inGame &&
+               !player.ready &&
+               !game.gameComplete &&
+               <TouchableOpacity onPress={playerReady} style={styles['ready-button-container']}>
+                   <Animated.View  style={[styles['ready-button'], {opacity: this.state.readyBtnOpacity}]}>
+                       <Text>ready</Text>
+                   </Animated.View>
+               </TouchableOpacity>
+               }
+           </View>
         )
     }
 }
@@ -204,12 +200,12 @@ class VotingScreen extends Component{
 
                     if (!isCurrentPlayer) {
                         return (
-                            <TouchableOpacity
-                                style={currentPlayer.votingFor === player.name ? styles['player-selected'] : styles['player-vote']}
-                                onPress={() => this.castVote(currentPlayer, player)}
-                            >
-                                <Text key={player.name} style={styles['game-text']}>{player.name}</Text>
-                            </TouchableOpacity>
+                           <TouchableOpacity
+                              style={currentPlayer.votingFor === player.name ? styles['player-selected'] : styles['player-vote']}
+                              onPress={() => this.castVote(currentPlayer, player)}
+                           >
+                               <Text key={player.name} style={styles['game-text']}>{player.name}</Text>
+                           </TouchableOpacity>
                         )
                     }
 
@@ -223,43 +219,43 @@ class VotingScreen extends Component{
 
         const {game, player} = this.props;
 
-		return(
-			<View style={[styles['screen'], styles['game-screen']]}>
-				{game.votingInProgress &&
-				<View style={styles['vote-screen-container']}>
-					<ScrollView contentContainerStyle={styles['players-container']}>
+        return(
+           <View style={[styles['screen'], styles['game-screen']]}>
+               {game.votingInProgress &&
+               <View style={styles['vote-screen-container']}>
+                   <ScrollView contentContainerStyle={styles['players-container']}>
 
-                        {game.votingInProgress && !player.votingFor && player.inGame &&
-                        <Text style={styles['header']}>Please vote</Text>}
+                       {game.votingInProgress && !player.votingFor && player.inGame &&
+                       <Text style={styles['header']}>Please vote</Text>}
 
-                        {game.votingInProgress && player.votingFor &&
-                        <Text style={styles['header']}> Waiting for others to vote...</Text>}
+                       {game.votingInProgress && player.votingFor &&
+                       <Text style={styles['header']}> Waiting for others to vote...</Text>}
 
-                        {game.isDraw && <View style={[styles['draw-view']]} ><Text style={styles['header']}>There has been a draw between:</Text></View>}
+                       {game.isDraw && <View style={[styles['draw-view']]} ><Text style={styles['header']}>There has been a draw between:</Text></View>}
 
-                        {game.isDraw &&
-                        <View style={styles['player-draw-container']}>
-                            {game.isDraw.map(player =>{return(
-                                <View style={styles['player-draw']}>
-                                    <Text style={styles['player-draw-text']}>{player}</Text>
-                                </View>
-                            )})
-                            }
-                        </View>}
+                       {game.isDraw &&
+                       <View style={styles['player-draw-container']}>
+                           {game.isDraw.map(player =>{return(
+                              <View style={styles['player-draw']}>
+                                  <Text style={styles['player-draw-text']}>{player}</Text>
+                              </View>
+                           )})
+                           }
+                       </View>}
 
-                        {this.getVotePlayers()}
+                       {this.getVotePlayers()}
 
-                    </ScrollView>
-                </View>
-                }
+                   </ScrollView>
+               </View>
+               }
 
-                {game.votingInProgress && !player.inGame &&
-                <View style={styles['timer']}>
-                    <LoadingSpinner/>
-                    <Text style={styles['header']}> Voting in progress...</Text>
-                </View>}
+               {game.votingInProgress && !player.inGame &&
+               <View style={styles['timer']}>
+                   <LoadingSpinner/>
+                   <Text style={styles['header']}> Voting in progress...</Text>
+               </View>}
 
-            </View>
+           </View>
         )
     }
 }
@@ -271,23 +267,23 @@ class InGameScreen extends Component{
 
 
         return(
-            <View style={[styles['screen'], styles['game-screen']]}>
+           <View style={[styles['screen'], styles['game-screen']]}>
 
-				<View >
-					<Text style={styles['game-header']}>{game.gameName}</Text>
-				</View>
+               <View >
+                   <Text style={styles['game-header']}>{game.gameName}</Text>
+               </View>
 
-				<View style={styles['timer']}>
-					<CountDown
-						digitBgColor={'#00FFC2'}
-						until={59}
-						onFinish={endRound}
-						size={80}
-						timeToShow={['S']}
-						labelS={""}/>
-				</View>
+               <View style={styles['timer']}>
+                   <CountDown
+                      digitBgColor={'#00FFC2'}
+                      until={59}
+                      onFinish={endRound}
+                      size={80}
+                      timeToShow={['S']}
+                      labelS={""}/>
+               </View>
 
-			</View>
-		)
-	}
+           </View>
+        )
+    }
 }
