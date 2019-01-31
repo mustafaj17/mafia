@@ -12,10 +12,10 @@ export default class EndGame extends Component {
         }
     }
 
-    getPlayers = () => {
+    getPlayers = (type) => {
         const {players, game} = this.props;
 
-        return players.map(player => {
+        return players.filter(player => player.type === type).map(player => {
                 let isMafia = player.type === 'Mafia';
                 let stylesArray = [];
 
@@ -36,11 +36,16 @@ export default class EndGame extends Component {
         return (
             <View style={[styles['screen'], styles['game-screen']]}>
                 <Text>GAME HAS ENDED</Text>
+                <Text>Mafias</Text>
                 <ScrollView contentContainerStyle={styles['games']}>
-                    {this.getPlayers()}
+                    {this.getPlayers("Mafia")}
+                </ScrollView>
+                <Text>Civilians</Text>
+                <ScrollView contentContainerStyle={styles['games']}>
+                    {this.getPlayers("Civilian")}
                 </ScrollView>
 
-                <TouchableOpacity onPress={this.props.endGame()} style={styles['ready-button-container']}>
+                <TouchableOpacity onPress={() => this.props.endGame()} style={styles['ready-button-container']}>
                         <Text>Back to Main Screen</Text>
                 </TouchableOpacity>
             </View>

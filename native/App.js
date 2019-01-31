@@ -153,7 +153,7 @@ export default class App extends Component {
                 this.setState({loadingGame: false})
             }
             this.runGame();
-            if((this.state.gameDocRef.data().roundNumber !== this.state.roundNumber) &&
+            if(((this.state.gameDocRef && this.state.gameDocRef.data().roundNumber !== this.state.roundNumber)) &&
                 (this.state.playerRef && this.state.playerRef.data() && !this.state.playerRef.data().admin)){
                 this.resetModalFlags()
             }
