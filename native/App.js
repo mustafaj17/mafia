@@ -79,10 +79,10 @@ export default class App extends Component {
             hasUser: true
         })
         this.user.name =this.state.inputUserName;
-        this.set('@Mafia:username', this.state.inputUserName);
+        this.saveUsername('@Mafia:username', this.state.inputUserName);
     }
 
-    set = (key, value) => {
+	saveUsername = (key, value) => {
         value = JSON.stringify(value);
         if (value) return AsyncStorage.setItem(key, value)
         else console.log('not set, stringify failed:', key, value)
