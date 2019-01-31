@@ -54,8 +54,9 @@ export default class App extends Component {
             players: null,
             playerRef: null,
             hasGameEnded: false
-
         })
+
+       this.user.admin = false;
     }
 
     getUsername = async () => {
