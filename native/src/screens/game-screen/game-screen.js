@@ -8,6 +8,7 @@ import backBtn from '../../../resources/back-icon.png';
 import CountDown from 'react-native-countdown-component';
 import LoadingSpinner from "../../components/loadingSpinner/loadingSpinner";
 import LoadingScreen from "../loadingScreen/loadingScreen";
+import EndGame from "../end-game/end-game"
 
 export default class GameScreen extends Component{
 
@@ -92,7 +93,7 @@ export default class GameScreen extends Component{
 
 
     render(){
-        const {game, currentPlayer, playerReady, endRound, player, players} = this.props;
+        const {game, currentPlayer, playerReady, endRound, player, players, endGame} = this.props;
 
         if(!player || !game){
             return <LoadingScreen/>;
@@ -107,13 +108,18 @@ export default class GameScreen extends Component{
         }
 
         if(game.gameComplete){
-            return <EndGameScreen game={game} player={player} players={players} currentPlayer={currentPlayer}/>;
+            return <EndGame
+                game={game}
+                players={players}
+                currentPlayer={currentPlayer}
+                endGame={endGame}
+            />;
         }
 
         return(
            <View style={[styles['screen'], styles['game-screen']]}>
 
-               {!this.props.hasPlayerSeenVotedOut && game.votedOut &&
+               {!this.props.hasPlayerSeenVotedOut && game.votedOut && !game.gameComplete &&
                <Modal text={game.votedOut}
                       mafia={this.getPlayerType(game.votedOut) === 'Mafia'}
                       subText={'was voted out'}
@@ -124,7 +130,7 @@ export default class GameScreen extends Component{
 
                {(!game.gameInProgress || !player.inGame) &&
                <TouchableOpacity style={styles['back-btn-holder']} onPress={this.props.leaveGame}>
-                   <Image style={styles['back-btn']} source={backBtn}></Image>
+                   <Image style={styles['back-btn']} source={backBtn}/>
                </TouchableOpacity>}
 
 
@@ -268,7 +274,7 @@ class InGameScreen extends Component{
                <View style={styles['timer']}>
                    <CountDown
                       digitBgColor={'#00FFC2'}
-                      until={59}
+                      until={2}
                       onFinish={endRound}
                       size={80}
                       timeToShow={['S']}

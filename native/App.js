@@ -197,8 +197,8 @@ export default class App extends Component {
             })
 
         })
-
     }
+
 
     endGame = () => {
         this.disconnectFromGame();
@@ -406,7 +406,7 @@ export default class App extends Component {
         }
     }
 
-    render() {
+render() {
 
 
         if(this.state.loadingGame){
@@ -418,27 +418,28 @@ export default class App extends Component {
         //player has a game
         if(this.state.gameDocRef) {
 
-            let game = this.state.gameDocRef.data && this.state.gameDocRef.data();
-            let player = this.state.playerRef && this.state.playerRef.data && this.state.playerRef.data();
-            let players = this.state.players;
-            return (
-                <View>
-                    <ImageBackground source={background} style={{width: '100%', height: '100%'}}>
-                        <GameScreen
-                            game={game}
-                            voteMode={game.votingInProgress}
-                            players={players}
-                            currentPlayer={this.state.playerRef}
-                            playerReady={this.playerReady}
-                            endRound={this.endRound}
-                            leaveGame={this.leaveGame}
-                            endGame={this.endGame}
-                            player={player}
-                            hasPlayerSeenVotedOut={this.state.hasPlayerSeenVotedOut}
-                            playerHasSeenVotedOut={ () => this.setState({hasPlayerSeenVotedOut: true})}
-                        />
-                    </ImageBackground>
-                </View>
+        let game = this.state.gameDocRef.data && this.state.gameDocRef.data();
+        let player = this.state.playerRef && this.state.playerRef.data && this.state.playerRef.data();
+        let players = this.state.players;
+
+        return (
+		<View>
+			<ImageBackground source={background} style={{width: '100%', height: '100%'}}>
+				<GameScreen
+				game={game}
+				voteMode={game.votingInProgress}
+				players={players}
+				currentPlayer={this.state.playerRef}
+				playerReady={this.playerReady}
+				endRound={this.endRound}
+				leaveGame={this.leaveGame}
+				endGame={this.endGame}
+				player={player}
+				hasPlayerSeenVotedOut={this.state.hasPlayerSeenVotedOut}
+				playerHasSeenVotedOut={ () => this.setState({hasPlayerSeenVotedOut: true})}
+				/>
+			</ImageBackground>
+		</View>
 
             )
         }
