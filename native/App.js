@@ -73,19 +73,6 @@ export default class App extends Component {
         }
     }
 
-
-    getGames = () => {
-        this.disconnectFromGames = this.mafiaGamesCollectionRef.onSnapshot(gamesSnapshot => {
-            let games = [];
-            gamesSnapshot.forEach(gameDoc => {
-                games.push(gameDoc);
-            });
-            this.setState({games});
-        }, err => {
-            console.log(err);
-        });
-    }
-
     createUser = () => {
         this.setState({
             hasUser: true
@@ -126,7 +113,6 @@ export default class App extends Component {
         });
 
     }
-
 
     joinGame = gameName => {
         if(gameName.length > 3){
@@ -213,15 +199,11 @@ export default class App extends Component {
 
     }
 
-
-
-
     endGame = () => {
         this.disconnectFromGame();
         this.disconnectFromPlayer();
         this.disconnectFromPlayers();
         this.resetState();
-        this.getGames();
     }
 
     leaveGame = () => {
@@ -230,7 +212,6 @@ export default class App extends Component {
         this.disconnectFromPlayers();
         this.state.playerRef.ref.delete();
         this.resetState()
-        this.getGames();
     }
 
     playerReady = () => {

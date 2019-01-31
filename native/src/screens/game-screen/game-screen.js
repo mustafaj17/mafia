@@ -8,7 +8,6 @@ import backBtn from '../../../resources/back-icon.png';
 import CountDown from 'react-native-countdown-component';
 import LoadingSpinner from "../../components/loadingSpinner/loadingSpinner";
 import LoadingScreen from "../../components/loadingScreen/loadingScreen";
-import FadeIn from "../../components/fadeIn/fadeIn";
 
 export default class GameScreen extends Component{
 
@@ -107,6 +106,10 @@ export default class GameScreen extends Component{
             return <InGameScreen game={game} endRound={endRound}/>
         }
 
+        if(game.gameComplete){
+            return <EndGameScreen game={game} player={player} players={players} currentPlayer={currentPlayer}/>;
+        }
+
         return(
            <View style={[styles['screen'], styles['game-screen']]}>
 
@@ -114,18 +117,7 @@ export default class GameScreen extends Component{
                <Modal text={game.votedOut}
                       mafia={this.getPlayerType(game.votedOut) === 'Mafia'}
                       subText={'was voted out'}
-                      onPressHandler={game.gameComplete ? () => this.props.endGame() : this.props.playerHasSeenVotedOut}>
-
-                   {game.gameComplete && game.mafiasWin &&
-                   <View style={[styles['winner-view']]} >
-                       < Text style={[styles['winner-text']]} >
-                           {game.mafiasWin ?
-                              'Mafias win' : 'Civilians win'
-                           }
-                       </Text>
-                   </View>
-                   }
-
+                      onPressHandler={this.props.playerHasSeenVotedOut}>
                </Modal>
                }
 

@@ -3,9 +3,9 @@ import { View, Text, TouchableOpacity, Image } from 'react-native';
 import styles from './modal.styles';
 import gunIcon from '../../../resources/gun-icon.png';
 import peaceIcon from '../../../resources/civilian-icon.png';
+import FadeIn from '../../components/fadeIn/fadeIn';
 
-export default class Modal extends Component{
-	//TODO: SHOW WHO WAS MAFIA WHEN GAME IS OVER
+class Modal extends Component{
 	render(){
 		return(
 			<View style={styles.modal}>
@@ -31,3 +31,5 @@ export default class Modal extends Component{
 		)
 	}
 }
+
+export default FadeIn(Modal);
