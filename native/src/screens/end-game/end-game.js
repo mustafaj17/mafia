@@ -48,7 +48,7 @@ export default class EndGame extends Component {
                 </ScrollView>
 
                 <TouchableOpacity onPress={this.props.endGame()} style={styles['ready-button-container']}>
-                        <Text>ready</Text>
+                        <Text>Back to Main Screen</Text>
                 </TouchableOpacity>
             </View>
         )
