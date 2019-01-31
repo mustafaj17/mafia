@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {ImageBackground, Text, View, StyleSheet} from "react-native";
-import LoadingSpinner from "../loadingSpinner/loadingSpinner";
+import LoadingSpinner from "../../components/loadingSpinner/loadingSpinner";
 import background from '../../../resources/background.png'
 
 export default class LoadingScreen extends Component{

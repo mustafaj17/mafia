@@ -7,7 +7,7 @@ import Player from '../../components/player/player.component';
 import backBtn from '../../../resources/back-icon.png';
 import CountDown from 'react-native-countdown-component';
 import LoadingSpinner from "../../components/loadingSpinner/loadingSpinner";
-import LoadingScreen from "../../components/loadingScreen/loadingScreen";
+import LoadingScreen from "../loadingScreen/loadingScreen";
 
 export default class GameScreen extends Component{
 

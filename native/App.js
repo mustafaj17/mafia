@@ -7,7 +7,7 @@ import GameScreen from "./src/screens/game-screen/game-screen";
 import EnterNameScreen from "./src/screens/enter-name/enter-name-screen";
 import styles from "./src/app.style";
 import background from "./resources/background.png";
-import LoadingScreen from "./src/components/loadingScreen/loadingScreen";
+import LoadingScreen from "./src/screens/loadingScreen/loadingScreen";
 
 
 export default class App extends Component {
@@ -82,7 +82,7 @@ export default class App extends Component {
         this.saveUsername('@Mafia:username', this.state.inputUserName);
     }
 
-	saveUsername = (key, value) => {
+	 saveUsername = (key, value) => {
         value = JSON.stringify(value);
         if (value) return AsyncStorage.setItem(key, value)
         else console.log('not set, stringify failed:', key, value)
