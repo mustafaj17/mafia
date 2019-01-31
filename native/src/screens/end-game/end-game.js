@@ -14,12 +14,8 @@ export default class EndGame extends Component {
 
     getPlayers = () => {
         const {players, game} = this.props;
-        let currentPlayer = this.props.currentPlayer.data();
 
         return players.map(player => {
-                let isCurrentPlayer = currentPlayer.name === player.name;
-                let isCurrentPlayerMafia = currentPlayer.type === 'Mafia';
-                let isCurrentPlayerCivilian = currentPlayer.type === 'Civilian';
                 let isMafia = player.type === 'Mafia';
                 let stylesArray = [];
 
@@ -29,9 +25,6 @@ export default class EndGame extends Component {
                     <PlayerEndGame stylesArray={stylesArray}
                             player={player}
                             isMafia={isMafia}
-                            isCurrentPlayerCivilian={isCurrentPlayerCivilian}
-                            isCurrentPlayer={isCurrentPlayer}
-                            isCurrentPlayerMafia={isCurrentPlayerMafia}
                             game={game}
                             endGame
                     />
