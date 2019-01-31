@@ -72,7 +72,7 @@ export default FadeIn = Comp => {
                         }
                     ]
                 }]}>
-                    <Comp onPressHandler={this.handlePress}/>
+                    <Comp onPressHandler={this.handlePress} {...this.props}/>
                 </Animated.View>
             )
         }
