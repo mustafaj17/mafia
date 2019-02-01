@@ -208,23 +208,24 @@ export default StyleSheet.create(
 		'back-btn-holder':{
 			position: 'absolute',
 			top: 20,
-			left: 20
+			left: 20,
+			zIndex: 10
 		},
 		'timer':{
 			alignItems: 'center',
 			justifyContent: 'center'
 		},
-        'error-view': {
-            margin: 10
-        },
-        'draw-view': {
-            marginBottom: 20
-        },
-        'error-text': {
-            color: '#ffa5a5',
-            fontSize: 18,
-            fontWeight: 'bold',
-        },
+		'error-view': {
+			margin: 10
+		},
+		'draw-view': {
+			marginBottom: 20
+		},
+		'error-text': {
+			color: '#ffa5a5',
+			fontSize: 18,
+			fontWeight: 'bold',
+		},
 		'winner-view': {
 			position: 'absolute',
 			alignItems: 'center',

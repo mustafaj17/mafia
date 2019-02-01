@@ -201,18 +201,18 @@ export default class App extends Component {
 
 
     endGame = () => {
+        this.resetState();
         this.disconnectFromGame();
         this.disconnectFromPlayer();
         this.disconnectFromPlayers();
-        this.resetState();
     }
 
     leaveGame = () => {
+        this.resetState()
         this.disconnectFromGame();
         this.disconnectFromPlayer();
         this.disconnectFromPlayers();
         this.state.playerRef.ref.delete();
-        this.resetState()
     }
 
     playerReady = () => {
