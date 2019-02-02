@@ -8,20 +8,16 @@ export default class EndGame extends Component {
     constructor() {
         super()
         this.state = {
-            hasPlayerSeenType: false,
             headingOpacity: new Animated.Value(0)
         }
     }
 
     componentDidMount(){
-        Animated.sequence([
-            Animated.parallel([
-                Animated.timing(this.state.headingOpacity, {
-                    toValue: 1,
-                    duration: 1000,
-                })
-            ])
-        ]).start()
+        Animated.timing(this.state.headingOpacity, {
+            toValue: 1,
+            duration: 1000,
+        })
+            .start()
     }
 
 
