@@ -5,11 +5,8 @@ import styles from "../end-game/end-game.styles";
 import PlayerEndGame from '../../components/playerEndGame/playerEndGame';
 
 export default class EndGame extends Component {
-    constructor() {
-        super()
-        this.state = {
-            headingOpacity: new Animated.Value(0)
-        }
+    state = {
+        headingOpacity: new Animated.Value(0)
     }
 
     componentDidMount(){
