@@ -237,6 +237,7 @@ export default StyleSheet.create(
 		},
 		'winner-text': {
 			fontSize: 24,
+			color: "white"
 		}
 	}
 );
