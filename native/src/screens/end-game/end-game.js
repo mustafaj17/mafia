@@ -53,10 +53,7 @@ export default class EndGame extends Component {
 
     render() {
         const {game} = this.props;
-        const headingOpacity = this.state.headingOpacity.interpolate({
-            inputRange: [0, 1],
-            outputRange: [0, 1]
-        })
+        const {headingOpacity} = this.state;
 
         return (
             <View style={styles['game-screen']}>
