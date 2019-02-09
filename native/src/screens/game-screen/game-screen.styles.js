@@ -226,18 +226,28 @@ export default StyleSheet.create(
 			fontSize: 18,
 			fontWeight: 'bold',
 		},
-		'winner-view': {
-			position: 'absolute',
-			alignItems: 'center',
-			justifyContent: 'center',
-			backgroundColor: '#00FFC2',
-			padding: 15,
-			top: -80,
-			borderRadius: 2,
-		},
-		'winner-text': {
-			fontSize: 24,
-			color: "white"
-		}
+        'winner-view':
+            {   width: '100%',
+                height: 100,
+                backgroundColor: '#00614a',
+                shadowOffset: { width: 2, height: 4 },
+                shadowRadius: 2,
+                shadowColor: 'rgba(34, 23, 83, 0.27)',
+                shadowOpacity: 1,
+                borderRadius: 4,
+                marginBottom: 32,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row',
+                left: 0,
+            },
+        'winner-text': {
+            fontSize: 24,
+            color: "#fff",
+            letterSpacing:2
+        },
+
+
 	}
 );

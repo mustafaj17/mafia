@@ -6,14 +6,28 @@ import PlayerEndGame from '../../components/playerEndGame/playerEndGame';
 
 export default class EndGame extends Component {
     state = {
-        headingOpacity: new Animated.Value(0)
+        top: new Animated.Value(10),
+        scale: new Animated.Value(0)
     }
 
     componentDidMount(){
-        Animated.timing(this.state.headingOpacity, {
-            toValue: 1,
-            duration: 1000,
-        })
+        // Animated.timing(this.state.headingOpacity, {
+        //     toValue: 1,
+        //     duration: 500,
+        // }).start()
+        Animated.loop(
+            Animated.sequence([
+                Animated.timing(this.state.scale, {
+                    toValue: 1,
+                    duration: 600
+                })
+                ,
+                Animated.timing(this.state.scale, {
+                    toValue: 0,
+                    duration: 600
+                })
+            ])
+        )
             .start()
     }
 
@@ -21,10 +35,8 @@ export default class EndGame extends Component {
     getPlayers = (type) => {
         const {players, game} = this.props;
         let playersArr = []
-
         players.filter(player => player.type === type).map(player => {
             let isMafia = player.type === 'Mafia';
-
             playersArr.push(
                 <PlayerEndGame stylesArray={styles['player']}
                                player={player}
@@ -34,6 +46,7 @@ export default class EndGame extends Component {
                 />
             )
         })
+
         return(
             <View>
                 <View style={styles['sub-heading']}>
@@ -46,25 +59,31 @@ export default class EndGame extends Component {
 
     render() {
         const {game} = this.props;
-        const {headingOpacity} = this.state;
+
+        const boxScale = this.state.scale.interpolate({
+            inputRange: [0, 1],
+            outputRange: [1, 1.05]
+        })
 
         return (
             <View style={styles['game-screen']}>
-                <View>
-                    <Animated.View style={[{zIndex: 10, top: 10, left: 0, height: 34, alignItems: 'center', margin: 16}, {
-                        opacity: headingOpacity,
-                    }]}>
-                        <Text style={styles['winner-text']}>{game.mafiasWin ? 'Mafias Win' : 'Civilians Win'}</Text>
-                    </Animated.View>
+                <View style={styles['winner-view']}>
+                    <Text style={styles['winner-text']}>{game.mafiasWin ? 'Mafias Win' : 'Civilians Win'}</Text>
+                </View>
+                <View style={styles['title-container']}>
                     <ScrollView contentContainerStyle={styles['games']}>
                         {this.getPlayers("Mafia")}
                         {this.getPlayers("Civilian")}
                     </ScrollView>
                 </View>
                 <TouchableOpacity onPress={() => this.props.endGame()} style={styles['ready-button-container']}>
-                    <View style={styles['ready-button']}>
+                    <Animated.View style={[styles['ready-button'], {
+                        transform: [
+                            {scale: boxScale}
+                        ]
+                    }]}>
                         <Text style={styles['ready-text']}>Back to Main Screen</Text>
-                    </View>
+                    </Animated.View>
                 </TouchableOpacity>
             </View>
         )

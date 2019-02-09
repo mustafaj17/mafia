@@ -7,75 +7,110 @@ import {View, Text, Image, Animated} from 'react-native';
 
 export default class Player extends Component{
 
-	state = {
-		playerRotate: new Animated.Value(1),
-		playerOpacity: new Animated.Value(0),
+    state = {
+        playerRotate: new Animated.Value(1),
+        playerOpacity: new Animated.Value(0),
+        iconRotate: new Animated.Value(0),
 
-	}
+    }
 
-	componentDidMount(){
-		Animated.sequence([
-			Animated.parallel([
-				Animated.timing(this.state.playerRotate, {
-					toValue: 0,
-					duration: 1000,
-				}),
-				Animated.timing(this.state.playerOpacity, {
-					toValue: 1,
-					duration: 1000,
-				})
-			])
-		]).start()
-	}
+    componentDidMount(){
+        Animated.loop(
+            Animated.sequence([
+                Animated.timing(this.state.iconRotate, {
+                    toValue: 1,
+                    duration: 500
+                })
+                ,
+                Animated.timing(this.state.iconRotate, {
+                    toValue: 0,
+                    duration: 500
+                })
+            ])
+        )
+            .start()
 
-	componentWillUnmount(){
-		Animated.sequence([
-			Animated.parallel([
-				Animated.timing(this.state.playerRotate, {
-					toValue: 1,
-					duration: 5000,
-				}),
-				Animated.timing(this.state.playerOpacity, {
-					toValue: 0,
-					duration: 5000,
-				})
-			])
-		]).start()
-	}
+        Animated.sequence([
+            Animated.parallel([
+                Animated.timing(this.state.playerRotate, {
+                    toValue: 0,
+                    duration: 1000,
+                }),
+                Animated.timing(this.state.playerOpacity, {
+                    toValue: 1,
+                    duration: 1000,
+                })
+            ])
+        ]).start()
+    }
 
-	render(){
+    componentWillUnmount(){
+        Animated.sequence([
+            Animated.parallel([
+                Animated.timing(this.state.playerRotate, {
+                    toValue: 1,
+                    duration: 5000,
+                }),
+                Animated.timing(this.state.playerOpacity, {
+                    toValue: 0,
+                    duration: 5000,
+                })
+            ])
+        ]).start()
+    }
 
-		let { player, isCurrentPlayerCivilian, isCurrentPlayer, stylesArray, isMafia, isCurrentPlayerMafia, game} = this.props;
+    render(){
 
-		const playerRotate = this.state.playerRotate.interpolate({
-			inputRange: [0, 1],
-			outputRange: ['0deg', '60deg']
-		})
+        let { player, isCurrentPlayerCivilian, isCurrentPlayer, stylesArray, isMafia, isCurrentPlayerMafia, game} = this.props;
 
-		return(
-			<Animated.View style={[stylesArray, {
-				opacity: this.state.playerOpacity,
-				transform:[
-					{rotateX: playerRotate},
-					{ perspective: 1000}
-				]
-			}]}>
-				<View style={styles['icon-name-container']}>
+        const playerRotate = this.state.playerRotate.interpolate({
+            inputRange: [0, 1],
+            outputRange: ['0deg', '60deg']
+        })
 
-					{!isMafia &&
-					isCurrentPlayerCivilian &&
-					isCurrentPlayer &&
-					<Image resizeMode="contain" style={styles['type-icon']} source={peaceIcon}></Image>}
+        const iconRotate = this.state.iconRotate.interpolate({
+            inputRange: [0, 1],
+            outputRange: ['-15deg', '15deg']
+        })
 
-					{isCurrentPlayerMafia &&
-					isMafia &&
-					<Image resizeMode="contain" style={styles['type-icon']} source={gunIcon}></Image>}
+        return(
+            <Animated.View style={[stylesArray, {
+                opacity: this.state.playerOpacity,
+                transform:[
+                    {rotateX: playerRotate},
+                    { perspective: 1000}
+                ]
+            }]}>
+                <View style={styles['icon-name-container']}>
 
-					<Text key={player.name} style={styles['game-text']}>{player.name}</Text>
+                    {!isMafia &&
+                    isCurrentPlayerCivilian &&
+                    isCurrentPlayer &&
+                    <Animated.Image resizeMode="contain" style={[styles['type-icon'], {
+                        height: 30,
+                        width: 30,
+                        transform:[
+                            {rotate: iconRotate},
+                            { perspective: 1000}
+                        ]
+                    }]} source={peaceIcon} />}
 
-				</View>
-				{player.ready && !game.roundInProgress && <Text key={player.name} style={styles['ready-text']}>ready</Text>}
-			</Animated.View>
-		)
-	}
+                    {isCurrentPlayerMafia &&
+                    isMafia &&
+                    <Animated.Image resizeMode="contain" style={[styles['type-icon'], {
+                        height: 30,
+                        width: 30,
+                        transform:[
+                            {rotate: iconRotate},
+                            { perspective: 1000}
+                        ]
+                    }]} source={gunIcon} />}
+
+                    <Text key={player.name} style={styles['game-text']}>{player.name}</Text>
+
+                </View>
+                {player.ready && !game.roundInProgress && <Text key={player.name} style={styles['ready-text']}>ready</Text>}
+            </Animated.View>
+        )
+    }
 }

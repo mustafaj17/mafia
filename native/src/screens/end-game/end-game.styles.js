@@ -11,18 +11,6 @@ export default StyleSheet.create(
                 marginTop: 24,
                 zIndex:2,
                 position: 'relative'},
-        'ready-text':
-            {
-                paddingRight: 8,
-                letterSpacing: 1
-            },
-        'ready-button-container':{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            position: 'absolute',
-            bottom: '5%',
-        },
         'ready-button':
             { width: 250,
                 height: 40,
@@ -39,9 +27,39 @@ export default StyleSheet.create(
                 alignItems: 'center',
                 flexDirection: 'row'
             },
+        'ready-text':
+            {
+                paddingRight: 8,
+                letterSpacing: 1
+            },
+        'ready-button-container':{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            position: 'absolute',
+            bottom: '5%',
+        },
+        'winner-view':
+            {
+                marginTop: 16,
+                width: '100%',
+                height: 100,
+                backgroundColor: '#00614a',
+                shadowOffset: { width: 2, height: 4 },
+                shadowRadius: 2,
+                shadowColor: 'rgba(34, 23, 83, 0.27)',
+                shadowOpacity: 1,
+                borderRadius: 4,
+                marginBottom: 32,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row',
+                left: 0,
+            },
         'winner-text': {
             fontSize: 24,
-            color: "white",
+            color: "#fff",
             letterSpacing:2
         },
 		'sub-heading-text': {
@@ -67,6 +85,14 @@ export default StyleSheet.create(
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 flexDirection: 'row'
+            },
+        'title-container':
+            {
+                position: 'absolute',
+                display: 'flex',
+                alignItems: 'center',
+                top: 130,
+                bottom: 120
             },
     }
 );

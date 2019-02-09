@@ -17,6 +17,7 @@ export default class GameScreen extends Component{
         this.state = {
             hasPlayerSeenType: false,
             readyBtnOpacity: new Animated.Value(0),
+            readyBtnScale: new Animated.Value(0)
         }
     }
 
@@ -31,12 +32,23 @@ export default class GameScreen extends Component{
     }
 
     componentDidMount(){
-        Animated.sequence([
+        Animated.parallel([
             // after decay, in parallel:
             Animated.timing(this.state.readyBtnOpacity, {
                 toValue: 1,                   // Animate to opacity: 1 (opaque)
                 duration: 1000,
             }),
+            Animated.loop(
+                Animated.sequence([
+                Animated.timing(this.state.readyBtnScale, {
+                    toValue: 1,
+                    duration: 600,
+                }),
+                Animated.timing(this.state.readyBtnScale, {
+                    toValue: 0,
+                    duration: 600,
+                }),
+            ]))
         ]).start()
     }
 
@@ -94,6 +106,11 @@ export default class GameScreen extends Component{
 
     render(){
         const {game, currentPlayer, playerReady, endRound, player, players, endGame} = this.props;
+        const boxScale = this.state.readyBtnScale.interpolate({
+            inputRange: [0, 1],
+            outputRange: [1, 1.05]
+        })
+
 
         if(!player || !game){
             return <LoadingScreen/>;
@@ -167,7 +184,9 @@ export default class GameScreen extends Component{
                !player.ready &&
                !game.gameComplete &&
                <TouchableOpacity onPress={playerReady} style={styles['ready-button-container']}>
-                   <Animated.View  style={[styles['ready-button'], {opacity: this.state.readyBtnOpacity}]}>
+                   <Animated.View  style={[styles['ready-button'], {opacity: this.state.readyBtnOpacity, transform: [
+                           {scale: boxScale}
+                       ]}]}>
                        <Text>ready</Text>
                    </Animated.View>
                </TouchableOpacity>
