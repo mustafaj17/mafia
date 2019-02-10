@@ -137,15 +137,21 @@ export default class LobbyScreen extends Component{
 
 	startGame = () => {
 		this.setState({joinGameSelected: false})
-		this.textInput.focus();
+
 		this.runAnimation();
+
+		setTimeout( () => {
+			this.textInput.focus();
+      }, 500)
 
 	}
 
 	createGame = () => {
 		this.setState({joinGameSelected: true})
-		this.textInput.focus();
 		this.runAnimation();
+		setTimeout( () => {
+			this.textInput.focus();
+		}, 500)
 
 	}
 
@@ -188,13 +194,15 @@ export default class LobbyScreen extends Component{
 					<Animated.View  style={{zIndex: this.state.inputOpacity, display: 'flex', alignItems: 'center'} }>
 						{this.props.errorMessage && <View style={styles['error-view']}><Text style={styles['error-text']}>{this.props.errorMessage}</Text></View>}
 						{this.props.showSpinner && <View style={styles['error-view']}><Text style={styles['error-text']}>Loading</Text></View>}
+
 						<Animated.View  style={
 							{
-								opacity: this.state.inputOpacity,
+								opacity: this.state.inputOpacity
 							}
 						}>
 							<TextInput style={styles['input-box']}
 										  onChangeText={(text) => this.setState({ gameName : text})}
+										  editable={this.state.uiInputMode}
 										  disable={!this.state.uiInputMode}
 										  value={this.state.gameName}
 										  placeholder='Enter game ID'
