@@ -156,7 +156,6 @@ export default class GameScreen extends Component{
 
         return(
             <View style={[styles['screen'], styles['game-screen']]}>
-
                 {!this.props.hasPlayerSeenVotedOut && game.votedOut && !game.gameComplete &&
                 <Modal text={game.votedOut}
                        mafia={this.getPlayerType(game.votedOut) === 'Mafia'}

@@ -44,7 +44,7 @@ export default StyleSheet.create(
                 marginTop: 16,
                 width: '95%',
                 height: 100,
-                backgroundColor: '#00614a',
+                backgroundColor: '#e6fff9',
                 shadowOffset: { width: 2, height: 4 },
                 shadowRadius: 2,
                 shadowColor: 'rgba(34, 23, 83, 0.27)',
@@ -59,14 +59,14 @@ export default StyleSheet.create(
             },
         'winner-text': {
             fontSize: 30,
-            color: "#fff",
-            letterSpacing: 2,
+            color: "#000000",
+            letterSpacing: 3,
             fontWeight: 'bold'
         },
 		'sub-heading-text': {
             fontSize: 20,
             color: "white",
-            letterSpacing: 1,
+            letterSpacing: 2,
             fontWeight: 'bold'
         },
         'sub-heading': {
@@ -95,6 +95,11 @@ export default StyleSheet.create(
                 alignItems: 'center',
                 top: 130,
                 bottom: 120
+            },
+        'type-icon':
+            {
+                height: 30,
+                width: 30
             },
     }
 );

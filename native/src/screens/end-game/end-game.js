@@ -3,11 +3,15 @@ import {Component} from "react";
 import {View, ScrollView, Text, TouchableOpacity, Animated} from 'react-native';
 import styles from "../end-game/end-game.styles";
 import PlayerEndGame from '../../components/playerEndGame/playerEndGame';
+import peaceIcon from '../../../resources/civilian-icon.png';
+import gunIcon from '../../../resources/gun-icon.png';
+import LottieView from 'lottie-react-native';
 
 export default class EndGame extends Component {
     state = {
         top: new Animated.Value(10),
-        scale: new Animated.Value(0)
+        scale: new Animated.Value(0),
+        iconRotate: new Animated.Value(0),
     }
 
     componentDidMount(){
@@ -15,6 +19,21 @@ export default class EndGame extends Component {
         //     toValue: 1,
         //     duration: 500,
         // }).start()
+        Animated.loop(
+            Animated.sequence([
+                Animated.timing(this.state.iconRotate, {
+                    toValue: 1,
+                    duration: 500
+                })
+                ,
+                Animated.timing(this.state.iconRotate, {
+                    toValue: 0,
+                    duration: 500
+                }),
+            ])
+        )
+            .start()
+
         Animated.loop(
             Animated.sequence([
                 Animated.timing(this.state.scale, {
@@ -65,10 +84,41 @@ export default class EndGame extends Component {
             outputRange: [1, 1.05]
         })
 
+        const iconRotate = this.state.iconRotate.interpolate({
+            inputRange: [0, 1],
+            outputRange: ['-15deg', '15deg']
+        })
         return (
             <View style={styles['game-screen']}>
+                <LottieView
+                    source={game.mafiasWin ? require('../../assets/animations/fireworks') : require('../../assets/animations/fireworks-green')}
+                    autoPlay
+                    loop
+                />
+
                 <View style={styles['winner-view']}>
+                    <Animated.Image resizeMode="contain" style={[styles['type-icon'], {
+                        height: 50,
+                        width: 50,
+                        margin: 8,
+                        transform:[
+                            {rotate: iconRotate},
+                            { perspective: 1000},
+                            {scaleX: -1}
+                        ]
+                    }]} source={game.mafiasWin ? gunIcon : peaceIcon}/>
+
                     <Text style={styles['winner-text']}>{game.mafiasWin ? 'Mafias Win' : 'Civilians Win'}</Text>
+
+                    <Animated.Image resizeMode="contain" style={[styles['type-icon'], {
+                        height: 50,
+                        width: 50,
+                        margin: 8,
+                        transform:[
+                            {rotate: iconRotate},
+                            {perspective: 1000},
+                        ]
+                    }]} source={game.mafiasWin ? gunIcon : peaceIcon}/>
                 </View>
                 <View style={styles['title-container']}>
                     <ScrollView contentContainerStyle={styles['games']}>

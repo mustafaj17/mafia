@@ -9,6 +9,7 @@
   "dependencies": {
     "@babel/runtime": "^7.0.0",
     "firebase": "^4.9.1",
+    "lottie-react-native": "^2.5.11",
     "react": "16.5.0",
     "react-native": "0.57.1",
     "react-native-android-keyboard-adjust": "^1.2.0",

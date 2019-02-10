@@ -10,26 +10,10 @@ export default class PlayerEndGame extends Component{
     state = {
         playerRotate: new Animated.Value(1),
         playerOpacity: new Animated.Value(0),
-        iconRotate: new Animated.Value(0),
 
     }
 
     componentDidMount(){
-        Animated.loop(
-            Animated.sequence([
-                Animated.timing(this.state.iconRotate, {
-                    toValue: 1,
-                    duration: 500
-                })
-                ,
-                Animated.timing(this.state.iconRotate, {
-                    toValue: 0,
-                    duration: 500
-                })
-            ])
-        )
-            .start()
-
         Animated.sequence([
             Animated.parallel([
                 Animated.timing(this.state.playerRotate, {
@@ -68,11 +52,6 @@ export default class PlayerEndGame extends Component{
             outputRange: ['0deg', '60deg']
         })
 
-        const iconRotate = this.state.iconRotate.interpolate({
-            inputRange: [0, 1],
-            outputRange: ['-15deg', '15deg']
-        })
-
         return(
             <Animated.View style={[stylesArray, {
                 opacity: this.state.playerOpacity,
@@ -84,24 +63,10 @@ export default class PlayerEndGame extends Component{
                 <View style={styles['icon-name-container']}>
 
                     {!isMafia &&
-                    <Animated.Image resizeMode="contain" style={[styles['type-icon'], {
-                        height: 30,
-                        width: 30,
-                        transform:[
-                    {rotate: iconRotate},
-                    { perspective: 1000}
-                        ]
-                    }]} source={peaceIcon}/>}
+                    <Image resizeMode="contain" style={styles['type-icon']} source={peaceIcon}/>}
 
                     {isMafia &&
-                    <Animated.Image resizeMode="contain" style={[styles['type-icon'], {
-                        height: 30,
-                        width: 30,
-                        transform:[
-                    {rotate: iconRotate},
-                    { perspective: 1000}
-                        ]
-                    }]} source={gunIcon}/>}
+                    <Image resizeMode="contain" style={styles['type-icon']} source={gunIcon}/>}
 
                     <Text key={player.name} style={styles['game-text']}>{player.name}</Text>
 
