@@ -187,15 +187,15 @@ export default class GameScreen extends Component{
                         <Text style={styles['header']}>Mafias left : {this.getMafiasLeft()}</Text>
                     </View>}
 
-                    {(players.length < 3) &&
-                    <View style={[styles['error-view']]} >
-                        <Text style={[styles['error-text']]}>Minimum of 3 players are required to play</Text>
-                    </View>
-                    }
-
                     <ScrollView contentContainerStyle={styles['games']}>
                         {this.getPlayers()}
                     </ScrollView>
+
+						 {(players.length < 3) &&
+						 <View style={[styles['error-view']]} >
+							 <Text style={[styles['error-text']]}>Minimum of 3 players are required to play</Text>
+						 </View>
+						 }
 
                 </View>
 

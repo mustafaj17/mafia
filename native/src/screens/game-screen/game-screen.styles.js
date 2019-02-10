@@ -216,7 +216,9 @@ export default StyleSheet.create(
 			justifyContent: 'center'
 		},
 		'error-view': {
-			margin: 10
+			marginBottom: 10,
+			marginTop: 10,
+			width: 280,
 		},
 		'draw-view': {
 			marginBottom: 20
@@ -225,6 +227,7 @@ export default StyleSheet.create(
 			color: '#ffa5a5',
 			fontSize: 18,
 			fontWeight: 'bold',
+			textAlign:'center'
 		},
         'winner-view':
             {   width: '100%',
