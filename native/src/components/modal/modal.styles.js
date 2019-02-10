@@ -14,10 +14,10 @@ export default StyleSheet.create(
 				alignItems: 'center' },
 		'modal-box':
 			{
-				backgroundColor: '#D4D4D4',
+				backgroundColor: '#e6fff9',
 				width: 307,
 				height: 320,
-				borderWidth: 1,
+				borderWidth: 4,
 				borderStyle: 'solid',
 				borderColor: '#00FFC2',
 				shadowOffset: { width: 0, height: 4 },

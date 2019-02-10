@@ -42,7 +42,7 @@ export default StyleSheet.create(
         'winner-view':
             {
                 marginTop: 16,
-                width: '100%',
+                width: '95%',
                 height: 100,
                 backgroundColor: '#00614a',
                 shadowOffset: { width: 2, height: 4 },
@@ -58,14 +58,16 @@ export default StyleSheet.create(
                 left: 0,
             },
         'winner-text': {
-            fontSize: 24,
+            fontSize: 30,
             color: "#fff",
-            letterSpacing:2
+            letterSpacing: 2,
+            fontWeight: 'bold'
         },
 		'sub-heading-text': {
             fontSize: 20,
             color: "white",
-            letterSpacing:1
+            letterSpacing: 1,
+            fontWeight: 'bold'
         },
         'sub-heading': {
             margin: 4
