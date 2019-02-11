@@ -249,8 +249,8 @@ export default class LobbyScreen extends Component{
 						]}}>
 					<View style={styles['logo-container']}>
 
-						<Image style={styles.logo} source={logo}></Image>
-						<Image style={styles['mafia-text']} source={mafiaText}></Image>
+						<Image style={styles.logo} source={logo}/>
+						<Image style={styles['mafia-text']} source={mafiaText}/>
 
 					</View>
 				</Animated.View>
@@ -270,11 +270,11 @@ export default class LobbyScreen extends Component{
 
 
 				{ this.state.uiInputMode && <TouchableOpacity style={styles['back-btn']} onPress={ this.handleBackBtnPress }>
-					<Image style={styles['back-icon']} source={backBtnIcon}></Image>
+					<Image style={styles['back-icon']} source={backBtnIcon}/>
 				</TouchableOpacity>}
 
 				{ !this.state.uiInputMode &&  <TouchableOpacity style={styles['info']} onPress={ () => this.setState({viewInfoModal: true}) }>
-					<Image style={styles['info-img']} source={info}></Image>
+					<Image style={styles['info-img']} source={info}/>
 				</TouchableOpacity>}
 			</View>
 		)

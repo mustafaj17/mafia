@@ -109,7 +109,6 @@ export default StyleSheet.create(
          left: 0,
          height: 40,
          width: 250,
-         backgroundColor: '#202020',
          display: 'flex',
          justifyContent: 'center',
          alignItems: 'center',

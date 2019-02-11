@@ -124,7 +124,7 @@ export default class App extends Component {
                         this.setState({showSpinner: false})
                         this.selectGame(doc);
                     }else{
-                        this.setState({errorMessage: "This game has already started", showSpinner: false})
+                        this.setState({errorMessage: "This game has started", showSpinner: false})
                     }
                 } else {
                     this.setState({errorMessage: "This game does not exist",  showSpinner: false})
