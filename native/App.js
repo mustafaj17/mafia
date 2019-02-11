@@ -65,7 +65,7 @@ export default class App extends Component {
             if (value !== null) {
                 value = JSON.parse(value);
                 this.user.name = value;
-                this.setState({hasUser: true, inputUserName: value})
+                this.setState({hasUser: false, inputUserName: value})
             }else{
                 this.setState({hasUser: false})
             }
@@ -75,11 +75,13 @@ export default class App extends Component {
     }
 
     createUser = () => {
-        this.setState({
-            hasUser: true
-        })
-        this.user.name =this.state.inputUserName;
-        this.saveUsername('@Mafia:username', this.state.inputUserName);
+        if(this.state.inputUserName.length > 2) {
+			  this.setState({
+				  hasUser: true
+			  })
+			  this.user.name = this.state.inputUserName;
+			  this.saveUsername('@Mafia:username', this.state.inputUserName);
+		  }
     }
 
 	 saveUsername = (key, value) => {

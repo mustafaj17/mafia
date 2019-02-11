@@ -12,8 +12,9 @@ export default class EnterNameScreen extends Component{
 					<Image style={styles['mafia-text']} source={mafiaText}></Image>
 					<Image style={styles['logo']} source={mafiaLogo}></Image>
 					<View style={styles['form-holder']}>
-						<View>
+						<View style={styles['center-it']}>
 							<Text style={styles['input-title']}>Enter your name</Text>
+							<Text style={styles['min-text']}>(minumum 3 characters)</Text>
 						</View>
 						<View><TextInput style={styles['input-text-box']}
 							onChangeText={(text) => this.props.updateName(text)}

@@ -36,6 +36,16 @@ export default StyleSheet.create(
 				fontSize: 18,
 				letterSpacing: 2
 			},
+		'min-text':
+			{ color: '#b9b9b9',
+				fontSize: 14,
+				letterSpacing: 2
+			},
+		'center-it':
+			{ display: 'flex',
+				justifyContent: 'center',
+				alignItems: 'center'
+			},
 		'input-text-box':
 			{ backgroundColor: '#ffffff',
 				shadowOffset: { width: 0, height: 4 },
