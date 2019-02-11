@@ -116,7 +116,6 @@ export default class App extends Component {
     }
 
     joinGame = gameName => {
-        if(gameName.length > 3){
             this.setState({errorMessage: null, showSpinner: true})
             this.mafiaGamesCollectionRef.doc(gameName).get().then(doc => {
                 if (doc.exists) {
@@ -132,7 +131,6 @@ export default class App extends Component {
             }).catch ( error => {
                 this.setState({errorMessage: "Error connecting, please try again",  showSpinner: false})
             });
-        }
     }
 
     resetModalFlags = () => {

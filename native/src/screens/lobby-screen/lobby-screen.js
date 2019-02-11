@@ -1,21 +1,18 @@
 //* eslint-disable */
 import React, { Component } from 'react';
-import {View, Text, TouchableOpacity, Keyboard, Image, TextInput, Animated, Platform} from 'react-native';
+import {View, Text, TouchableOpacity, Keyboard, Image, TextInput, Animated} from 'react-native';
 import styles from './lobby-screen.styles';
 import mafiaText from '../../../resources/mafia-text.png';
 import info from '../../../resources/info.png';
 import backBtnIcon from '../../../resources/back-icon.png';
 import InfoModal from '../../components/infoModal/infoModal'
 import logo from '../../../resources/logo.png';
-import AndroidKeyboardAdjust from 'react-native-android-keyboard-adjust';
 
 export default class LobbyScreen extends Component{
 
 	state = {
 		gameName : '',
 		viewInfoModal: false,
-		textRotation: new Animated.Value(0),
-		inputBoxRotation: new Animated.Value(1),
 		textOpacity: new Animated.Value(1),
 		inputOpacity: new Animated.Value(0),
 		joinGameTranslationY: new Animated.Value(0),
@@ -24,41 +21,11 @@ export default class LobbyScreen extends Component{
 		joinGameSelected: false
 	}
 
-	componentDidMount () {
-		this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
-		this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
-		if(Platform.OS === 'android') {
-			AndroidKeyboardAdjust.setAdjustNothing();
-		}
-	}
-
-	componentWillUnmount () {
-		this.keyboardDidShowListener.remove();
-		this.keyboardDidHideListener.remove();
-	}
-
-	_keyboardDidShow = () => {
-		// this.setState({uiInputMode: true})
-	}
-
-	_keyboardDidHide = () => {
-		// this.setState({uiInputMode: false})
-	}
-
 	runAnimation() {
 		if(this.state.uiInputMode){
 			Animated.sequence([
 				Animated.parallel([
 					// after decay, in parallel:
-					Animated.timing(this.state.textRotation, {
-						toValue: 0,                   // Animate to opacity: 1 (opaque)
-						duration: 500,
-					}),
-					Animated.timing(this.state.inputBoxRotation, {
-						// and twirl
-						toValue: 1,
-						duration: 500
-					}),
 					Animated.timing(this.state.joinGameTranslationY, {
 						// and twirl
 						toValue: 0,
@@ -87,15 +54,6 @@ export default class LobbyScreen extends Component{
 			Animated.sequence([
 				Animated.parallel([
 					// after decay, in parallel:
-					Animated.timing(this.state.textRotation, {
-						toValue: 1,                   // Animate to opacity: 1 (opaque)
-						duration: 500,
-					}),
-					Animated.timing(this.state.inputBoxRotation, {
-						// and twirl
-						toValue: 2,
-						duration: 500
-					}),
 					Animated.timing(this.state.joinGameTranslationY, {
 						// and twirl
 						toValue: 50,
@@ -122,27 +80,14 @@ export default class LobbyScreen extends Component{
 		}
 	}
 
-	runScreenTransitionAnimation  = () => {
-		Animated.sequence([
-			Animated.parallel([
-				// after decay, in parallel:
-				Animated.timing(this.state.logoTranslationY, {
-					// and twirl
-					toValue: -80,
-					duration: 500
-				}),
-			]),
-		]).start()
-	}
-
 	startGame = () => {
 		this.setState({joinGameSelected: false})
 
 		this.runAnimation();
 
-		setTimeout( () => {
+		setTimeout(() => {
 			this.textInput.focus();
-      }, 500)
+		}, 500)
 
 	}
 
@@ -164,26 +109,17 @@ export default class LobbyScreen extends Component{
 	}
 
 	startOrJoin = () => {
-		Keyboard.dismiss();
-		if(this.state.joinGameSelected) {
-			this.props.joinGame(this.state.gameName)
-		}else {
-			this.props.createGame(this.state.gameName)
+		if(this.state.gameName.length > 2) {
+			Keyboard.dismiss();
+			if (this.state.joinGameSelected) {
+				this.props.joinGame(this.state.gameName)
+			} else {
+				this.props.createGame(this.state.gameName)
+			}
 		}
 	}
 
 	render(){
-
-		const textBoxRotation = this.state.textRotation.interpolate({
-			inputRange: [0, 1, 2],
-			outputRange: ['0deg', '180deg', '360deg']
-		})
-
-
-		const inputBoxRotation = this.state.inputBoxRotation.interpolate({
-			inputRange: [0, 1, 2],
-			outputRange: ['0deg', '180deg', '360deg']
-		})
 
 		return(
 			<View style={styles['lobby-screen']}>
@@ -249,8 +185,8 @@ export default class LobbyScreen extends Component{
 						]}}>
 					<View style={styles['logo-container']}>
 
-						<Image style={styles.logo} source={logo}/>
-						<Image style={styles['mafia-text']} source={mafiaText}/>
+						<Image style={styles.logo} source={logo}></Image>
+						<Image style={styles['mafia-text']} source={mafiaText}></Image>
 
 					</View>
 				</Animated.View>
@@ -269,13 +205,16 @@ export default class LobbyScreen extends Component{
 				</View>
 
 
-				{ this.state.uiInputMode && <TouchableOpacity style={styles['back-btn']} onPress={ this.handleBackBtnPress }>
-					<Image style={styles['back-icon']} source={backBtnIcon}/>
-				</TouchableOpacity>}
-
-				{ !this.state.uiInputMode &&  <TouchableOpacity style={styles['info']} onPress={ () => this.setState({viewInfoModal: true}) }>
-					<Image style={styles['info-img']} source={info}/>
-				</TouchableOpacity>}
+				{ this.state.uiInputMode
+					?
+					<TouchableOpacity style={styles['back-btn']} onPress={ this.handleBackBtnPress }>
+						<Image style={styles['back-icon']} source={backBtnIcon}></Image>
+					</TouchableOpacity>
+					:
+					<TouchableOpacity style={styles['info']} onPress={ () => this.setState({viewInfoModal: true}) }>
+						<Image style={styles['info-img']} source={info}></Image>
+					</TouchableOpacity>
+				}
 			</View>
 		)
 	}
