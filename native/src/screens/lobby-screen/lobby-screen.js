@@ -154,7 +154,7 @@ export default class LobbyScreen extends Component{
 								marginTop:20
 							}}>
 
-							<TouchableOpacity onPress={this.startOrJoin} editable={!this.state.uiInputMode}>
+							<TouchableOpacity onPress={this.startOrJoin} editable={!this.state.uiInputMode} disabled={this.props.showSpinner}>
 								<View style={styles['go-btn']}>
 									<Text style={{fontSize: 18, letterSpacing: 2}}>Go</Text>
 								</View>
@@ -208,7 +208,7 @@ export default class LobbyScreen extends Component{
 				{ this.state.uiInputMode
 					?
 					<TouchableOpacity style={styles['back-btn']} onPress={ this.handleBackBtnPress }>
-						<Image style={styles['back-icon']} source={backBtnIcon}></Image>
+						<Image style={styles['back-icon']} source={backBtnIcon}/>
 					</TouchableOpacity>
 					:
 					<TouchableOpacity style={styles['info']} onPress={ () => this.setState({viewInfoModal: true}) }>
