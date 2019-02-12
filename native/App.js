@@ -65,7 +65,7 @@ export default class App extends Component {
             if (value !== null) {
                 value = JSON.parse(value);
                 this.user.name = value;
-                this.setState({hasUser: false, inputUserName: value})
+                this.setState({hasUser: true, inputUserName: value})
             }else{
                 this.setState({hasUser: false})
             }
