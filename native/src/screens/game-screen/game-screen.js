@@ -4,11 +4,12 @@ import { View, Text, TouchableOpacity, Image, ScrollView, Animated } from 'react
 import styles from './game-screen.styles';
 import Modal from '../../components/modal/modal'
 import Player from '../../components/player/player.component';
-import backBtn from '../../../resources/back-icon.png';
+import closeIcon from '../../../resources/closeIcon.png';
 import CountDown from 'react-native-countdown-component';
 import LoadingSpinner from "../../components/loadingSpinner/loadingSpinner";
 import LoadingScreen from "../loadingScreen/loadingScreen";
 import EndGame from "../end-game/end-game"
+import ConfirmModal from '../../components/confirmModal/confirmModal';
 
 export default class GameScreen extends Component{
 
@@ -17,7 +18,8 @@ export default class GameScreen extends Component{
         this.state = {
             hasPlayerSeenType: false,
             readyBtnOpacity: new Animated.Value(0),
-            readyBtnScale: new Animated.Value(0)
+            readyBtnScale: new Animated.Value(0),
+			   showConfirmModal: false
         }
     }
 
@@ -124,8 +126,16 @@ export default class GameScreen extends Component{
         return type;
     }
 
+	confirmModalYesHandler = () =>{
+		this.props.leaveGame();
+	}
+	confirmModalNoHandler = () =>{
+		this.setState({showConfirmModal : false})
+	}
 
-    render(){
+
+
+	render(){
         const {game, currentPlayer, playerReady, endRound, player, players, endGame} = this.props;
         const boxScale = this.state.readyBtnScale.interpolate({
             inputRange: [0, 1],
@@ -138,11 +148,11 @@ export default class GameScreen extends Component{
         }
 
         if(game.votingInProgress){
-            return <VotingScreen game={game} player={player} players={players} currentPlayer={currentPlayer}/>;
+            return <VotingScreen leaveGame={this.props.leaveGame} game={game} player={player} players={players} currentPlayer={currentPlayer}/>;
         }
 
         if(game.roundInProgress){
-            return <InGameScreen game={game} endRound={endRound}/>
+            return <InGameScreen leaveGame={this.props.leaveGame} game={game} endRound={endRound}/>
         }
 
         if(game.gameComplete){
@@ -164,11 +174,15 @@ export default class GameScreen extends Component{
                 </Modal>
                 }
 
+                {this.state.showConfirmModal &&
+					<ConfirmModal
+						yesHandler={this.confirmModalYesHandler}
+						noHandler={this.confirmModalNoHandler}
+					/>}
 
-                {(!game.gameInProgress || !player.inGame) &&
-                <TouchableOpacity style={styles['back-btn-holder']} onPress={this.props.leaveGame}>
-                    <Image style={styles['back-btn']} source={backBtn}/>
-                </TouchableOpacity>}
+                <TouchableOpacity style={styles['back-btn-holder']} onPress={()=>this.setState({showConfirmModal : true})}>
+                    <Image style={styles['back-btn']} source={closeIcon}/>
+                </TouchableOpacity>
 
 
                 {!this.state.hasPlayerSeenType && player.type &&
@@ -220,7 +234,12 @@ export default class GameScreen extends Component{
 class VotingScreen extends Component{
 
 
-    castVote = (currentPlayer, player) => {
+	state = {
+		showConfirmModal : false
+	}
+
+
+	castVote = (currentPlayer, player) => {
         if(!currentPlayer.votingFor) {
             this.props.currentPlayer.ref.update('votingFor', player.name)
         }
@@ -251,13 +270,28 @@ class VotingScreen extends Component{
         }
     }
 
+	confirmModalYesHandler = () =>{
+		this.props.leaveGame();
+	}
+	confirmModalNoHandler = () =>{
+		this.setState({showConfirmModal : false})
+	}
 
     render(){
 
         const {game, player} = this.props;
 
-        return(
+
+		 return(
             <View style={[styles['screen'], styles['game-screen']]}>
+					<TouchableOpacity style={styles['back-btn-holder']} onPress={()=>this.setState({showConfirmModal : true})}>
+						<Image style={styles['back-btn']} source={closeIcon}/>
+					</TouchableOpacity>
+					{this.state.showConfirmModal &&
+					<ConfirmModal
+						yesHandler={this.confirmModalYesHandler}
+						noHandler={this.confirmModalNoHandler}
+					/>}
                 {game.votingInProgress &&
                 <View style={styles['vote-screen-container']}>
                     <ScrollView contentContainerStyle={styles['players-container']}>
@@ -300,13 +334,33 @@ class VotingScreen extends Component{
 
 
 class InGameScreen extends Component{
-    render(){
 
+    state = {
+		 showConfirmModal : false
+    }
+
+
+	confirmModalYesHandler = () =>{
+		this.props.leaveGame();
+	}
+	confirmModalNoHandler = () =>{
+		this.setState({showConfirmModal : false})
+	}
+
+
+	render(){
         const {game, endRound} = this.props;
-
 
         return(
             <View style={[styles['screen'], styles['game-screen']]}>
+					<TouchableOpacity style={styles['back-btn-holder']} onPress={()=>this.setState({showConfirmModal : true})}>
+						<Image style={styles['back-btn']} source={closeIcon}/>
+					</TouchableOpacity>
+					{this.state.showConfirmModal &&
+					<ConfirmModal
+						yesHandler={this.confirmModalYesHandler}
+						noHandler={this.confirmModalNoHandler}
+					/>}
 
                 <View >
                     <Text style={styles['game-header']}>{game.gameName}</Text>
@@ -315,7 +369,7 @@ class InGameScreen extends Component{
                 <View style={styles['timer']}>
                     <CountDown
                         digitBgColor={'#00FFC2'}
-                        until={10}
+                        until={59}
                         onFinish={endRound}
                         size={80}
                         timeToShow={['S']}

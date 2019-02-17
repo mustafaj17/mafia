@@ -9,6 +9,7 @@ import InfoModal from '../../components/infoModal/infoModal'
 import logo from '../../../resources/logo.png';
 import AndroidKeyboardAdjust from 'react-native-android-keyboard-adjust';
 
+
 export default class LobbyScreen extends Component{
 
     state = {
@@ -130,6 +131,7 @@ export default class LobbyScreen extends Component{
 
         return(
             <TouchableWithoutFeedback>
+
                 <View style={styles['lobby-screen']}>
                     {this.state.viewInfoModal && <InfoModal onPressHandler={ () => this.setState({viewInfoModal: false}) } />}
 

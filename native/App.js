@@ -208,13 +208,17 @@ export default class App extends Component {
         this.disconnectFromPlayers();
     }
 
-    leaveGame = () => {
-        this.resetState()
-        this.disconnectFromGame();
-        this.disconnectFromPlayer();
-        this.disconnectFromPlayers();
-        this.state.playerRef.ref.delete();
-    }
+	leaveGame = () => {
+		if(this.state.gameDocRef.data().gameInProgress){
+			this.state.playerRef.ref.update('inGame', false);
+		}else {
+			this.state.playerRef.ref.delete();
+		}
+		this.resetState()
+		this.disconnectFromGame();
+		this.disconnectFromPlayer();
+		this.disconnectFromPlayers();
+		}
 
     playerReady = () => {
         this.state.playerRef.ref.update('ready', true);

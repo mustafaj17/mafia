@@ -202,13 +202,13 @@ export default StyleSheet.create(
 				flexDirection: 'row'
 			},
 		'back-btn': {
-			width: 30,
-			height: 29
+			width: 20,
+			height: 20
 		},
 		'back-btn-holder':{
 			position: 'absolute',
 			top: 20,
-			left: 20,
+			right: 20,
 			zIndex: 10
 		},
 		'timer':{
