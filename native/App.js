@@ -105,7 +105,8 @@ export default class App extends Component {
                     gameName: gameName,
                     roundInProgress: false,
                     votingInProgress: false,
-                    roundNumber: 1
+                    roundNumber: 1,
+                    timestamp: new Date()
                 })
 
                 this.user.admin = true;

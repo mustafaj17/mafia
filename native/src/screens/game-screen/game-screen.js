@@ -297,6 +297,8 @@ class VotingScreen extends Component{
     }
 }
 
+
+
 class InGameScreen extends Component{
     render(){
 
@@ -313,13 +315,15 @@ class InGameScreen extends Component{
                 <View style={styles['timer']}>
                     <CountDown
                         digitBgColor={'#00FFC2'}
-                        until={59}
+                        until={10}
                         onFinish={endRound}
                         size={80}
                         timeToShow={['S']}
                         labelS={""}/>
                 </View>
-
+                <TouchableOpacity style={styles['skip-button']} onPress={endRound}>
+                    <Text>Skip</Text>
+                </TouchableOpacity>
             </View>
         )
     }
