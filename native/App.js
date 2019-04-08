@@ -1,489 +1,486 @@
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-import React, {Component} from 'react';
-import { Text, View, ImageBackground, AsyncStorage} from 'react-native';
+import firebase from "firebase/app";
+import "firebase/firestore";
+import React, {Component} from "react";
+import {Animated, AsyncStorage, Image, ImageBackground, Text, View} from "react-native";
 import LobbyScreen from "./src/screens/lobby-screen/lobby-screen";
 import GameScreen from "./src/screens/game-screen/game-screen";
 import EnterNameScreen from "./src/screens/enter-name/enter-name-screen";
-import EnterGameNameScreen from "./src/screens/enter-game-name/enter-game-name-screen";
-import styles from './src/app.style';
-import background from './src/assets/background.png';
-import backgroundLobby from './src/assets/background-lobby.png';
-import Image from 'react-native-remote-svg';
-import loadingSpinner from './src/assets/loading1.svg';
+import styles from "./src/app.style";
+import background from "./resources/background.png";
+import LoadingScreen from "./src/screens/loadingScreen/loadingScreen";
 
 
 export default class App extends Component {
 
-	constructor(props) {
-		super(props);
-		if (firebase.apps && ( firebase.apps.length < 1 )) {
-			let config = {
-				apiKey: "AIzaSyAJoYge9agHxipUEtP-RFulZCUTif9Mi3o",
-				authDomain: "mafia-7c60c.firebaseapp.com",
-				databaseURL: "https://mafia-7c60c.firebaseio.com",
-				projectId: "mafia-7c60c",
-				storageBucket: "mafia-7c60c.appspot.com",
-				messagingSenderId: "328931836560"
-			};
+    constructor(props) {
+        super(props);
+        if (firebase.apps && ( firebase.apps.length < 1 )) {
+            let config = {
+                apiKey: "AIzaSyAJoYge9agHxipUEtP-RFulZCUTif9Mi3o",
+                authDomain: "mafia-7c60c.firebaseapp.com",
+                databaseURL: "https://mafia-7c60c.firebaseio.com",
+                projectId: "mafia-7c60c",
+                storageBucket: "mafia-7c60c.appspot.com",
+                messagingSenderId: "328931836560"
+            };
 
-			firebase.initializeApp(config);
+            firebase.initializeApp(config);
 
-		}
-		this.user = {};
-		this.db = firebase.firestore();
-		this.mafiaGamesCollectionRef = this.db.collection('mafia-games');
-		this.getUsername();
-		this.state = {
-			games: [],
-			createGame: false,
-			inputGameName: ''
-		}
-	}
+        }
+        this.user = {};
+        this.db = firebase.firestore();
+        this.mafiaGamesCollectionRef = this.db.collection('mafia-games');
+        this.getUsername();
+        this.state = {
+            inputGameName: '',
+            loadingGame: false,
+            hasPlayerSeenVotedOut: false,
+            errorMessage: null,
+            showSpinner: false,
+            roundNumber: 1
 
-	getUsername = async () => {
-		try {
-			let value = await AsyncStorage.getItem('@Mafia:username');
-			if (value !== null) {
-				value = JSON.parse(value);
-				this.user.name = value;
-				this.setState({hasUser: true, inputUserName: value})
-			}else{
-				this.setState({hasUser: false})
-			}
-		} catch (error) {
-			return 'error';
-		}
-	}
+        }
+    }
 
-	componentWillMount() {
+    resetState = () => {
+        this.setState({
+            inputGameName: '',
+            loadingGame: false,
+            errorMessage: null,
+            hasPlayerSeenVotedOut: true,
+            showSpinner: false,
+            roundNumber: 1,
+            gameDocRef: null,
+            players: null,
+            playerRef: null,
+            hasGameEnded: false
+        })
 
-		this.getGames()
-	}
+       this.user.admin = false;
+    }
 
-	componentWillUnmount() {
-		// window.removeEventListener("beforeunload", this.onUnload)
-	}
+    getUsername = async () => {
+        try {
+            let value = await AsyncStorage.getItem('@Mafia:username');
+            if (value !== null) {
+                value = JSON.parse(value);
+                this.user.name = value;
+                this.setState({hasUser: true, inputUserName: value})
+            }else{
+                this.setState({hasUser: false})
+            }
+        } catch (error) {
+            return 'error';
+        }
+    }
 
-	// onUnload = (event) => { // the method that will be used for both add and remove event
-	//
-	// 	if(this.state.gameDocRef) {
-	// 		let playersColRef = this.state.gameDocRef.ref.collection('players')
-	// 		playersColRef.onSnapshot(playersSnapshot => {
-	// 				playersSnapshot.forEach(playerDoc => {
-	// 					if (playerDoc.data().name === this.user.name) {
-	// 						//todo: remove player
-	// 					}
-	// 				})
-	// 			}
-	// 		)
-	// 	}
-	// 	event.returnValue = "player left"
-	// 	// when admin leaves game, select another admin from the list of players.
-	// 	// when normal player closes window, we must delete them from the player collection.
-	// }
+    createUser = () => {
+        if(this.state.inputUserName.length > 2) {
+			  this.setState({
+				  hasUser: true
+			  })
+			  this.user.name = this.state.inputUserName;
+			  this.saveUsername('@Mafia:username', this.state.inputUserName);
+		  }
+    }
 
-	getGames = () => {
-		this.disconnectFromGames = this.mafiaGamesCollectionRef.onSnapshot(gamesSnapshot => {
-			let games = [];
-			gamesSnapshot.forEach(gameDoc => {
-				games.push(gameDoc);
-			});
-			this.setState({games});
-		}, err => {
-			console.log(err);
-		});
-	}
+	 saveUsername = (key, value) => {
+        value = JSON.stringify(value);
+        if (value) return AsyncStorage.setItem(key, value)
+        else console.log('not set, stringify failed:', key, value)
+    }
 
-	createUser = () => {
-		this.setState({
-			hasUser: true
-		})
-		this.user.name =this.state.inputUserName;
-		this.set('@Mafia:username', this.state.inputUserName);
-	}
+    createGame = gameName => {
 
-	set = (key, value) => {
-		value = JSON.stringify(value);
-		if (value) return AsyncStorage.setItem(key, value)
-		else console.log('not set, stringify failed:', key, value)
-	}
+        this.setState({showSpinner: true, errorMessage: null})
+        this.mafiaGamesCollectionRef.doc(gameName).get().then(doc => {
+            if (doc.exists) {
+                this.setState({errorMessage: "Game name already exists", showSpinner: false})
+            } else {
+                this.setState({
+                    createGame: false
+                })
 
-	createGame = () => {
-		this.setState({
-			createGame: false,
-			joiningGame: true
-		})
+                doc.ref.set({
+                    gameName: gameName,
+                    roundInProgress: false,
+                    votingInProgress: false,
+                    roundNumber: 1,
+                    timestamp: new Date()
+                })
 
-		this.mafiaGamesCollectionRef.add(
-			{
-				gameName: this.state.inputGameName,
-				roundInProgress: false,
-				votingInProgress: false
-			}
-		).then(gameDocRef => {
-			this.user.admin = true;
-			this.selectGame(gameDocRef);
-		})
-	}
+                this.user.admin = true;
+                this.selectGame(doc);
+            }
+        }).catch( (error) => {
+            this.setState({errorMessage: "Error connecting, please try againnnn", showSpinner: false})
+        });
 
-	selectGame = gameDoc => {
-		this.setState({
-			createGame: false,
-			joiningGame: true,
-			games : []
-		})
+    }
 
-		gameDoc = gameDoc.ref || gameDoc;
-		this.disconnectFromGames();
+    joinGame = gameName => {
+            this.setState({errorMessage: null, showSpinner: true})
+            this.mafiaGamesCollectionRef.doc(gameName).get().then(doc => {
+                if (doc.exists) {
+                    if(!doc.data().gameInProgress) {
+                        this.setState({showSpinner: false})
+                        this.selectGame(doc);
+                    }else{
+                        this.setState({errorMessage: "This game has started", showSpinner: false})
+                    }
+                } else {
+                    this.setState({errorMessage: "This game does not exist",  showSpinner: false})
+                }
+            }).catch ( error => {
+                this.setState({errorMessage: "Error connecting, please try again",  showSpinner: false})
+            });
+    }
 
-		//connect to the game doc and update state whenever it changes
-		this.disconnectFromGame = gameDoc.onSnapshot(gameDocRef => {
-			debugger;
-			this.state.gameDocRef = gameDocRef;
-			this.setState({
-				gameDocRef
-			})
-			if(this.state.joiningGame){
-				this.setState({joiningGame: false})
-			}
-			this.runGame();
-		});
+    resetModalFlags = () => {
+        this.setState({hasPlayerSeenVotedOut : false})
+    }
 
-		let playersColRef = gameDoc.collection('players');
+    selectGame = gameDoc => {
+        this.setState({loadingGame: true})
+        gameDoc = gameDoc.ref || gameDoc;
 
-		//connect to the player collection and update when it changes
-		playersColRef.onSnapshot(playersSnapshot => {
-			let playersArray = [];
-			playersSnapshot.forEach(playerDoc => {
-				playersArray.push(playerDoc.data())
-			})
+        //connect to the game doc and update state whenever it changes
+        this.disconnectFromGame = gameDoc.onSnapshot(gameDocRef => {
+            this.state.gameDocRef = gameDocRef;
+            this.setState({
+                gameDocRef
+            })
+            if(this.state.loadingGame){
+                this.setState({loadingGame: false})
+            }
+            this.runGame();
+            if(((this.state.gameDocRef && this.state.gameDocRef.data().roundNumber !== this.state.roundNumber)) &&
+                (this.state.playerRef && this.state.playerRef.data() && !this.state.playerRef.data().admin)){
+                this.resetModalFlags()
+            }
 
-			this.setState({
-				players: playersArray
-			})
+        });
 
-			this.runGame();
-		})
+        let playersColRef = gameDoc.collection('players');
 
-		let currentPlayerRef;
+        //connect to the player collection and update when it changes
+        this.disconnectFromPlayers = playersColRef.onSnapshot(playersSnapshot => {
+            let playersArray = [];
+            playersSnapshot.forEach(playerDoc => {
+                playersArray.push(playerDoc.data())
+            })
 
-		playersColRef.get().then(playerDocsRefs => {
+            this.setState({
+                players: playersArray
+            })
 
-			playerDocsRefs.forEach(playerDocRef => {
-				if (playerDocRef.data().name === this.state.inputUserName) {
-					if(playerDocRef.data().admin){
-						this.user.admin = true;
-					}
-					playerDocRef.ref.onSnapshot(playerRef => {
-						this.setState({
-							playerRef: playerRef
-						})
-					})
-					this.setState({
-						playerRef: playerDocRef
-					})
-					currentPlayerRef = playerDocRef
-					console.log('player exists');
-				}
-			})
+            this.runGame();
+        })
 
-			if (!currentPlayerRef) {
-				playersColRef
-					.add(
-						{
-							type: null,
-							inGame: true,
-							ready: false,
-							...this.user
-						}).then(playerDocRef => {
-					playerDocRef.get().then(playerDoc => {
-						this.setState({
-							playerRef: playerDocRef
-						})
-						playerDoc.ref.onSnapshot(playerRef => {
-							this.setState({
-								playerRef: playerRef
-							})
-						})
-						console.log('added new player');
-					})
+        playersColRef.add(
+            {
+                type: null,
+                inGame: true,
+                ready: false,
+                ...this.user
+            }).then(playerDocRef => {
+            playerDocRef.get().then(playerDoc => {
 
-				})
+                this.setState({
+                    playerRef: playerDocRef
+                });
 
-			}
-		})
-	}
+                this.disconnectFromPlayer = playerDoc.ref.onSnapshot(playerRef => {
+                    this.setState({
+                        playerRef: playerRef
+                    })
+                })
+            })
+
+        })
+    }
+
+
+    endGame = () => {
+        this.resetState();
+        this.disconnectFromGame();
+        this.disconnectFromPlayer();
+        this.disconnectFromPlayers();
+    }
 
 	leaveGame = () => {
+		if(this.state.gameDocRef.data().gameInProgress){
+			this.state.playerRef.ref.update('inGame', false);
+		}else {
+			this.state.playerRef.ref.delete();
+		}
+		this.resetState()
 		this.disconnectFromGame();
-		this.state.playerRef.ref.delete();
-		this.setState({gameDocRef: null, players: null, playerRef: null, joiningGame: false});
-		this.getGames();
-	}
-
-	playerReady = () => {
-		this.state.playerRef.ref.update('ready', true);
-	}
-
-	runGame = () => {
-		if(this.state.players && this.state.players.length) {
-			if (this.user && this.user.admin && this.state.gameDocRef) {
-				let game = this.state.gameDocRef.data();
-				let playersInTheGame = this.state.players.filter(player => player.inGame);
-				let playersHaveType= this.state.players.every(player => player.type);
-				let allPlayersAreReady = playersInTheGame.every(player => player.ready);
-				if (allPlayersAreReady) {
-					if(!game.gameInProgress){
-						this.state.gameDocRef.ref.update('gameInProgress', true);
-					}
-					this.setTypes()
-					this.startGameRound(allPlayersAreReady, playersHaveType);
-				}
-
-				if (game.votingInProgress) {
-					let allPlayersHaveVoted = playersInTheGame.every(player => player.votingFor);
-					if (allPlayersHaveVoted) {
-						this.votingComplete();
-					}
-				}
-				this.hasGameEnded();
-			}
-		}
-	}
-
-	hasGameEnded = () => {
-		if (this.state.players && this.state.players.length) {
-			if (this.user.admin) {
-				if (this.state.players.every(player => player.type)) {
-
-					let playersInTheGame = this.state.players.filter(player => player.inGame)
-					let civilianCount = playersInTheGame.filter(player => player.type === 'Civilian')
-					let mafiaCount = playersInTheGame.filter(player => player.type === 'Mafia')
-
-					if (mafiaCount.length === 0) {
-						this.state.gameDocRef.ref.update('gameComplete', true, 'civiliansWin', true);
-					}
-
-
-					if (mafiaCount.length >= civilianCount.length) {
-						this.state.gameDocRef.ref.update('gameComplete', true, 'mafiasWin', true);
-					}
-
-				}
-			}
-		}
-	}
-
-	votingComplete = () => {
-		let inGamePlayers = this.state.players.filter( player => player.inGame)
-		let votes = inGamePlayers.map( player => player.votingFor)
-		let votingCount = {}
-
-		inGamePlayers.forEach(player => {
-			if(votingCount[player.votingFor]){
-				votingCount[player.votingFor] = votingCount[player.votingFor] + 1
-			} else {
-				votingCount[player.votingFor] = 1
-			}
-		})
-
-		let mostVoted
-		let mostVotedName;
-		let drawArray = []
-		Object.keys(votingCount).forEach( player => {
-			if(mostVoted){
-				if(mostVoted < votingCount[player]){
-					mostVoted = votingCount[player];
-					mostVotedName = player
-				}
-			}else{
-				mostVoted = votingCount[player];
-				mostVotedName = player
-			}
-		})
-
-		drawArray.push(mostVotedName)
-
-		Object.keys(votingCount).forEach(player => {
-			if((votingCount[player] === mostVoted) && (mostVotedName !== player)){
-				drawArray.push(player)
-			}
-		})
-
-		if(drawArray.length > 1){
-			this.state.gameDocRef.ref.collection('players').get().then(playerDocs => {
-				playerDocs.forEach(playerDocRef => {
-					playerDocRef.ref.update('votingFor', null)
-				})
-				this.state.gameDocRef.ref.update('isDraw', drawArray)
-			})
-
-
-		} else {
-
-			this.state.gameDocRef.ref.collection('players').get().then(playerDocs => {
-				playerDocs.forEach(playerDocRef => {
-					if (playerDocRef.data().name === mostVotedName) {
-						playerDocRef.ref.update('inGame', false)
-
-					}
-					playerDocRef.ref.update('votingFor', null)
-				})
-				this.state.gameDocRef.ref.update('votingInProgress', false, 'isDraw', null, 'votedOut', mostVotedName)
-			})
+		this.disconnectFromPlayer();
+		this.disconnectFromPlayers();
 		}
 
-	}
+    playerReady = () => {
+        this.state.playerRef.ref.update('ready', true);
+    }
 
-	startGameRound = (allPlayersAreReady, playersHaveType) => {
-		if (allPlayersAreReady && playersHaveType) {
-			this.state.gameDocRef.ref.update('roundInProgress', true, 'votedOut', null);
-		}
-	}
+    runGame = () => {
+        if(this.state.players && this.state.players.length) {
+            if (this.state.playerRef && this.state.playerRef.data().admin && this.state.gameDocRef) {
+                let game = this.state.gameDocRef.data();
+                let playersInTheGame = this.state.players.filter(player => player.inGame);
+                let playersHaveType= this.state.players.every(player => player.type);
+                let allPlayersAreReady = playersInTheGame.every(player => player.ready);
+                if (allPlayersAreReady) {
+                    if(!game.gameInProgress && this.state.players.length > 2){
+                        //setTypes only happens once in the game
+                        this.setTypes();
+                        this.state.gameDocRef.ref.update('gameInProgress', true);
+                    }
 
-	endRound = () => {
-		this.state.gameDocRef.ref.collection('players').get().then( playerDocs => {
-			playerDocs.forEach(playerDocRef => {
-				playerDocRef.ref.update('ready', false)
-			})
-			this.state.gameDocRef.ref.update('roundInProgress' , false, 'votingInProgress' , true);
-		})
-	}
+                    if(game.gameInProgress && playersHaveType) {
+                        this.startGameRound();
+                        this.state.gameDocRef.ref.update('roundHasBegun', true, 'roundNumber', this.state.roundNumber + 1);
+                    }
+                }
 
-	setTypes = () => {
-		let players = this.state.players
-		if(players.length > 1 &&
-			players.every( player => player.type === null)){
-			//no types are set
-			let mafiaCount;
-			switch (true){
-				case (players.length < 6):
-					mafiaCount = 1;
-					break;
-				case (players.length < 9):
-					mafiaCount = 2;
-					break;
-				default:
-					break
-			}
+                if (game.votingInProgress) {
+                    let allPlayersHaveVoted = playersInTheGame.every(player => player.votingFor);
+                    if (allPlayersHaveVoted) {
+                        this.votingComplete();
+                    }
+                }
+                this.hasGameEnded();
+            }
+        }
+    }
 
-			while(mafiaCount){
-				let rand = Math.floor(Math.random() * players.length);
-				if(!players[rand].type){
-					players[rand].type = 'Mafia';
-					players.ready = false
-					mafiaCount--;
-				}
-			}
+    hasGameEnded = () => {
+        if (this.state.players && this.state.players.length) {
+            if (this.user.admin) {
+                if (this.state.players.every(player => player.type)) {
 
-			players.forEach( player => {
-				if(!player.type) {
-					player.type = 'Civilian'
-					player.ready = false
-				}
-			});
+                    let playersInTheGame = this.state.players.filter(player => player.inGame)
+                    let civilianCount = playersInTheGame.filter(player => player.type === 'Civilian')
+                    let mafiaCount = playersInTheGame.filter(player => player.type === 'Mafia')
 
-			this.state.gameDocRef.ref.collection('players').get().then( playerDocs => {
+                    if (mafiaCount.length === 0) {
+                        this.state.gameDocRef.ref.update('gameComplete', true, 'civiliansWin', true);
+                    }
 
-					playerDocs.forEach ( playerDoc => {
-						let playerType = null;
-						this.state.players.forEach( player => {
-							if(player.name === playerDoc.data().name){
-								playerType = player.type
-							}
-						})
-						playerDoc.ref.update('type', playerType, 'ready', false);
-					})
+                    if (mafiaCount.length >= civilianCount.length) {
+                        this.state.gameDocRef.ref.update('gameComplete', true, 'mafiasWin', true);
+                    }
 
-				}
-			)
-		}
-	}
+                }
+            }
+        }
+    }
 
-	render() {
+    votingComplete = () => {
+        let inGamePlayers = this.state.players.filter( player => player.inGame)
+        let votingCount = {}
 
-		if(this.state.joiningGame){
-			return(
-				<View>
-					<ImageBackground source={background} style={{width: '100%', height: '100%'}}>
-						<Image source={loadingSpinner}></Image>
-					</ImageBackground>
-				</View>
-			)
-		}
+        inGamePlayers.forEach(player => {
+            if(votingCount[player.votingFor]){
+                votingCount[player.votingFor] = votingCount[player.votingFor] + 1
+            } else {
+                votingCount[player.votingFor] = 1
+            }
+        })
 
-		if(!this.state.hasUser){
-			return(
-				<View style={styles.app}>
-					<ImageBackground source={background} style={{width: '100%', height: '100%'}}>
-						<EnterNameScreen
-							updateName={name=>this.setState({inputUserName : name})}
-							inputUserName={this.state.inputUserName}
-							createUser={this.createUser}/>
-					</ImageBackground>
-				</View>
-			)
-		}
+        let mostVoted;
+        let mostVotedName;
+        let drawArray = [];
+        Object.keys(votingCount).forEach( player => {
+            if(mostVoted){
+                if(mostVoted < votingCount[player]){
+                    mostVoted = votingCount[player];
+                    mostVotedName = player
+                }
+            }else{
+                mostVoted = votingCount[player];
+                mostVotedName = player
+            }
+        })
 
-		if(this.state.createGame){
-			return(
-				<View style={styles.app}>
-					<ImageBackground source={background} style={{width: '100%', height: '100%'}}>
-						<EnterGameNameScreen
-							updateGameName={name=>this.setState({inputGameName : name})}
-							inputGameName={this.state.inputGameName}
-							createGame={this.createGame}
-							backToLobby={() => { this.setState({createGame: false})}}
-						/>
-					</ImageBackground>
-				</View>
-			)
-		}
+        drawArray.push(mostVotedName)
 
-		if(this.state.gameDocRef) {
+        Object.keys(votingCount).forEach(player => {
+            if((votingCount[player] === mostVoted) && (mostVotedName !== player)){
+                drawArray.push(player)
+            }
+        })
 
-			let game = this.state.gameDocRef.data && this.state.gameDocRef.data();
-			let player = this.state.playerRef && this.state.playerRef.data && this.state.playerRef.data();
-			let players = this.state.players;
-			if(!player || !game){
-				return(
-					<View>
-						<ImageBackground source={background} style={{width: '100%', height: '100%'}}>
-							<Image source={loadingSpinner}></Image>
-						</ImageBackground>
-					</View>
-				)
-			}
-			return (
-				<View>
-					<ImageBackground source={background} style={{width: '100%', height: '100%'}}>
-						<GameScreen
-							game={game}
-							voteMode={game.votingInProgress}
-							players={players}
-							currentPlayer={this.state.playerRef}
-							playerReady={this.playerReady}
-							endRound={this.endRound}
-							leaveGame={this.leaveGame}
-						/>
-					</ImageBackground>
-				</View>
+        if(drawArray.length > 1){
+            this.state.gameDocRef.ref.collection('players').get().then(playerDocs => {
+                playerDocs.forEach(playerDocRef => {
+                    playerDocRef.ref.update('votingFor', null)
+                })
+                this.state.gameDocRef.ref.update('isDraw', drawArray)
+            })
 
-			)
-		}
 
-		return (
-			<View style={styles.app}>
-				<ImageBackground source={backgroundLobby} style={{width: '100%', height: '100%'}}>
-					<LobbyScreen
-						createNewGame={() => { this.setState({createGame: true})}}
-						games={this.state.games}
-						selectGame={this.selectGame}
-					/>
-				</ImageBackground>
+        } else {
 
-			</View>
-		);
-	}
+            this.state.gameDocRef.ref.collection('players').get().then(playerDocs => {
+                playerDocs.forEach(playerDocRef => {
+                    if (playerDocRef.data().name === mostVotedName) {
+                        playerDocRef.ref.update('inGame', false, 'votingFor', null)
+
+                    }else {
+                        playerDocRef.ref.update('votingFor', null)
+                    }
+                })
+                this.state.gameDocRef.ref.update('votingInProgress', false, 'isDraw', null, 'votedOut', mostVotedName)
+            })
+        }
+
+    }
+
+    startGameRound = () => {
+        this.state.gameDocRef.ref.update('roundInProgress', true, 'votedOut', null);
+        this.setState({hasPlayerSeenVotedOut : false})
+    }
+
+    endRound = () => {
+        this.state.gameDocRef.ref.collection('players').get().then( playerDocs => {
+            playerDocs.forEach(playerDocRef => {
+                playerDocRef.ref.update('ready', false)
+            })
+            this.state.gameDocRef.ref.update('roundInProgress' , false, 'votingInProgress' , true);
+        })
+    }
+
+    setTypes = () => {
+        let players = this.state.players;
+
+        //if players dont have types
+        if(players.every( player => player.type === null)){
+            //no types are set
+            let mafiaCount;
+            switch (true){
+                case (players.length < 5):
+                    mafiaCount = 1;
+                    break;
+                case (players.length < 8):
+                    mafiaCount = 2;
+                    break;
+                case (players.length < 11):
+                    mafiaCount = 3;
+                    break;
+                case (players.length < 14):
+                    mafiaCount = 4;
+                    break;
+                case (players.length < 16):
+                    mafiaCount = 5;
+                    break;
+                default:
+                    mafiaCount = 6;
+                    break
+            }
+
+            while(mafiaCount){
+                let rand = Math.floor(Math.random() * players.length);
+                if(!players[rand].type){
+                    players[rand].type = 'Mafia';
+                    players.ready = false;
+                    mafiaCount--;
+                }
+            }
+
+            players.forEach( player => {
+                if(!player.type) {
+                    player.type = 'Civilian'
+                    player.ready = false
+                }
+            });
+
+            this.state.gameDocRef.ref.collection('players').get().then( playerDocs => {
+
+                playerDocs.forEach ( playerDoc => {
+                    let playerType = null;
+                    this.state.players.forEach( player => {
+                        if(player.name === playerDoc.data().name){
+                            playerType = player.type
+                        }
+                    })
+                    playerDoc.ref.update('type', playerType, 'ready', false);
+                })
+            })
+        }
+    }
+
+render() {
+
+
+        if(this.state.loadingGame){
+            return(
+                <LoadingScreen/>
+            )
+        }
+
+        //player has a game
+        if(this.state.gameDocRef) {
+
+        let game = this.state.gameDocRef.data && this.state.gameDocRef.data();
+        let player = this.state.playerRef && this.state.playerRef.data && this.state.playerRef.data();
+        let players = this.state.players;
+
+        return (
+		<View>
+			<ImageBackground source={background} style={{width: '100%', height: '100%'}}>
+				<GameScreen
+				game={game}
+				voteMode={game.votingInProgress}
+				players={players}
+				currentPlayer={this.state.playerRef}
+				playerReady={this.playerReady}
+				endRound={this.endRound}
+				leaveGame={this.leaveGame}
+				endGame={this.endGame}
+				player={player}
+				hasPlayerSeenVotedOut={this.state.hasPlayerSeenVotedOut}
+				playerHasSeenVotedOut={ () => this.setState({hasPlayerSeenVotedOut: true})}
+				/>
+			</ImageBackground>
+		</View>
+
+            )
+        }
+
+        if(!this.state.hasUser){
+            return (
+                <View style={styles.app}>
+                    <ImageBackground source={ background } style={{width: '100%', height: '100%'}}>
+                        <EnterNameScreen
+                            updateName={name=>this.setState({inputUserName : name})}
+                            inputUserName={this.state.inputUserName}
+                            createUser={this.createUser}/>
+                    </ImageBackground>
+
+                </View>
+            );
+        }
+
+        return (
+            <View style={styles.app}>
+
+                <ImageBackground source={ background } style={{width: '100%', height: '100%'}}>
+
+                    <LobbyScreen
+                        errorMessage={this.state.errorMessage}
+                        createNewGame={() => { this.setState({createGame: true})}}
+                        selectGame={this.selectGame}
+                        joinGame={this.joinGame}
+                        createGame={this.createGame}
+                        showSpinner={this.state.showSpinner}
+                        resetError={() => this.setState({errorMessage: null, showSpinner: false})}
+                    />
+
+                </ImageBackground>
+
+            </View>
+        );
+    }
 }

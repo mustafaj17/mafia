@@ -101,8 +101,8 @@ android {
         applicationId "com.mafianative"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2
-        versionName "2.0"
+        versionCode 5
+        versionName "5"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -117,6 +117,10 @@ android {
             }
         }
     }
+    compileOptions {
+           sourceCompatibility 1.8
+           targetCompatibility 1.8
+        }
     splits {
         abi {
             reset()
@@ -148,6 +152,8 @@ android {
 }
 
 dependencies {
+    compile project(':lottie-react-native')
+    compile project(':react-native-android-keyboard-adjust')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.facebook.react:react-native:+"  // From node_modules

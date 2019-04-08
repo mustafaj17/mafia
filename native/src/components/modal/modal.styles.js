@@ -14,10 +14,10 @@ export default StyleSheet.create(
 				alignItems: 'center' },
 		'modal-box':
 			{
-				backgroundColor: '#D4D4D4',
+				backgroundColor: '#e6fff9',
 				width: 307,
 				height: 320,
-				borderWidth: 1,
+				borderWidth: 4,
 				borderStyle: 'solid',
 				borderColor: '#00FFC2',
 				shadowOffset: { width: 0, height: 4 },
@@ -35,7 +35,12 @@ export default StyleSheet.create(
 		title:
 			{
 				textAlign: 'center',
-				marginBottom: 40
+				marginBottom: 40,
+				display: 'flex',
+				alignItems: 'center',
+				justifyContent: 'center',
+				width: '100%'
+
 			},
 		'title-text':
 			{
@@ -63,6 +68,11 @@ export default StyleSheet.create(
 			{
 				fontSize: 16,
 				color: '#000000'
-			}
+			},
+		icon:{
+			width: 108,
+			height: 67,
+            resizeMode: 'contain',
+		}
 	}
 );
